@@ -29,9 +29,9 @@ Getting started (Python-based project)
 
 2. Use the "find in project"-functionality of your editor to search and replace the following terms:
 
-        NNN -> Your name
-        UUU -> Your affiliation
-        TTT -> The title of the project
+        Tobias Felix Werner -> Your name
+        University of Bonn -> Your affiliation
+        Bagging Regression Trees -> The title of the project
 
 3. Make sure to have [Miniconda](http://conda.pydata.org/miniconda.html) or Anaconda installed. A a modern LaTeX distribution (e.g. [TeXLive](www.tug.org/texlive/), [MacTex](http://tug.org/mactex/), or [MikTex](http://miktex.org/)) needs to be found on your path.
 

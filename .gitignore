@@ -30,7 +30,7 @@
 *.svn
 *.tmproj
 *.toc
-*.ttt
+*.Bagging Regression Trees
 *.vrb
 .waf*
 waf-*
