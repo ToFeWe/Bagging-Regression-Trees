@@ -1,0 +1,1 @@
+{"style": "seaborn-white", "figsize": [10, 10], "colors": {"bagging": "tab:blue", "converged": "#d3e9f8", "subagging": "tab:red", "trees": "tab:olive"}, "ls": {"mse": "-", "bias": ":", "variance": "--"}}

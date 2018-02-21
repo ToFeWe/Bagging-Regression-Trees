@@ -1,0 +1,1 @@
+{"n_repeat": 100, "n_test_train": [500, 500], "noise": 1, "B_iterations": 50, "min_split_tree": 2, "random_seeds": [3003, 2017, 1304, 2206], "BAGGING_RATIO": 1}

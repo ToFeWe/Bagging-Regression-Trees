@@ -19,8 +19,14 @@ def set_project_paths(ctx):
     pp['IN_MODEL_SPECS'] = 'src/model_specs'
     pp['OUT_DATA'] = '{}/out/data'.format(out)
     pp['OUT_ANALYSIS'] = '{}/out/analysis'.format(out)
+    pp['OUT_ANALYSIS_MAIN'] = '{}/out/analysis/main_simulation'.format(out)
+    pp['OUT_ANALYSIS_REAL_DATA'] = '{}/out/analysis/real_data_simulation'.format(out)
+    pp['OUT_ANALYSIS_THEORY'] = '{}/out/analysis/theory_part_simulation'.format(out)
     pp['OUT_FINAL'] = '{}/out/final'.format(out)
     pp['OUT_FIGURES'] = '{}/out/figures'.format(out)
+    pp['OUT_FIGURES_MAIN'] = '{}/out/figures/main_simulation'.format(out)
+    pp['OUT_FIGURES_REAL_DATA'] = '{}/out/figures/real_data_simulation'.format(out)
+    pp['OUT_FIGURES_THEORY'] = '{}/out/figures/theory_part_simulation'.format(out)
     pp['OUT_TABLES'] = '{}/out/tables'.format(out)
 
     # Convert the directories into Waf nodes.

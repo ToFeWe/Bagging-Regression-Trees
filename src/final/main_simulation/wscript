@@ -1,0 +1,37 @@
+#! python
+
+
+def build(ctx):
+
+        ctx(
+            features='run_py_script',
+            source='plot_simulation_convergence.py',
+            deps=[
+                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_convergence_friedman.pickle'),
+                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_convergence_linear.pickle'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+            ],
+            target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_convergence.pdf')
+        )
+
+        ctx(
+            features='run_py_script',
+            source='plot_simulation_subagging.py',
+            deps=[
+                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_subagging_friedman.pickle'),
+                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_subagging_linear.pickle'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+            ],
+            target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_subagging.pdf')
+        )
+
+        ctx(
+            features='run_py_script',
+            source='plot_simulation_tree_depth.py',
+            deps=[
+                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_friedman.pickle'),
+                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_linear.pickle'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+            ],
+            target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_tree_depth.pdf')
+        )
