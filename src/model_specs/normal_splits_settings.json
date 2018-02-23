@@ -1,0 +1,12 @@
+{
+  "c_gridpoints": 100,
+  "c_min": 0,
+  "c_max": 5,
+  "a_array": {
+    "first_a": 1,
+    "second_a": [2,3],
+    "third_a": [1,2],
+    "fourth_a": [1,10]
+  },
+  "gamma": 0.5
+}

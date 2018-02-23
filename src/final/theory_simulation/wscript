@@ -1,0 +1,23 @@
+#! python
+
+
+def build(ctx):
+        ctx(
+            features='run_py_script',
+            source='plot_finite_sample.py',
+            deps=[
+                ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_finite_sample.pickle'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+            ],
+            target=ctx.path_to(ctx, 'OUT_FIGURES_THEORY', 'plot_finite_sample.pdf')
+        )
+
+        ctx(
+            features='run_py_script',
+            source='plot_normal_splits.py',
+            deps=[
+                ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_normal_splits.pickle'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+            ],
+            target=ctx.path_to(ctx, 'OUT_FIGURES_THEORY', 'plot_normal_splits.pdf')
+        )

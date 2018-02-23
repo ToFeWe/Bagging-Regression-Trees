@@ -43,10 +43,11 @@ class MonteCarloSimulation:
         # Create one X_test and f_test that will be same for all following
         # simulation steps. This is important as we want to make for each
         # step a prediction on the same sample.
-        self.test_simulation = DataSimulation(n_size=self.n_test,
-                                             noise=self.noise,
-                                             without_error=True,
-                                             random_seed=self.random_seed_test)
+        self.test_simulation = DataSimulation(
+            n_size=self.n_test,
+            noise=self.noise,
+            without_error=True,
+            random_seed=self.random_seed_test)
         # Create test sample according to the given data generating process.
         if self.data_process == 'friedman':
             self.X_test, self.f_test = self.test_simulation.friedman_1_model()
@@ -55,7 +56,12 @@ class MonteCarloSimulation:
         elif self.data_process == 'linear':
             self.X_test, self.f_test = self.test_simulation.linear_model()
 
-    def calc_mse(self, ratio=1, bootstrap=True, min_split_tree=2, B_iterations=50):
+    def calc_mse(
+            self,
+            ratio=1,
+            bootstrap=True,
+            min_split_tree=2,
+            B_iterations=50):
         ''' Performs the simulation and returns MSE, Bias^2, Variance and Error for
         the specified simulation under bagging as a numpy array
 
@@ -68,9 +74,9 @@ class MonteCarloSimulation:
         # Create the instane of the bagging algorithm class, with the given
         # parameters, that will be used for the rest of the simulation run.
         bagging_instance = BaggingTree(random_seed=self.random_seed_fit,
-                                        ratio=ratio, bootstrap=bootstrap,
-                                        B_iterations=B_iterations,
-                                        min_split_tree=min_split_tree)
+                                       ratio=ratio, bootstrap=bootstrap,
+                                       B_iterations=B_iterations,
+                                       min_split_tree=min_split_tree)
 
         # To make results compareable and to get a smooth plot (we have
         # to limit *n_repeat* due to computation reasons), we create a
@@ -102,7 +108,7 @@ class MonteCarloSimulation:
         simulated_y_test_all = np.ones((self.n_test, self.n_repeat)) * np.nan
 
         # Create an array to save the squared-error for all simulation runs
-        y_se_all = np.zeros((self.n_repeat, self.n_test))
+        y_se_all = np.ones((self.n_repeat, self.n_test)) * np.nan
 
         # Peform the main simulation. Further explanation on this can be found
         # in the paper.
@@ -122,7 +128,7 @@ class MonteCarloSimulation:
 
             # Make a prediction on the test sample and save the squared-error.
             predictions[:, i] = fitted_bagging.predict(self.X_test)
-            y_se_all[i,:] = (y_test - predictions[:, i]) ** 2
+            y_se_all[i, :] = (y_test - predictions[:, i]) ** 2
 
         # Compute the simulated expected squared-error, squared-bias,variance and noise
         # for each observation.
@@ -140,7 +146,13 @@ class MonteCarloSimulation:
 
         return output
 
-    def calc_mse_all_ratios(self, n_ratios=10, min_ratio=0.1, max_ratio=1, min_split_tree=2, B_iterations=50):
+    def calc_mse_all_ratios(
+            self,
+            n_ratios=10,
+            min_ratio=0.1,
+            max_ratio=1,
+            min_split_tree=2,
+            B_iterations=50):
         ''' Returns the MSE, Bias^2, Variance and Error for
         the specified simulation under subagging as a numpy array for the range of
         ratios.
@@ -157,8 +169,9 @@ class MonteCarloSimulation:
 
         # We loop over all ratios and save the results to an array.
         for index, ratio in enumerate(ratiorange):
-            output_array_subagging[index, :] = self.calc_mse(ratio=ratio,
-                                                          bootstrap=False,
-                                                          min_split_tree=min_split_tree,
-                                                          B_iterations=B_iterations)
+            output_array_subagging[index,
+                                   :] = self.calc_mse(ratio=ratio,
+                                                      bootstrap=False,
+                                                      min_split_tree=min_split_tree,
+                                                      B_iterations=B_iterations)
         return output_array_subagging

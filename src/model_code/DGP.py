@@ -65,13 +65,13 @@ class DataSimulation:
             self.random_state = np.random.RandomState(random_seed)
         else:
             raise ValueError(
-            'Must pass integer value or None as the random seed for the data generating process.'
+                'Must pass integer value or None as the random seed for the data generating process.'
             )
 
     def _check_n_size(self, n_size):
-        if not isinstance(n_size, int) or n_size<1:
+        if not isinstance(n_size, int) or n_size < 1:
             raise ValueError(
-            'Must pass a postitive integer as the sample size for the process'
+                'Must pass a postitive integer as the sample size for the process'
             )
         else:
             self.n_size = n_size
@@ -81,17 +81,17 @@ class DataSimulation:
             self.noise = noise
         else:
             raise ValueError(
-            'Must pass float or int as the noise term.'
+                'Must pass float or int as the noise term.'
             )
+
     def _check_without_error(self, without_error):
         if isinstance(without_error, bool):
             self.without_error = without_error
         else:
             raise ValueError(
-            'Must pass bool as without_error to specify if you want'+
-            'to draw with or without error term.'
+                'Must pass bool as without_error to specify if you want' +
+                'to draw with or without error term.'
             )
-
 
     def friedman_1_model(self):
         """
@@ -117,9 +117,7 @@ class DataSimulation:
             draw_e = self.random_state.normal(0, self.noise, self.n_size)
             y = np.add(draw_e, f_x)
 
-
         return X, y
-
 
     def linear_model(self):
         ''' Returns the linear model from Friedman Hall (2000) covariante matrix *X* and the
@@ -135,7 +133,6 @@ class DataSimulation:
         f_x = (1 * X[:, 0] + 2 * X[:, 1] + 3 *
                X[:, 2] + 4 * X[:, 3] + 5 * X[:, 4])
 
-
         # Indicate if we draw an error term directly
         # and draw error if desired
         if self.without_error:
@@ -144,7 +141,6 @@ class DataSimulation:
             draw_e = self.random_state.normal(0, self.noise, self.n_size)
             y = np.add(draw_e, f_x)
         return X, y
-
 
     def _indicator_function(self, var_1, arg_1, var_2=None, arg_2=None):
         ''' Returns an numpy array with {0,1}

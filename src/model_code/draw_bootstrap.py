@@ -55,8 +55,6 @@ class BaggingTree:
 
         return X_draw, y_draw
 
-
-
     def fit(self, X, y):
         # Define list of estimators that will be fit to the different Bootstrap
         # sample.
@@ -75,9 +73,10 @@ class BaggingTree:
                 random_state=self.random_seed)
 
             # Fit Regression Tree to the Bootstrap Sample.
-            fitted_tree  = tree.fit(X_draw, y_draw)
+            fitted_tree = tree.fit(X_draw, y_draw)
 
-            # Append the fitted tree to the list, that contains all Regression Trees
+            # Append the fitted tree to the list, that contains all Regression
+            # Trees
             self.tree_estimators.append(fitted_tree)
         # We return *self*, as we want be able to pass a trained instance
         return self
@@ -93,7 +92,7 @@ class BaggingTree:
 
         # Get prediction values for each tree.
         for i in range(self.B_iterations):
-            predictions[i,:] = self.tree_estimators[i].predict(X)
+            predictions[i, :] = self.tree_estimators[i].predict(X)
 
         # Compute the mean over all *B_iterations* predictions for each
         # observation in X.

@@ -5,8 +5,10 @@ def build(ctx):
     ctx.recurse('data_management')
     ctx.recurse('analysis')
     ctx.recurse('analysis/main_simulation')
+    ctx.recurse('analysis/theory_simulation')
     ctx.recurse('final')
     ctx.recurse('final/main_simulation')
+    ctx.recurse('final/theory_simulation')
     # Safety measure -- else the LaTeX scanner might fail because some
     # '.tex'-source file has not been generated.
     ctx.add_group()
