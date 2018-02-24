@@ -22,3 +22,14 @@ def build(ctx):
               ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_normal_splits.pickle'),
           ]
       )
+
+      ctx(
+          features='run_py_script',
+          source='calc_toy_example.py',
+          deps=[
+              ctx.path_to(ctx, 'IN_MODEL_SPECS', 'toy_example_settings.json'),
+          ],
+          target=[
+              ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_toy_example.pickle'),
+          ]
+      )

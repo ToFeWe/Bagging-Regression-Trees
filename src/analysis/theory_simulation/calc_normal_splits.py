@@ -79,5 +79,5 @@ if __name__ == '__main__':
 
     calculate_normal_splits = calculate_normal_splits(normal_splits_settings_imported)
 
-with open(ppj("OUT_ANALYSIS_THEORY","output_normal_splits.pickle"), "wb") as out_file:
-    pickle.dump(calculate_normal_splits, out_file)
+    with open(ppj("OUT_ANALYSIS_THEORY","output_normal_splits.pickle"), "wb") as out_file:
+        pickle.dump(calculate_normal_splits, out_file)

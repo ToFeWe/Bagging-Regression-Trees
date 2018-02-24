@@ -21,3 +21,13 @@ def build(ctx):
             ],
             target=ctx.path_to(ctx, 'OUT_FIGURES_THEORY', 'plot_normal_splits.pdf')
         )
+
+        ctx(
+            features='run_py_script',
+            source='plot_toy_example.py',
+            deps=[
+                ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_toy_example.pickle'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+            ],
+            target=ctx.path_to(ctx, 'OUT_FIGURES_THEORY', 'plot_toy_example.pdf')
+        )
