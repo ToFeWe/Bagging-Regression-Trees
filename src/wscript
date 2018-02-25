@@ -6,11 +6,13 @@ def build(ctx):
     ctx.recurse('analysis')
     ctx.recurse('analysis/main_simulation')
     ctx.recurse('analysis/theory_simulation')
+    ctx.recurse('analysis/real_data_simulation')
     ctx.recurse('final')
     ctx.recurse('final/main_simulation')
     ctx.recurse('final/theory_simulation')
+    ctx.recurse('final/real_data_simulation')
     # Safety measure -- else the LaTeX scanner might fail because some
     # '.tex'-source file has not been generated.
     ctx.add_group()
-    #ctx.recurse('paper')
+    ctx.recurse('paper')
     #ctx.recurse('documentation')

@@ -9,8 +9,8 @@ This module peforms the simulations needed.
 
 # Import the needed packages
 import numpy as np
-from src.model_code.draw_bootstrap import BaggingTree
-from src.model_code.DGP import DataSimulation
+from src.model_code.bagging_module import BaggingTree
+from src.model_code.dgp_module import DataSimulation
 
 
 class MonteCarloSimulation:

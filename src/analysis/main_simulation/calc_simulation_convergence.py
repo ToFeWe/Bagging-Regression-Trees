@@ -8,8 +8,6 @@ This module simulates the convergence of bagging/subagging towards a stable valu
 
 """
 import sys
-sys.path.append('../../BaggingSimulation')
-
 from src.model_code.simulations import MonteCarloSimulation
 import numpy as np
 import json

@@ -11,12 +11,9 @@ Welcome to the Bagging Regression Trees project's documentation!
     :maxdepth: 2
 
     introduction
-    original_data
-    data_management
+    model_code
     analysis
     final
     paper
-    model_code
     model_specs
-    library
     references
