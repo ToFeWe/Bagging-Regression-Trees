@@ -1,16 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Dec  4 11:17:12 2017
+    """
+   Created on Mon Dec  4 11:17:12 2017
 
-@author: Tobias Werner
+   @author: Tobias Werner
 
-This module peforms the simulations needed.
-"""
+   This module peforms the simulations needed.
+   """
 
 # Import the needed packages
 import numpy as np
-from src.model_code.bagging_module import BaggingTree
-from src.model_code.dgp_module import DataSimulation
+from src.model_code.baggingtree import BaggingTree
+from src.model_code.datasimulation import DataSimulation
 
 
 class MonteCarloSimulation:

@@ -9,9 +9,9 @@ def build(ctx):
             features='run_py_script',
             source='calc_simulation_subagging.py',
             deps=[
-                ctx.path_to(ctx, 'IN_MODEL_CODE', 'dgp_module.py'),
-                ctx.path_to(ctx, 'IN_MODEL_CODE', 'bagging_module.py'),
-                ctx.path_to(ctx, 'IN_MODEL_CODE', 'simulations.py'),
+                ctx.path_to(ctx, 'IN_MODEL_CODE', 'datasimulation.py'),
+                ctx.path_to(ctx, 'IN_MODEL_CODE', 'baggingtree.py'),
+                ctx.path_to(ctx, 'IN_MODEL_CODE', 'montecarlosimulation.py'),
                 ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings_small.json'),
                 ctx.path_to(ctx, 'IN_MODEL_SPECS', 'subagging_settings.json')
             ],
@@ -26,9 +26,9 @@ def build(ctx):
             features='run_py_script',
             source='calc_simulation_convergence.py',
             deps=[
-                ctx.path_to(ctx, 'IN_MODEL_CODE', 'dgp_module.py'),
-                ctx.path_to(ctx, 'IN_MODEL_CODE', 'bagging_module.py'),
-                ctx.path_to(ctx, 'IN_MODEL_CODE', 'simulations.py'),
+                ctx.path_to(ctx, 'IN_MODEL_CODE', 'datasimulation.py'),
+                ctx.path_to(ctx, 'IN_MODEL_CODE', 'baggingtree.py'),
+                ctx.path_to(ctx, 'IN_MODEL_CODE', 'montecarlosimulation.py'),
                 ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings_small.json'),
                 ctx.path_to(ctx, 'IN_MODEL_SPECS', 'convergence_settings.json')
             ],
@@ -43,9 +43,9 @@ def build(ctx):
             features='run_py_script',
             source='calc_simulation_tree_depth.py',
             deps=[
-                ctx.path_to(ctx, 'IN_MODEL_CODE', 'dgp_module.py'),
-                ctx.path_to(ctx, 'IN_MODEL_CODE', 'bagging_module.py'),
-                ctx.path_to(ctx, 'IN_MODEL_CODE', 'simulations.py'),
+                ctx.path_to(ctx, 'IN_MODEL_CODE', 'datasimulation.py'),
+                ctx.path_to(ctx, 'IN_MODEL_CODE', 'baggingtree.py'),
+                ctx.path_to(ctx, 'IN_MODEL_CODE', 'montecarlosimulation.py'),
                 ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings_small.json'),
                 ctx.path_to(ctx, 'IN_MODEL_SPECS', 'tree_depth_settings.json')
             ],

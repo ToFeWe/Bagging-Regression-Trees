@@ -6,7 +6,7 @@ Created on Tue Jan 30 11:07:27 2018
 """
 
 import sys
-from src.model_code.bagging_module import BaggingTree
+from src.model_code.baggingtree import BaggingTree
 import numpy as np
 from sklearn.datasets import load_boston
 from sklearn.model_selection import train_test_split

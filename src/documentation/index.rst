@@ -5,7 +5,7 @@
 
 
 Welcome to the Bagging Regression Trees project's documentation!
-================================================
+=================================================================
 
 .. toctree::
     :maxdepth: 2

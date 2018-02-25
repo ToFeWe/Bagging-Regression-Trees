@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Nov 17 10:53:11 2017
 
@@ -6,7 +5,7 @@ Created on Fri Nov 17 10:53:11 2017
 
 The module implements different data generating processes within
 the *DataSimulation* class. In order to make results compareable
-we define the attributes of the dgp_module within a class. All function then have the same
+we define the attributes of the datasimulation within a class. All function then have the same
 noise, size and random_seed.
 """
 
