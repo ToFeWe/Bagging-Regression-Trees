@@ -19,11 +19,11 @@ def indicator(x_value,Y_bar):
         return 0
 
 
-def bagged_indicator(x_value, sample, B_iterations=50):
+def bagged_indicator(x_value, sample, b_iterations=50):
     ''' TBT X-X
     '''
-    predictions = np.ones(B_iterations) * np.nan
-    for m in range(B_iterations):
+    predictions = np.ones(b_iterations) * np.nan
+    for m in range(b_iterations):
         bootstrapsample = np.random.choice(sample,size=(sample.size,),replace=True)
         Y_bootstrap = bootstrapsample.mean()
         predictions[m] = indicator(x_value,Y_bootstrap)
@@ -67,7 +67,7 @@ def simulate_finite_sample(settings):
                 # Draw a new sample and make a prediction for bagging and without bagging
                 Y_sample = random_state.normal(settings['mu'], settings['sigma'], size=sample_size)
                 prediction_unbagged = indicator(x, Y_sample.mean())
-                prediction_bagged = bagged_indicator(x, Y_sample, B_iterations=settings['B_iterations'])
+                prediction_bagged = bagged_indicator(x, Y_sample, b_iterations=settings['b_iterations'])
 
                 # Calculate the Squared Error for the given repetition
                 y_se_bagged[i_repeat] = (true_prediction - prediction_bagged) ** 2

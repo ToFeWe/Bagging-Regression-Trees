@@ -1,10 +1,10 @@
-    """
-   Created on Mon Dec  4 11:17:12 2017
+"""
+Created on Mon Dec  4 11:17:12 2017
 
-   @author: Tobias Werner
+@author: Tobias Werner
 
-   This module peforms the simulations needed.
-   """
+This module peforms the simulations needed.
+"""
 
 # Import the needed packages
 import numpy as np
@@ -60,7 +60,7 @@ class MonteCarloSimulation:
             ratio=1,
             bootstrap=True,
             min_split_tree=2,
-            B_iterations=50):
+            b_iterations=50):
         ''' Performs the simulation and returns MSE, Bias^2, Variance and Error for
         the specified simulation under bagging as a numpy array
 
@@ -74,7 +74,7 @@ class MonteCarloSimulation:
         # parameters, that will be used for the rest of the simulation run.
         bagging_instance = BaggingTree(random_seed=self.random_seed_fit,
                                        ratio=ratio, bootstrap=bootstrap,
-                                       B_iterations=B_iterations,
+                                       b_iterations=b_iterations,
                                        min_split_tree=min_split_tree)
 
         # To make results compareable and to get a smooth plot (we have
@@ -151,7 +151,7 @@ class MonteCarloSimulation:
             min_ratio=0.1,
             max_ratio=1,
             min_split_tree=2,
-            B_iterations=50):
+            b_iterations=50):
         ''' Returns the MSE, Bias^2, Variance and Error for
         the specified simulation under subagging as a numpy array for the range of
         ratios.
@@ -172,5 +172,5 @@ class MonteCarloSimulation:
                                    :] = self.calc_mse(ratio=ratio,
                                                       bootstrap=False,
                                                       min_split_tree=min_split_tree,
-                                                      B_iterations=B_iterations)
+                                                      b_iterations=b_iterations)
         return output_array_subagging

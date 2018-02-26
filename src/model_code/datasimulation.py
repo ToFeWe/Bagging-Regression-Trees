@@ -1,12 +1,10 @@
 """
-Created on Fri Nov 17 10:53:11 2017
 
-@author: Tobias Werner
+This module implements different data generating processes within
+the *DataSimulation* class. In order to make the results for different functional forms of f(X) compareable,
+we define the attributes of the datasimulation within a class. All function to which we apply the Bagging Algortithm then have the same
+noise, size and random_seed This is important, as we want to compare its performance on different regression functions.
 
-The module implements different data generating processes within
-the *DataSimulation* class. In order to make results compareable
-we define the attributes of the datasimulation within a class. All function then have the same
-noise, size and random_seed.
 """
 
 import numpy as np
@@ -14,23 +12,23 @@ import numpy as np
 
 class DataSimulation:
     """
-    A  class that collect different data generating processes.
+    A  class that collects different data generating processes.
 
     Parameters
     ----------
     random_seed: int or None, optional (Default: None)
         random_seed is used to specify the RandomState for numpy.random.
-        It is shared accros all functions.
+        It is shared accros all functions of the class.
 
         IMPORTANT: This random seed is fixed for a specific instance, as it specifies a new RandomState for all numpy functions
         used in the class. As a result this random_seed is *not* overwritten by numpy
-        random seeds that are defined outside of specific class instance. The reason For
+        random seeds that are defined outside of specific class instance. The reason for
         this is that it makes reproducibility easier accross different simulations and
         modules.
         Note however that the downside is, that we have to specify for each class (each instance)
-        a different random seed and it is not possible to specify one random seed at the begiing
+        a different random seed and it is not possible to specify one random seed at the beginning
         of the whole simulation, as this will define the RandomState within each class.
-
+        
     n_size: int, optional (Default=500)
         The sample size, when calling one of the data geenrating functions.
 
@@ -43,8 +41,10 @@ class DataSimulation:
     without_error: bool, optional(Default=False)
         Specify if the data should be generated with an error term already added.
 
-        Use this option if you want to create a test sample for which you draw
+        Default=False implies that it is created *with* an error term.
+        Change this option to *True* if you want to create a test sample for which you draw
         an error term for each simulation iteration.
+
     """
 
     def __init__(
@@ -59,6 +59,7 @@ class DataSimulation:
         self._check_without_error(without_error)
 
     def _check_random_seed(self, random_seed):
+        ''' Checks if the *random_seed* is specified correctly'''
         if random_seed is None or isinstance(random_seed, int):
             self.random_seed = random_seed
             self.random_state = np.random.RandomState(random_seed)
@@ -68,6 +69,7 @@ class DataSimulation:
             )
 
     def _check_n_size(self, n_size):
+        ''' Checks if the *n_size* is specified correctly'''
         if not isinstance(n_size, int) or n_size < 1:
             raise ValueError(
                 'Must pass a postitive integer as the sample size for the process'
@@ -76,6 +78,7 @@ class DataSimulation:
             self.n_size = n_size
 
     def _check_noise(self, noise):
+        ''' Checks if the *noise* is specified correctly'''
         if isinstance(noise, (float, int)):
             self.noise = noise
         else:
@@ -84,6 +87,7 @@ class DataSimulation:
             )
 
     def _check_without_error(self, without_error):
+        ''' Checks if the *without_error* is specified correctly'''
         if isinstance(without_error, bool):
             self.without_error = without_error
         else:
@@ -95,8 +99,8 @@ class DataSimulation:
     def friedman_1_model(self):
         """
         Returns the Friedman #1 Model covariante matrix *X* and the
-        target variable *y* as numpy arrays.
-        Note that x6 to x10 do not contribute to y and can be considered as
+        target variable *y* as a numpy arrays for the values specified in the
+        class instance. Note that x6 to x10 do not contribute to y and can be considered as
         'noise' variables.
 
         For further reference see:
@@ -120,7 +124,9 @@ class DataSimulation:
 
     def linear_model(self):
         ''' Returns the linear model from Friedman Hall (2000) covariante matrix *X* and the
-        target variable *y* as numpy arrays.
+        target variable *y* as numpy arrays for the values specified in the
+        class instance. Note that x6 to x10 do not contribute to y and can be considered as
+        'noise' variables.
 
         For further reference see:
 
@@ -142,7 +148,10 @@ class DataSimulation:
         return X, y
 
     def _indicator_function(self, var_1, arg_1, var_2=None, arg_2=None):
-        ''' Returns an numpy array with {0,1}
+        ''' Returns an numpy array with {0,1} according to the variable array *var_1* and
+        the argument array *arg_1*. It checks element wise the indicator function.
+        It can be extended for a second variable array *var_2* and a second argument array *arg_2*.
+        The function is used for computing the indicator function of the *indicator_model()* function.
 
         '''
         equal_1 = np.equal(
@@ -161,7 +170,15 @@ class DataSimulation:
             return 1 * np.logical_and(equal_1, equal_2)
 
     def indicator_model(self):
-        '''Returns the Bühlman M3 Model as a numpy array
+        '''Returns the M3 Model from Bühlmann (2003) as a numpy array for the values specified in the
+        class instance.
+
+        Note that this data generating process was *not* used in the final paper, but offers an interesting
+        comparison for the intersted reader.
+
+        Bühlmann, P. L. (2003). Bagging, subagging and bragging for improving some prediction algorithms. In Research report/Seminar für Statistik, Eidgenössische Technische Hochschule (ETH) (Vol. 113). Seminar für Statistik, Eidgenössische Technische Hochschule (ETH), Zürich.
+
+
         '''
         # Initalize the variables covariante matrix
         # Note we always add +1 to the desired variable due to the

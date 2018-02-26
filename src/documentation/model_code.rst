@@ -1,7 +1,7 @@
 .. _model_code:
 
 **********
-Model code
+Main Algorithms and Model code
 **********
 
 
@@ -35,11 +35,17 @@ constant across different regression functions.
 
 The ``MonteCarloSimulation`` class
 ==================================
-The ``MonteCarloSimulation`` class implements the Monte Carlo simulation as it was
+The ``MonteCarloSimulation`` class implements the Monte Carlo simulation for a given set of parameters as it was
 used in the **Simulation** part of the paper.
 We picked this simulation procedure as we wanted to emphasis the decomposition of the
 mean squared prediction error at a new input point into Bias and the Variance
 but also the irreducible Noise term.
+It is used in the calculation modules in *src.analysis.main_simulation*, where we consider different parameter variations for the
+Bagging Algorithm to observe changes in the MSPE, Bias and the Variance.
+The parameters that are specific to the data generating process are defined in the class instance.
+Parameters for the Bagging Algorithm are defined in the functions.
+The idea is that we create a class instance which specifies a data generating process and then loop
+over different parameters for bagging using the pre specified class instance.
 
 
 .. automodule:: src.model_code.montecarlosimulation

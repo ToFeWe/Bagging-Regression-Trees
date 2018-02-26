@@ -3,7 +3,7 @@
   "n_list": [100,1000,10000,50000],
   "mu": 0,
   "sigma": 2,
-  "B_iterations": 100,
+  "b_iterations": 100,
   "x_gridpoints": 100,
   "x_min": -5,
   "x_max": 5,

@@ -1,11 +1,11 @@
-'''
+"""
 Created on Tue Dec 12 15:02:16 2017
 
 @author: Tobias Werner
 
 This module simulates the convergence of bagging/subagging towards a stable value
 
-'''
+"""
 
 import sys
 from src.model_code.montecarlosimulation import MonteCarloSimulation
@@ -45,7 +45,7 @@ def simulate_convergence(general_settings, convergence_settings, model):
                            :] = simulation_basis.calc_mse(ratio=general_settings['BAGGING_RATIO'],
                                                           bootstrap=True,
                                                           min_split_tree=general_settings["min_split_tree"],
-                                                          B_iterations=n_bootstrap)
+                                                          b_iterations=n_bootstrap)
 
     # Simulate MSE for a high number of bootstrap iterations to visualize its
     # convergence
@@ -53,7 +53,7 @@ def simulate_convergence(general_settings, convergence_settings, model):
         ratio=general_settings['BAGGING_RATIO'],
         bootstrap=True,
         min_split_tree=general_settings["min_split_tree"],
-        B_iterations=convergence_settings['converged_bootstrap'])
+        b_iterations=convergence_settings['converged_bootstrap'])
     return output_convergence, output_large_B
 
 

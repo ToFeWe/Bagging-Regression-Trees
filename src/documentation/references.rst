@@ -4,5 +4,4 @@
 References
 **********
 
-.. bibliography:: ../paper/MetricsBibliography.bib
-   :style: plain
+TODO

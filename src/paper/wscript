@@ -5,11 +5,11 @@ def build(ctx):
 
         ctx(
             features='tex',
-            source='bagging.tex',
+            source='bagging_pres.tex',
             prompt=1
         )
         # Install to the project root.
         ctx.install_files(
             ctx.env.PROJECT_PATHS['PROJECT_ROOT'].abspath(),
-            'bagging.pdf'
+            'bagging_pres.pdf'
         )

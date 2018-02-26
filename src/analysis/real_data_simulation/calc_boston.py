@@ -31,7 +31,7 @@ def split_fit_predict_bagging(
         random_seed_split,
         random_seed_fit,
         bootstrap_bool,
-        B_iterations,
+        b_iterations,
         min_split_tree,
         a_ratio):
     '''
@@ -45,7 +45,7 @@ def split_fit_predict_bagging(
         random_seed=random_seed_fit,
         ratio=a_ratio,
         bootstrap=bootstrap_bool,
-        B_iterations=B_iterations,
+        b_iterations=b_iterations,
         min_split_tree=min_split_tree
     )
     fitted_model = bagging_instance.fit(X_train, y_train)
@@ -73,7 +73,7 @@ def simulate_bagging_parallel(X, y, general_settings, boston_settings):
             random_seed_split=boston_settings['random_seed_split'] + i,
             random_seed_fit=boston_settings['random_seed_fit'],
             bootstrap_bool=True,
-            B_iterations = general_settings['B_iterations'],
+            b_iterations = general_settings['b_iterations'],
             min_split_tree = general_settings['min_split_tree'],
             a_ratio=general_settings['BAGGING_RATIO']) for i in range(
                 general_settings['n_repeat']))
@@ -104,7 +104,7 @@ def simulate_subagging_parallel(
                 random_seed_split=boston_settings['random_seed_split'] + i,
                 random_seed_fit=boston_settings['random_seed_fit'],
                 bootstrap_bool=False,
-                B_iterations = general_settings['B_iterations'],
+                b_iterations = general_settings['b_iterations'],
                 min_split_tree = general_settings['min_split_tree'],
                 a_ratio=a_value) for i in range(
                     general_settings['n_repeat']))

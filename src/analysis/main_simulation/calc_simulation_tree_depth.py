@@ -1,4 +1,5 @@
 """
+
 Created on Fri Dec  8 10:49:40 2017
 
 @author: Tobias Werner
@@ -56,13 +57,13 @@ def simulate_tree_depth(general_settings, tree_depth_settings, model):
             ratio=general_settings['BAGGING_RATIO'],
             bootstrap=True,
             min_split_tree=split,
-            B_iterations=general_settings["B_iterations"])
+            b_iterations=general_settings["b_iterations"])
         # Note: Subagging(bootstrap=False) with ratio = 1 -> Tree
         output_tree = simulation_basis.calc_mse(
             ratio=general_settings['BAGGING_RATIO'],
             bootstrap=False,
             min_split_tree=split,
-            B_iterations=general_settings["B_iterations"])
+            b_iterations=general_settings["b_iterations"])
 
         output_array_bagging[index, :] = output_bagging
         output_array_tree[index, :] = output_tree
