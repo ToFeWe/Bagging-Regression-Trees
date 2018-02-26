@@ -1,9 +1,29 @@
 """
-Created on Mon Dec  4 11:17:12 2017
 
-@author: Tobias Werner
+This module performs the simulations of the MSPE and its decomposition into squared-bias, variance and noise, for the
+Bagging Algorithm as described in the paper:
 
-This module peforms the simulations needed.
+In all simulations we use the following procedure:
+i. Generate a test sample, without error term, according to the data generating processes of
+interest. This will be constant for the whole simulation study. All predictions will be made
+on this sample.10
+ii. For each simulation iteration we follow this procedure:
+    (a) Draw new error terms for the test sample.
+    (b) Draw a new training sample with regressors and error terms.
+    (c) Fit the predictor (Tree, Bagging, Subagging) to the generated training data.
+    (d) Using this new predictor make a prediction into the fixed test sample and save the
+    predicted values.
+iii. We compute the MSPE, squared bias and variance for the given predictor at the input point X = x0 with x0 being the test sample generated in (i).
+
+
+
+Within one class instance we define all parameters that are relevant to the data generating process (DGP) and the simulation set-up.
+Parameters that are specific to the Bagging Algorithm are defined in the functions. The idea is to define one class
+instance and then loop over different bagging parameters for the same instance, keeping the DGP and the simulation set-up
+constant.
+The function calc_mse() computes the MSPE and its decomposition for one specification and the calc_mse_all_ratios() for a
+range of subsampling ratios.
+
 """
 
 # Import the needed packages
@@ -13,13 +33,52 @@ from src.model_code.datasimulation import DataSimulation
 
 
 class MonteCarloSimulation:
-    """TBT
-    Performs a Monte Carlo simulation for the given parameters
+    """
+    A  class that implements a Monte Carlo Simulation for the Bagging Algortihm.
+
+    Parameters
+    ----------
+    random_seeds: tuple of size 4 consisting of int or None, optional (Default: (None, None, None, None))
+        Specify the random seeds that will be used for the simulation study. We have to use different random seeds, as
+        we define different RandomState instances for each part of the simulation.
+
+        random_seeds[0]: Defines the RandomState for the noise term draw
+        random_seeds[1]: Defines the RandomState for the BaggingTree class
+        random_seeds[2]: Defines the RandomState for the training sample draws
+        random_seeds[3]: Defines the RandomState for the test sample draw
+
+        One random_seed is used to specify the RandomState for numpy.random.
+        It is shared accros all functions of the class.
+
+        IMPORTANT: This random seed is fixed for a specific instance, as it specifies a new RandomState for all numpy functions
+        used in the class. As a result this random_seed is *not* overwritten by numpy
+        random seeds that are defined outside of specific class instance. The reason for
+        this is that it makes reproducibility easier accross different simulations and
+        modules.
+        Note however that the downside is, that we have to specify for each class (each instance)
+        a different random seed and it is not possible to specify one random seed at the beginning
+        of the whole simulation, as this will define the RandomState within each class.
+
+    noise: int, float, optional (Default=1.0)
+        The variance of the error term that is used for the data generating
+        processes.
+        The default of *noise* = 1.0 indicates that we draw without an error term
+        that is standard normally distributed.
+
+    n_test_train: tuple of size 2 with int, optional(Default= (500, 500))
+        Specify the sample size of the test sample and the training samples.
+
+        n_test_train[0]: Defines the size for the test sample
+        n_test_train[1]: Defines the size for the training samples
+
+    data_process: string, optional (Default="fiedman")
+        Defines which data generating process we use.
+        Other options are "linear" and "indicator".
 
     """
 
     def __init__(self,
-                 n_repeat=150,
+                 n_repeat=100,
                  noise=1,
                  data_process="friedman",
                  n_test_train=(500, 500),
@@ -61,10 +120,12 @@ class MonteCarloSimulation:
             bootstrap=True,
             min_split_tree=2,
             b_iterations=50):
-        ''' Performs the simulation and returns MSE, Bias^2, Variance and Error for
-        the specified simulation under bagging as a numpy array
+        """ Performs the simulation and returns MSPE, squared bias, variance and Error for
+        the specified simulation under bagging as a numpy array.
 
-        '''
+        TODO
+
+        """
 
         # Create numpy array that saves the MSPE for each training
         # observation.
@@ -152,12 +213,13 @@ class MonteCarloSimulation:
             max_ratio=1,
             min_split_tree=2,
             b_iterations=50):
-        ''' Returns the MSE, Bias^2, Variance and Error for
+        """ Returns the MSE, squared bias, variance and error for
         the specified simulation under subagging as a numpy array for the range of
         ratios.
-        - Add Dimesions!
 
-        '''
+        TODO
+
+        """
         # Array must be of length four: MSPE, Bias, Variance, Noise
         ARRAY_LENGTH = 4
         # Create a range of subsampling ratios.

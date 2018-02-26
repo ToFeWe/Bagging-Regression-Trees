@@ -1,6 +1,9 @@
 """
-Module to create a bootstrap sample, which will later be used
-to create the bagging algorithm
+
+This module implements the Bagging Algorithm used for the main simulations of this paper.
+To use it, you first define a class instance that specifies the parameters for the algorithm.
+Then use the fit() function to fit the algorithm to a training sample.
+Predictions on a new sample can be made using the predict() function.
 
 """
 import numpy as np
@@ -38,7 +41,11 @@ class BaggingTree:
         (*bootstrap=False*).
 
     min_split_tree: int, optional (Default=2)
-        The number of bootstrap iterations used to construct the bagging/subagging predictor.
+        The minimal number of observations that can be within a terminal node of the Regression Trees to be 
+        considered for a split. 
+        Use this to control for the complexity of the Regression Tree.
+        
+        Must be greater than 2.
 
     b_iterations: int, optional (Default=50)
         The number of bootstrap iterations used to construct the bagging/subagging predictor.
@@ -68,7 +75,7 @@ class BaggingTree:
     def _draw_sample(self, X, y):
         """Draws sample of the given data. Use *self.ratio* and *self.bootstrap*
         to specify if you want to draw with replacement (Bootstrap) and how large
-        your sample should be relative to the orginal data.
+        your sample should be relative to the original data.
         Note: Default values *self.ratio*=1 and *self.bootstrap*True indicate
         that we draw a sample for bagging.
 
@@ -96,8 +103,20 @@ class BaggingTree:
         return X_draw, y_draw
 
     def fit(self, X, y):
-        ''' TBT X-X
-        '''
+        """
+        Fit the Bagging Algorithm to a sample (usually training sample) that consists of the covariant matrix *X* and
+        the vector the dependent variable *y*.
+
+        Parameters
+        ----------
+        X: numpy-array with shape = [n_size, n_features] (Default: None)
+            The covariant matrix *X* with the sample size n_size and
+            n_features of covariants.
+
+        y: numpy-array with shape = [n_size] (Default: None)
+            The vector of the dependent variable *y* with the sample size n_size
+
+        """
         # Define list of estimators that will be fit to the different Bootstrap
         # sample.
         self.tree_estimators = []
@@ -124,8 +143,18 @@ class BaggingTree:
         return self
 
     def predict(self, X):
-        ''' TBT X-X
-        '''
+        """
+
+        Make a new prediction for a **trained** class instance (using the fit() function first) on
+        a new covariant matrix *X* (test sample).
+
+        Parameters
+        ----------
+        X: numpy-array with shape = [n_size, n_features] (Default: None)
+            The covariant matrix *X* of the new test sample with size n_size and
+            n_features covariants.
+
+        """
         # Number of observations for which we make a prediction
         n_observations = X.shape[0]
 
