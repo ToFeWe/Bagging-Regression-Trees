@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Nov 26 18:52:10 2017
 
-@author: gl1rk
+A module to calculate the results for the introductory example in subsection 3.2 of the paper for the dynamic environment
+of x.
+
+Given the choice of the appropriate environment of x, the estimator does not
+stabilizes even asymptotically and we can illustrate the effects of bagging on
+it.
+
 """
 
 import numpy as np
@@ -19,48 +24,88 @@ from bld.project_paths import project_paths_join as ppj
 
 
 def convolution_cdf_df(c):
-    ''' Calculate the convolution as defined by Bühlmann and Yu (2002) and as
-    used in the inductory example of our paper for the the c.d.f of the standard
+    """ Calculate the convolution as defined by Bühlmann and Yu (2002) and as
+    used in the introductory example of our paper for the the c.d.f of the standard
     normal distribution and the standard normal density for the gridpoint *c*
-    for the real number line.'''
+    for the real number line.
 
-    convolution  = integrate.quad(lambda y: norm.cdf(c-y) * norm.pdf(y), -np.inf,np.inf)[0]
+    Parameters
+    ----------
+    c: float, int
+        The gridpoint to be considered.
+
+    """
+
+    convolution = integrate.quad(lambda y: norm.cdf(c-y) * norm.pdf(y), -np.inf,np.inf)[0]
     return convolution
 
 def convolution_cdf_squared_df(c):
-    ''' Calculate the convolution as defined by Bühlmann and Yu (2002) and as
-    used in the inductory example of our paper for the the squared c.d.f of the standard
+    """ Calculate the convolution as defined by Bühlmann and Yu (2002) and as
+    used in the introductory example of our paper for the the squared c.d.f of the standard
     normal distribution and the standard normal density for the gridpoint *c*
-    for the real number line.'''
+    for the real number line.
+
+    Parameters
+    ----------
+    c: float, int
+        The gridpoint to be considered.
+
+    """
 
     convolution  = integrate.quad(lambda y: norm.cdf(c-y) ** 2 * norm.pdf(y), -np.inf,np.inf)[0]
     return convolution
 
 def calculate_bias_bagged(c_value):
-    ''' Calculate the squared bias for the bagged predictor given the grid point
+    """ Calculate the squared bias for the bagged predictor given the grid point
     *c_value*
-    '''
+
+    Parameters
+    ----------
+    c_value: float, int
+        The gridpoint to be considered.
+
+    """
     bias_bagged = (convolution_cdf_df(c_value) - norm.cdf(c_value)) ** 2
     return bias_bagged
 
 def calculate_var_bagged(c_value):
-    ''' Calculate the variance for the bagged predictor given the grid point
+    """ Calculate the variance for the bagged predictor given the grid point
     *c_value*
-    '''
+
+    Parameters
+    ----------
+    c_value: float, int
+        The gridpoint to be considered.
+
+    """
     var_bagged = convolution_cdf_squared_df(c_value) - convolution_cdf_df(c_value) ** 2
     return var_bagged
 
 def calculate_var_unbagged(c_value):
-    ''' Calculate the variance for the bagged predictor given the grid point
+    """ Calculate the variance for the bagged predictor given the grid point
     *c_value*
-    '''
+
+    Parameters
+    ----------
+    c_value: float, int
+        The gridpoint to be considered.
+
+
+    """
     var_unbagged = norm.cdf(c_value) * (1 - norm.cdf(c_value))
     return var_unbagged
 
 def calculate_toy_example(settings):
-    ''' TBT X-X
-    '''
+    """
+    Calculate the Bias and the Variance for the case of bagged and unbagged predictor based on the calulation settings
+    defined in *settings*.
 
+    settings: Dictionary as described in :ref:`model_specs`
+        The dictionary defines the calculation set-up that is specific to the introductory simulation.
+
+    Returns the calculated values as a dictionary.
+
+    """
     # Create grid with *c* values that we want to consider.
     c_range = np.linspace(settings['c_min'],settings['c_max'], num=settings['c_gridpoints'])
 
@@ -91,6 +136,7 @@ def calculate_toy_example(settings):
     output['unbagged']['bias'] = np.zeros(settings['c_gridpoints'])
 
     return output
+
 
 if __name__ == '__main__':
     with open(ppj("IN_MODEL_SPECS","toy_example_settings.json")) as f:

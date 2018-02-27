@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 """
-Created on Tue Dec 19 14:04:39 2017
+A module which creates figure 4 in the final paper. The calculations for this have been performed in the module
+*calc_normal_splits*, which can be found under *src.analysis.theory_simulation* and has been described
+in :ref:`analysis`.
 
-@author: Tobias Werner
 """
 
 import numpy as np
@@ -13,9 +13,20 @@ import json
 from bld.project_paths import project_paths_join as ppj
 
 
-def plot_normal_splits(settings_plotting, normal_splits_settings, output_normal_splits):
-    '''TBT X-X
-    '''
+def plot_normal_splits(settings_plotting, output_normal_splits):
+    """
+    A function that creates figure  in the final paper.
+
+    Parameters
+    ----------
+    settings_plotting: Dictionary as described in :ref:`model_specs`
+        The dictionary contains all plotting specifications that are shared across various modules.
+
+    output_normal_splits: Dictionary as defined by *calc_normal_splits* in *src.analysis.theory_simulation*
+        The dictionary that contains the simulation results for subagging of stump predictors for a range of
+        subsampling fractions.
+
+    """
     plt.style.use([settings_plotting['style']])
     fig, ax = plt.subplots(figsize=settings_plotting['figsize_theory'], ncols=3)
 
@@ -62,4 +73,4 @@ if __name__ == '__main__':
     with open(ppj("OUT_ANALYSIS_THEORY","output_normal_splits.pickle"), "rb") as f:
         output_normal_splits_imported = pickle.load(f)
 
-    plot_normal_splits(settings_plotting_imported, normal_splits_settings_imported, output_normal_splits_imported)
+    plot_normal_splits(settings_plotting_imported, output_normal_splits_imported)

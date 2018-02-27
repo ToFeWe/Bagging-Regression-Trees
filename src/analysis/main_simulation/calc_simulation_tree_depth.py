@@ -1,12 +1,8 @@
 """
+This module simulates the variations in the model complexity governed by the Tree depth for the Bagging Algorithm.
 
-Created on Fri Dec  8 10:49:40 2017
-
-@author: Tobias Werner
-
-This module calculates the simulated values for MSE, Bias, Variance for different
-tree sizes. The tree size is regulated by specifing the minimal sample size a leaf
-can have to be considered for a split.
+For this we use the MonteCarloSimulation Class described in :ref:`model_code` in the simulate_tree_depth() function
+and return the results as a dictionary.
 
 """
 import sys
@@ -19,10 +15,32 @@ from bld.project_paths import project_paths_join as ppj
 
 
 def simulate_tree_depth(general_settings, tree_depth_settings, model):
-    ''' TBT X-X
-    '''
+    """
+    A  function that simulates the variations in tree depth an its effect on the MSPE decomposition for
+    the Bagging Algorithm.
+
+    Parameters
+    ----------
+    general_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary is shared across various simulations and defines the overall simulation set-up.
+
+    tree_depth_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary defines the simulation set-up that is specific to the tree depth simulation.
+
+    model: String that defines the data generating process to be considered.
+        The option are 'friedman', 'linear' and 'indicator' which is usually passed as the first system argument.
+
+    Returns a tuple of the simulation results:
+        tuple[0]: numpy array of shape = [min_split_array.size, 4], where *min_split_array* is the array of minimal split
+                  values we want to consider. This is defined by keys in *tree_depth_settings*.
+                  The array consists of the MSPE decompositions for each of those minimal split values for the Bagging
+                  Algorithm.
+        tuple[0]: numpy array of shape = [min_split_array.size, 4], where *min_split_array* is the array of minimal split
+                  values we want to consider. This is defined by keys in *tree_depth_settings*.
+                  The array consists of the MSPE decompositions for each of those minimal split values for the unbagged Tree.
+    """
     # MSE + Variance + Bias + Error = 4
-    SIZE_MSE_DECOMP = 4
+    size_mse_decomp = 4
     # Create an array that describes minimal leaf sizes.
     # As we want to start from high to low, we turn the array around with
     # [::-1].
@@ -37,9 +55,9 @@ def simulate_tree_depth(general_settings, tree_depth_settings, model):
     # Create arrays to save the MSE, Bias, Variance + Noise for each split
     # specification.
     output_array_bagging = np.ones(
-        (min_split_array.size, SIZE_MSE_DECOMP)) * np.nan
+        (min_split_array.size, size_mse_decomp)) * np.nan
     output_array_tree = np.ones(
-        (min_split_array.size, SIZE_MSE_DECOMP)) * np.nan
+        (min_split_array.size, size_mse_decomp)) * np.nan
 
     # Create a MonteCarloSimulation instance that defines the attributes For
     # the data generating process and will be constant for the tree and

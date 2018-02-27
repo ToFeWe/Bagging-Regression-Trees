@@ -1,9 +1,22 @@
-# -*- coding: utf-8 -*-
 """
-Created on Tue Jan 30 11:07:27 2018
+This module simulates the MSPE for bagging and subagging for the Boston Housing data set. The simulation set-up is the
+following:
 
-@author: Tobias Werner
+i. For each simulation iteration follow this procedure
+    (a) Randomly divide the data set into a training and a test set
+    (b) Fit the predictor (Tree, Bagging, Subagging) to the training set
+    (c) Using this new predictor make a prediction into the current test set and save the
+    predicted values
+    (d) Compute the average prediction error of the current test set and save the value
+ii. Compute the MSPE as the mean of average prediction errors of each iteration
+
+For this we use the BaggingTree Class described in :ref:`model_code` in the simulate_convergence() function
+and return the results as a dictionary.
+
+Parts of the simulation run in parallel using the joblib library.
+
 """
+
 
 import sys
 from src.model_code.baggingtree import BaggingTree
@@ -34,11 +47,45 @@ def split_fit_predict_bagging(
         b_iterations,
         min_split_tree,
         a_ratio):
-    '''
-    Split into test and training set. Note that the Random Seed is changed
-    for each iteration but still deterministic overall
+    """
+    A  function that splits the data consisting of *X* and *y* into a new test and training sample, fits the Bagging
+    Algorithm on the training sample and makes a prediction on the test sample.
+    Eventually the MSPE is computed.
 
-    '''
+    Parameters
+    ----------
+    X: numpy-array with shape = [n_size, n_features] (Default: None)
+        The covariant matrix *X* with the sample size n_size and
+        n_features of covariants.
+
+    y: numpy-array with shape = [n_size] (Default: None)
+        The vector of the dependent variable *y* with the sample size n_size
+
+    ratio_test: float
+        The ratio of the data used for the test sample.
+
+    random_seed_split: int
+        The random seed for the train_test_split.
+        Note: It defines a RandomState instance and thus we don't reseed the module.
+
+    random_seed_fit: int
+        The random seed for the BaggingTree instance.
+        Note: It defines a RandomState instance and thus we don't reseed the module.
+
+    bootstrap_bool: bool
+        Defines if we use the standard bootstrap or m out of n bootstrap.
+        *bootstrap_bool=True* would imply that we use the standard bootstrap.
+
+    b_iterations: int
+        Number of Bootstrap iterations used to construct the Bagging Predictor.
+
+    min_split_tree: int
+        Defines the tree depth by setting the minimal size of a terminal node to be considered for a split.
+    a_ratio: float
+        Defines the subsampling ratio.
+
+    Returns the MSPE for one iteration.
+    """
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=ratio_test, random_state=random_seed_split)
     bagging_instance = BaggingTree(
@@ -56,8 +103,28 @@ def split_fit_predict_bagging(
 
 
 def simulate_bagging_parallel(X, y, general_settings, boston_settings):
-    ''' Runs the simulation for bagging in parallel.
-    '''
+    """
+    A  function that simulates the MSPE for the Bagging Algorithm using the Boston Housing data.
+
+    Parameters
+    ----------
+    X: numpy-array with shape = [n_size, n_features] (Default: None)
+        The covariant matrix *X* with the sample size n_size and
+        n_features of covariants.
+
+    y: numpy-array with shape = [n_size] (Default: None)
+        The vector of the dependent variable *y* with the sample size n_size
+
+    general_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary is shared across various simulations and defines the overall simulation set-up.
+
+    boston_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary defines the simulation set-up that is specific to the boston simulation.
+
+    Returns the simulated MSPE.
+
+    """
+
     # Note that you can change n_jobs to 1 in case your system suffers too much
 
     # Calculate the mse for each iteration in parallel and compute the MSE.
@@ -87,8 +154,30 @@ def simulate_subagging_parallel(
         general_settings,
         subagging_settings,
         boston_settings):
-    ''' Runs the simulation for subagging in parallel.
-    '''
+    """
+    A  function that simulates the MSPE for the Subagging Algorithm over a range of subsampling fractions.
+
+    Parameters
+    ----------
+    X: numpy-array with shape = [n_size, n_features] (Default: None)
+        The covariant matrix *X* with the sample size n_size and
+        n_features of covariants.
+
+    y: numpy-array with shape = [n_size] (Default: None)
+        The vector of the dependent variable *y* with the sample size n_size
+
+    general_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary is shared across various simulations and defines the overall simulation set-up.
+
+    subagging_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary defines the simulation set-up that is specific to the subagging simulation.
+
+    boston_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary defines the simulation set-up that is specific to the boston simulation.
+
+    Returns a numpy array with the simulated MSPE for each subsampling fraction.
+
+    """
 
     mse_subagging = np.ones(subagging_settings['n_ratios']) * np.nan
     ratiorange = np.linspace(subagging_settings['min_ratio'], subagging_settings['max_ratio'], subagging_settings['n_ratios'])

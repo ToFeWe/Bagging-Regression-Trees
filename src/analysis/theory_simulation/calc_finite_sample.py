@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Dec 19 15:08:09 2017
 
-@author: gl1rk
+A module to calculate the results for the introductory example in subsection 3.2 of the paper without the dynamic environment
+of x.
+
+Without choosing a dynamic environment for x, the estimator developed by X-X and
+illustrated in our paper stabilizes by the (weak) Law of Large Numbers.
+We simulate this here for a range of sample sizes for a given mean and variance,
+assuming that Y follows a Gaussian distribution.
 """
 import numpy as np
 import json
@@ -11,8 +16,18 @@ import pickle
 from bld.project_paths import project_paths_join as ppj
 
 def indicator(x_value,Y_bar):
-    ''' TBT X-X
-    '''
+    """
+    A indicator function that returns 1 if the threshold *Y_bar* smaller or equal the
+    x value *x_value*.
+
+    Parameters
+    ----------
+    x_value: int, float
+        The value of x to be considered.
+    Y_bar: int, float
+        The value of Y_bar to be considered, i.e. the threshold.
+
+    """
     if Y_bar <= x_value:
         return 1
     if Y_bar > x_value:
@@ -20,18 +35,41 @@ def indicator(x_value,Y_bar):
 
 
 def bagged_indicator(x_value, sample, b_iterations=50):
-    ''' TBT X-X
-    '''
+    """
+    The bagged indicator function as described in subsection 3.2.
+
+    Parameters
+    ----------
+    x_value: int, float
+        The value of x to be considered.
+
+    sample: numpy array of shape = [sample_size]
+        The sample on which we bootstrap the mean.
+
+    b_iterations: int, optional (Default=50)
+        The number of bootstrap iterations to construct the predictor.
+
+    Returns the value of the bagged predictor.
+    """
     predictions = np.ones(b_iterations) * np.nan
     for m in range(b_iterations):
-        bootstrapsample = np.random.choice(sample,size=(sample.size,),replace=True)
+        bootstrapsample = np.random.choice(sample,size=(sample.size,), replace=True)
         Y_bootstrap = bootstrapsample.mean()
         predictions[m] = indicator(x_value,Y_bootstrap)
     return predictions.mean()
 
 def simulate_finite_sample(settings):
-    ''' TBT X-X
-    '''
+    """
+    Performs the simulation of the MSE for the bagged and unbagged predictor for a range of sample sizes, which are
+    specified by the *settings* dictionary. The procedure is described in greater detail in the Appendix Part B.2 of the
+    paper.
+
+    Parameters
+    ----------
+    settings: Dictionary as described in :ref:`model_specs`
+        The dictionary that defines the simulation set-up for the finite sample case.
+
+    """
     # Create dict to save the finale results.
     output = {}
 
@@ -83,8 +121,6 @@ def simulate_finite_sample(settings):
         output[sample_size]['mse_unbagged'] = mse_array_unbagged
 
     return output
-
-
 
 
 if __name__ == '__main__':

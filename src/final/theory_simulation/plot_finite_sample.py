@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Dec 20 12:16:00 2017
+A module which creates figure 2 in the final paper. The calculations for this have been performed in the module
+*calc_finite_sample*, which can be found under *src.analysis.theory_simulation* and has been described
+in :ref:`analysis`.
 
-@author: Tobias Werner
 """
 
 import numpy as np
@@ -12,9 +12,22 @@ import json
 
 from bld.project_paths import project_paths_join as ppj
 
+
 def plot_finite_sample(settings_plotting, output_finite_sample):
-    '''TBT X-X
-    '''
+    """
+    A function that creates figure 5 in the final paper.
+
+    Parameters
+    ----------
+    settings_plotting: Dictionary as described in :ref:`model_specs`
+        The dictionary contains all plotting specifications that are shared across various modules.
+
+    output_finite_sample: Dictionary as defined by *calc_finite_sample* in *src.analysis.theory_simulation*
+        The dictionary that contains the simulation results for bagging the indicator function for
+        different sample sizes.
+
+    """
+
 
     plt.style.use([settings_plotting['style']])
     fig = plt.figure(figsize=settings_plotting['figsize'])

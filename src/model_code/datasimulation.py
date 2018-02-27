@@ -179,7 +179,6 @@ class DataSimulation:
 
         Bühlmann, P. L. (2003). Bagging, subagging and bragging for improving some prediction algorithms. In Research report/Seminar für Statistik, Eidgenössische Technische Hochschule (ETH) (Vol. 113). Seminar für Statistik, Eidgenössische Technische Hochschule (ETH), Zürich.
 
-
         """
         # Initalize the variables covariante matrix
         # Note we always add +1 to the desired variable due to the

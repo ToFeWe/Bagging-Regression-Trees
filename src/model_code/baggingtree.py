@@ -12,8 +12,6 @@ from sklearn.tree import DecisionTreeRegressor
 
 
 class BaggingTree:
-    """Implements a Bagging Predictor for Regressions Trees"""
-
     """
     A  class that implements the Bagging Algorithm applied to Regression Trees.
     For the Regression Trees we use the implementation of scikit-learn.
@@ -56,8 +54,6 @@ class BaggingTree:
 
         Default=True implies that we use Bagging.
     """
-
-
     def __init__(
             self,
             random_seed=None,
@@ -71,6 +67,11 @@ class BaggingTree:
         self.b_iterations = b_iterations
         self.min_split_tree = min_split_tree
         self.random_state = np.random.RandomState(self.random_seed)
+
+        # Define list of estimators that will be fit to the different Bootstrap
+        # sample.
+        self.tree_estimators = []
+
 
     def _draw_sample(self, X, y):
         """Draws sample of the given data. Use *self.ratio* and *self.bootstrap*
@@ -117,9 +118,6 @@ class BaggingTree:
             The vector of the dependent variable *y* with the sample size n_size
 
         """
-        # Define list of estimators that will be fit to the different Bootstrap
-        # sample.
-        self.tree_estimators = []
 
         # The actual Bagging algorithm follows. This step is repeated
         # *b_iterations* times, which is the number of Bootstrap iterations.
@@ -139,7 +137,7 @@ class BaggingTree:
             # Append the fitted tree to the list, that contains all Regression
             # Trees
             self.tree_estimators.append(fitted_tree)
-        # We return *self*, as we want be able to pass a trained instance
+        # We return *self*, as we want be able to pass a trained instance.
         return self
 
     def predict(self, X):

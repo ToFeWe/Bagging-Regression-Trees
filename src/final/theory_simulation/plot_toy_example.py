@@ -1,9 +1,10 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Dec 27 17:42:26 2017
+A module which creates figure 3 in the final paper. The calculations for this have been performed in the module
+*calc_toy_example*, which can be found under *src.analysis.theory_simulation* and has been described
+in :ref:`analysis`.
 
-@author: Tobias Werner
 """
+
 
 import pickle
 import numpy as np
@@ -12,9 +13,21 @@ import matplotlib.pyplot as plt
 from bld.project_paths import project_paths_join as ppj
 import json
 
+
 def plot_toy_example(settings_plotting, output_toy_example):
-    '''TBT X-X
-    '''
+    """
+    A function that creates figure 3 in the final paper.
+
+    Parameters
+    ----------
+    settings_plotting: Dictionary as described in :ref:`model_specs`
+        The dictionary contains all plotting specifications that are shared across various modules.
+
+    output_toy_example: Dictionary as defined by *calc_toy_example* in *src.analysis.theory_simulation*
+        The dictionary that contains the calculation results for the bagged and unbagged indicator function.
+
+    """
+
     plt.style.use([settings_plotting['style']])
     fig, ax = plt.subplots(figsize=settings_plotting['figsize_theory'], ncols=3)
 

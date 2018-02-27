@@ -1,8 +1,12 @@
-# -*- coding: utf-8 -*-
 """
-Created on Tue Dec 19 14:04:39 2017
 
-@author: Tobias Werner
+A module to calculate the results for the general stump predictor in subsection 4.2 (Theorem 4.1) of the paper for the dynamic environment
+of x.
+
+Replacing the bootstrap procedure by a subsampling scheme, we can here calculate
+upper bounds for the Variance and the Bias of stump predictors seen in subsection 4.2
+and following the framework developed by Bühlmann and Yu (2002).
+
 """
 
 import numpy as np
@@ -13,21 +17,63 @@ import pickle
 
 from bld.project_paths import project_paths_join as ppj
 
+
 def bias_normal_splits(c, a, gamma):
-    ''' TBT X-X
-    '''
+    """
+    Calculates the squared bias for stump predictors as defined in the paper in Theorem 4.1.
+
+    Parameters
+    ----------
+
+    c: int, float
+        The gridpoint to be considered.
+
+    a: float
+        The subsampling fraction.
+
+    gamma: float
+        The rate of convergence of the estimator.
+
+    Returns the squared bias.
+    """
     bias = (norm.cdf(c * a ** gamma) - norm.cdf(c)) ** 2
     return bias
 
+
 def variance_normal_splits(c, a, gamma):
-    ''' TBT X-X
-    '''
-    variance =  (a * norm.cdf(c * a ** gamma) * (1 - norm.cdf(c * a ** gamma)))
+    """
+    Calculates the variance for stump predictors as defined in the paper in Theorem 4.1.
+
+    Parameters
+    ----------
+
+    c: int, float
+        The gridpoint to be considered.
+
+    a: float
+        The subsampling fraction.
+
+    gamma: float
+        The rate of convergence of the estimator.
+
+    Returns the variance.
+    """
+    variance = (a * norm.cdf(c * a ** gamma) * (1 - norm.cdf(c * a ** gamma)))
     return variance
 
+
 def calculate_normal_splits(settings):
-    '''TBT X-X
-    '''
+    """
+    Calculate the Bias and the Variance for the case of subagging based on the calculation settings
+    defined in *settings*.
+
+    settings: Dictionary as described in :ref:`model_specs`
+        The dictionary defines the calculation set-up that is specific to the stump predictor simulation.
+
+    Returns the calculated values as a dictionary.
+
+    """
+
     output = {}
 
     # Create a range of c values that we will iterate over for each subsampling

@@ -120,25 +120,48 @@ class MonteCarloSimulation:
             bootstrap=True,
             min_split_tree=2,
             b_iterations=50):
-        """ Performs the simulation and returns MSPE, squared bias, variance and Error for
-        the specified simulation under bagging as a numpy array.
+        """
+        A  function to simulate he MSPE decomposition for one specific specification of the Bagging Algorithm applied to Regression Trees.
+        The simulation set up and the data generating process is given by the respective class instance. We want to compare
+        the output of this function with respect to variations in the Bagging parameters.
 
-        TODO
+        Returns a numpy array of size 4 with the MSPE decomposition:
+            array[0]: Simulated MSPE
+            array[1]: Simulated squared bias
+            array[2]: Simulated variance
+            array[3]: Simulated noise
 
+        Parameters
+        ----------
+        ratio: float, optional (Default=1.0)
+            The sample size used for the simulation procedure. Each sample we draw for the Bagging Algorithm will be of size
+            math.ceil(n_observations * self.ratio).
+
+        min_split_tree: int, optional (Default=2)
+            The minimal number of observations within a terminal node of the Regression Trees to be
+            considered for a split that are used in the simulation.
+            Use this to control for the complexity of the Regression Tree.
+
+            Must be greater than 2.
+
+        b_iterations: int, optional (Default=50)
+            The number of bootstrap iterations used to construct the bagging/subagging predictor in the simulation.
+
+
+        bootstrap: bool, optional(Default=True)
+            Specify if the you use the standard bootstrap (Bagging) or m out of n bootstrap (Subagging).
+
+            Default=True implies that we use Bagging.
         """
 
-        # Create numpy array that saves the MSPE for each training
-        # observation.
-        y_mse = np.ones(self.n_test) * np.nan
-
-        # Create the instane of the bagging algorithm class, with the given
+        # Create the instance of the bagging algorithm class, with the given
         # parameters, that will be used for the rest of the simulation run.
         bagging_instance = BaggingTree(random_seed=self.random_seed_fit,
                                        ratio=ratio, bootstrap=bootstrap,
                                        b_iterations=b_iterations,
                                        min_split_tree=min_split_tree)
 
-        # To make results compareable and to get a smooth plot (we have
+        # To make results comparable and to get a smooth plot (we have
         # to limit *n_repeat* due to computation reasons), we create a
         # RandomState container for numpy to draw the noise terms. For further
         # information on why we do this, see in the documentation X-X.
@@ -213,20 +236,52 @@ class MonteCarloSimulation:
             max_ratio=1,
             min_split_tree=2,
             b_iterations=50):
-        """ Returns the MSE, squared bias, variance and error for
-        the specified simulation under subagging as a numpy array for the range of
-        ratios.
+        """
+        A  function to simulate he MSPE decomposition for a range of subsampling fractions for
+        one specification of the Subagging Algorithm applied to Regression Trees.
+        The simulation set up and the data generating process is given by the respective class instance. We want to compare
+        the output of this function with respect to variations in the Bagging parameters and the variation between the
+        subsampling fractions.
+        Note that by defaul we use subsampling instead of the standard bootstrap.
 
-        TODO
+        The range of subsampling ratios is created by np.linspace(*min_ratio*, *max_ratio*, *n_ratios*).
+
+        Returns a numpy array of shape = [n_ratios, 4] with the MSPE decomposition for the *n_ratios* different subsamling
+        ratios:
+            array[:,0]: Simulated MSPE for all subsampling ratios
+            array[:,1]: Simulated squared bias for all subsampling ratios
+            array[:,2]: Simulated variance for all subsampling ratios
+            array[:,3]: Simulated noise for all subsampling ratios
+
+        Parameters
+        ----------
+        n_ratios: int, optional (Default=10)
+            The number of subsampling fractions we want to consider for the simulation.
+
+        min_ratio: float, optional (Default=0.1)
+            The minimal subsampling fraction to be considered.
+
+        max_ratio: float, optional (Default=1.0)
+            The maximal subsampling fraction to be considered.
+
+        min_split_tree: int, optional (Default=2)
+            The minimal number of observations within a terminal node of the Regression Trees to be
+            considered for a split that are used in the simulation.
+            Use this to control for the complexity of the Regression Tree.
+
+            Must be greater than 2.
+
+        b_iterations: int, optional (Default=50)
+            The number of bootstrap iterations used to construct the subagging predictor in the simulation.
 
         """
         # Array must be of length four: MSPE, Bias, Variance, Noise
-        ARRAY_LENGTH = 4
+        array_length = 4
         # Create a range of subsampling ratios.
         ratiorange = np.linspace(min_ratio, max_ratio, n_ratios)
 
         # Create an array to save simulation for each ratio.
-        output_array_subagging = np.ones((n_ratios, ARRAY_LENGTH)) * np.nan
+        output_array_subagging = np.ones((n_ratios, array_length)) * np.nan
 
         # We loop over all ratios and save the results to an array.
         for index, ratio in enumerate(ratiorange):

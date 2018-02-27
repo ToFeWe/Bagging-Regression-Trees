@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Dec  4 15:29:29 2017
-
-@author: Tobias Werner
+A module which creates figure 8 in the final paper. The calculations for this have been performed in the module
+*calc_simulation_convergence*, which can be found under *src.analysis.real_data_simulation* and has been described
+in :ref:`analysis`.
 
 """
-
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
@@ -14,8 +12,22 @@ import json
 from bld.project_paths import project_paths_join as ppj
 
 def plot_boston(settings_plotting, subagging_settings, output_boston):
-    ''' TBT X-X
-    '''
+    """
+    A function that creates figure 8 in the final paper.
+
+    Parameters
+    ----------
+    settings_plotting: Dictionary as described in :ref:`model_specs`
+        The dictionary contains all plotting specifications that are shared across various modules.
+
+    subagging_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary defines the simulation set-up that is specific to the subagging simulation.
+
+    output_boston: Dictionary as defined by *calc_boston* in *src.analysis.real_data_simulation*
+        The dictionary that contains the simulation results for bagging and subagging (for the ratio range)
+        for the boston housing data.
+
+    """
     plt.style.use([settings_plotting['style']])
     fig = plt.figure(figsize=settings_plotting['figsize'])
 

@@ -1,5 +1,5 @@
 import numpy as np
-models = ['friedman','linear']
+models = ['friedman', 'linear']
 
 # Set a table row with placeholders.
 table_row_multi = ( r'& {meth} & {mse:.4g} & {var:.4g} & {bias:.4g} &'+

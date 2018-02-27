@@ -1,3 +1,12 @@
+"""
+This module simulates the dependence of the subagging results on the subsampling faction and sets it in relation to bagging.
+
+For this we use the MonteCarloSimulation Class described in :ref:`model_code` in the simulate_bagging_subagging() function
+and return the results as a dictionary.
+
+"""
+
+
 import sys
 from src.model_code.montecarlosimulation import MonteCarloSimulation
 import numpy as np
@@ -8,8 +17,28 @@ from bld.project_paths import project_paths_join as ppj
 
 
 def simulate_bagging_subagging(general_settings, subagging_settings, model):
-    '''TBT X-X
-    '''
+    """
+    A  function that simulates the subsampling ratio dependency  of the Subagging Algorithm.
+
+    Parameters
+    ----------
+    general_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary is shared across various simulations and defines the overall simulation set-up.
+
+    subagging_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary defines the simulation set-up that is specific to the subagging simulation.
+
+    model: String that defines the data generating process to be considered.
+        The option are 'friedman', 'linear' and 'indicator' which is usually passed as the first system argument.
+
+    Returns a tuple of the simulation results:
+        tuple[0]: numpy array of shape = 4
+                  The array consists of the MSPE decompositions for the Bagging Algorithm.
+        tuple[1]: numpy array of shape = [*n_ratios*, 4], where *n_ratios* is the number of subsampling ratios to be
+                  considered. This is defined by keys in *subagging_settings*.
+                  The array consists of the MSPE decompositions for each of those subsampling fraction.
+
+    """
     # Create a MonteCarloSimulation instance that defines the attributes For
     # the data generating process and will be constant for the subagging and
     # bagging simulation.

@@ -1,9 +1,9 @@
 """
-Created on Tue Dec 12 15:02:16 2017
+This module simulates the convergence of bagging towards a stable value as seen in subsection 5.4 of the
+final paper.
 
-@author: Tobias Werner
-
-This module simulates the convergence of bagging/subagging towards a stable value
+For this we use the MonteCarloSimulation Class described in :ref:`model_code` in the simulate_convergence() function
+and return the results as a dictionary.
 
 """
 
@@ -17,10 +17,28 @@ from bld.project_paths import project_paths_join as ppj
 
 
 def simulate_convergence(general_settings, convergence_settings, model):
-    '''TBT X-X
-    '''
+    """
+    A  function that simulates the convergence of the Bagging Algorithm.
+
+    Parameters
+    ----------
+    general_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary is shared across various simulations and defines the overall simulation set-up.
+
+    convergence_settings: Dictionary as described in :ref:`model_specs`
+        The dictionary defines the simulation set-up that is specific to the convergence of the Bagging Algorithm.
+
+    model: String that defines the data generating process to be considered.
+        The option are 'friedman', 'linear' and 'indicator' which is usually passed as the first system argument.
+
+    Returns a tuple of the simulation results:
+        tuple[0]: Numpy array of shape = [len(n_bootstraps_array), 4], where *n_bootstraps_array* is the array of
+                  Bootstrap iterations to be considered. This is defined by keys in *convergence_settings*.
+                  The array consists of the MSPE decompositions for each of those bootstrap iterations.
+        tuple[1]: Numpy array of shape = 4 with the MSPE decomposition for a larger bootstrap iterations.
+    """
     # MSE + Variance + Bias + Error = 4
-    SIZE_MSE_DECOMP = 4
+    size_mse_decomp = 4
 
     # Create an array with all bootstrap itertions we consider.
     n_bootstraps_array = np.arange(
@@ -31,7 +49,7 @@ def simulate_convergence(general_settings, convergence_settings, model):
     # Create an array to save the results.
     output_convergence = np.ones(
         (n_bootstraps_array.shape[0],
-         SIZE_MSE_DECOMP)) * np.nan
+         size_mse_decomp)) * np.nan
 
     simulation_basis = MonteCarloSimulation(
         n_repeat=general_settings['n_repeat'],

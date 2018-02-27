@@ -1,15 +1,10 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Dec  4 15:29:29 2017
-
-@author: Tobias Werner
-
-Thos module plots the output of the simulations for a maximum of two data generating
-processes. This is restricted to two due to space limations in the paper. By default
-the first two entries/models within *dgp_models.json* will be plotted, in case you
-decided also to simulate the indicator model.
+A module which creates figure 6 in the final paper. The calculations for this have been performed in the module
+*calc_simulation_subagging*, which can be found under *src.analysis.main_simulation* and has been described
+in :ref:`analysis`.
 
 """
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,9 +14,27 @@ import json
 
 from bld.project_paths import project_paths_join as ppj
 
+
 def plot_subagging_two_models(settings_plotting, subagging_settings, models):
-    '''TBT X-X
-    '''
+    """
+    A function that creates figure 6 in the final paper.
+
+    Parameters
+    ----------
+    settings_plotting: Dictionary as described in :ref:`model_specs`
+        The dictionary contains all plotting specifications that are shared across various modules.
+
+    subagging_settings: Dictionary as described in :ref:`model_specs` 
+        The dictionary defines the simulation set-up that is specific to the subagging simulation.
+
+    models: list of shape = 2
+        The list of regression functions that should be contained in the figure. Must be of length 2.
+        In the specification chosen in the paper, it will plot the Friedman 1 Model and the Linear Model.
+        Another option is to replace one of those by the indicator model by changing the *dgp_models.json*
+        described in :ref:`model_specs`.
+        Note that we also need to change the *wscript* file in *src.analysis.main_simulation* then!
+
+    """
 
     plt.style.use([settings_plotting['style']])
     fig = plt.figure(figsize=settings_plotting['figsize'])

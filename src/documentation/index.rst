@@ -1,9 +1,5 @@
 .. This the Bagging Regression Trees project's documentation master file.
 
-.. You can adapt this file completely to your liking,
-.. but it should at least contain the `toctree` directive.
-
-
 Welcome to the Bagging Regression Trees project's documentation!
 =================================================================
 
@@ -11,6 +7,7 @@ Welcome to the Bagging Regression Trees project's documentation!
     :maxdepth: 3
 
     introduction
+    concept
     model_code
     analysis
     final

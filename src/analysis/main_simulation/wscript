@@ -3,7 +3,7 @@
 def build(ctx):
     # Specify which settings you want to use. You can choose either 'general_settings'
     # or 'general_settings_small' with the later one being for testing.
-    for model in ['friedman', 'linear', 'indicator']:
+    for model in ['friedman', 'linear']:
         # Start the simulation for Subagging.
         ctx(
             features='run_py_script',
