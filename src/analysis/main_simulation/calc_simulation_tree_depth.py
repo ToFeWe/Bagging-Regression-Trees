@@ -93,7 +93,7 @@ def simulate_tree_depth(general_settings, tree_depth_settings, model):
 if __name__ == '__main__':
     dgp_model = sys.argv[1]
 
-    with open(ppj("IN_MODEL_SPECS", "general_settings_small.json")) as f:
+    with open(ppj("IN_MODEL_SPECS", "general_settings.json")) as f:
         general_settings_imported = json.load(f)
 
     with open(ppj("IN_MODEL_SPECS", "tree_depth_settings.json")) as f:

@@ -632,19 +632,8 @@ $$\text{with }\epsilon_{i} \sim N(0,1) \text{ and } X_{i} \sim Uniform^{10}([0,1
 \begin{frame}{Simulation}{The Effect of Bagging}
 \begin{table}
 \resizebox{11cm}{!}{
-\begin{tabular}{ l l c c c c}
-\toprule
-\textbf{Model} & \textbf{Method} & \textbf{MSE} &\textbf{Variance} & \textbf{Bias$^{2}$} & \textbf{Relative Error}\tabularnewline
-\toprule
-\multirow{2}{*}{Friedman \# 1}
-& Tree & 9.94 & 6.58 & \textcolor{red}{\textbf{2.36}} & \multirow{2}{*}{0.53}\tabularnewline
-& Bagging & \textcolor{red}{\textbf{4.71}} & \textcolor{red}{\textbf{0.98}} & 2.74 &\tabularnewline
-\midrule
-\multirow{2}{*}{Linear}
-& Tree & 2.79 & 1.63 & \textcolor{red}{\textbf{0.17}} & \multirow{2}{*}{0.48}\tabularnewline
-& Bagging & \textcolor{red}{\textbf{1.46}} & \textcolor{red}{\textbf{0.24}} & 0.22 &\tabularnewline
-\bottomrule
-\end{tabular}
+
+\input{../../out/tables/table_bagging}
 }
 \caption{The effect of bagging using regression trees. The relative error is defined as $(MSE_{\text{Tree}} - MSE_{\text{Bagging}})/ MSE_{\text{Bagging}}$.}
 \end{table}

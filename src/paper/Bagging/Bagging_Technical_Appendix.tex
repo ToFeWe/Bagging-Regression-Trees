@@ -1,0 +1,57 @@
+\begin{proof}[Proof of Corollary \ref{corimpl}:]
+To prove assertion \ref{assertioncor1}., argue along the expectation operator and use the convergence in distribution property of the predictor. Thus,
+$$
+\lim_{n \rightarrow \infty} E[\hat{\theta}_{n}(x_{n}(c))] = \lim_{n \rightarrow \infty}E[\mathbbm{1}_{[n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma} \leq c]}]= \lim_{n \rightarrow \infty} P(n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma} \leq c)=P(Z \leq c) = \Phi(c)
+$$
+and similarly for the variance,
+\begin{align*}
+\lim_{n \rightarrow \infty} Var[\hat{\theta}_{n}(x_{n}(c))]
+&= \lim_{n \rightarrow \infty} \{E[\mathbbm{1}_{[n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma} \leq c]}^2]-E[\mathbbm{1}_{[n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma} \leq c]}]^2\} \\
+&= \lim_{n \rightarrow \infty} \{P(n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma}\leq c)- P(n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma} \leq c)^2\}\\
+&=P(Z \leq c) - P(Z \leq c)^2 = \Phi(c) (1- \Phi(c))
+\end{align*}
+
+For assertion \ref{assertioncor2}., we use the following fact (Portmanteau Lemma):\footnote{See for example \cite{grimmett}.} Let $X, X_1, \dots$ be random variables
+$$
+X_n \xrightarrow{D} X \iff E[f(X_n)] \rightarrow E[f(X)]
+$$
+for all bounded and continuous functions $f$.\\
+Let $f*g=\int_{\mathbb{R}}f(\cdot-y)g(y)dy$ be the convolution of $f$ and $g$. By equation (\ref{bagged}) and noting that $\Phi(c-z)$ is bounded and continuous, it follows then immediately that
+$$
+\lim_{n \rightarrow \infty}E[\hat{\theta}_{n;B}(x_{n}(c))]=E[\Phi(c-Z)]=\int_{\mathbb{R}}\Phi(c-z)\phi(z)dz=\Phi*\phi(c)
+$$
+Similar steps show the claim for the variance.
+\end{proof}
+
+
+\begin{proof}[Proof of Proposition \ref{prop1}:]
+Without loss of generality, we prove the proposition for $b_n=n^{1/2}$, $\hat{d}_{n}=\bar{Y}_n$, $d^{0}=\mu$ and $\sigma^{2}_{\infty}=\sigma^{2}$.\\
+We want to show that $\hat{\theta}_{n}(x_n(c))=\mathbbm{1}_{[n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma} \leq c]} \xrightarrow{D} \mathbbm{1}_{[Z \leq c]}, \quad
+Z \sim \mathcal{N}(0,1).$
+
+To see this, note that by the central limit theorem
+$$ Z_n := n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma} \xrightarrow{D} Z$$
+with $Z \sim \mathcal{N}(0,1).$
+For a fixed $c$, one yields thus
+$$P(\mathbbm{1}_{[Z_n \leq c]}=1)=P(Z_n \leq c) \rightarrow P(Z \leq c)=P(\mathbbm{1}_{[Z \leq c]}=1)$$
+and similarly,
+$$P(\mathbbm{1}_{[Z_n \leq c]}=0) \rightarrow P(\mathbbm{1}_{[Z \leq c]}=0).$$
+Hence, 
+$\mathbbm{1}_{[Z_n \leq c]} \xrightarrow{D} \mathbbm{1}_{[Z \leq c]}.$
+
+For the Bagging predictor it follows that
+\begin{align*}
+\hat{\theta}_{n;B}(x_{n}(c)) &=E^{*}[\mathbbm{1}_{[\bar{Y}_{n}^{*} \leq x_{n}(c)]}]\\
+&=E^{*}[\mathbbm{1}_{[n^{1/2}(\bar{Y}_{n}^{*}-\bar{Y}_{n})/\sigma \leq n^{1/2}(x_{n}(c)-\bar{Y}_{n})/\sigma]}]\\
+&=P^{*}[n^{1/2}(\bar{Y}_{n}^{*}-\bar{Y}_{n})/\sigma \leq n^{1/2}(x_{n}(c)-\bar{Y}_{n})/\sigma]\\
+&=\Phi(n^{1/2}\frac{x_{n}(c)-\bar{Y}_{n}}{\sigma})+o_{p}(1)\\
+&=\Phi(c-n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma})+o_{p}(1)\\
+&\xrightarrow{D} \Phi(c-Z), \quad Z \sim \mathcal{N}(0,1)
+\end{align*}
+
+where $P^{*}(\cdot)$ is the probability measure induced by the bootstrap sample and the fourth equality holds due to the consistency of the bootstrap. 
+For the convergence in distribution property, apply the continuous mapping theorem (since $\Phi(\cdot)$ is continuous).
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{fractionsubagging}:] We cite \cite{Buhlmann2002} and its references.
+\end{proof}

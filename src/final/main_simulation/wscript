@@ -9,7 +9,8 @@ def build(ctx):
             deps=[
                 ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_convergence_friedman.pickle'),
                 ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_convergence_linear.pickle'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'dgp_models.json')
             ],
             target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_convergence.pdf')
         )
@@ -20,7 +21,8 @@ def build(ctx):
             deps=[
                 ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_subagging_friedman.pickle'),
                 ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_subagging_linear.pickle'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'dgp_models.json')
             ],
             target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_subagging.pdf')
         )
@@ -31,7 +33,18 @@ def build(ctx):
             deps=[
                 ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_friedman.pickle'),
                 ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_linear.pickle'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'dgp_models.json')
             ],
             target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_tree_depth.pdf')
+        )
+        ctx(
+            features='run_py_script',
+            source='table.py',
+            deps=[
+                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_friedman.pickle'),
+                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_linear.pickle'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'dgp_models.json')
+            ],
+            target=ctx.path_to(ctx, 'OUT_TABLES', 'table_bagging.tex')
         )

@@ -1,0 +1,34 @@
+\section{Real Data Application - The Boston Housing Data Set}
+
+Initially, the Boston Housing data set was gathered to estimate the willingness to pay for air quality improvement (\cite{Harrison1978}). In this application we use the data set to predict median housing values in census tracts. The goal is to obtain an accurate prediction model. We do not want to draw any conclusions regarding the causal relationship between air pollution and housing prices.
+
+In order to do this, we conduct a Monte Carlo Simulation of the MSPE to assess the prediction accuracy of Bagging and Subagging applied to Regression Trees in a real world scenario.
+
+The Boston Housing data set comprises realizations of 14 variables for 506 census tracts in the Boston metropolitan area in 1970. For each region the data set provides information on median value of houses, socio-economic characteristics (e.g. crime rate, tax-rate), geographical-economic characteristics (e.g. percentage of land zoned for lots, percentage of non-retail business), air pollution (nitrogen oxide concentration) and property features (average room number, percentage of houses built before 1940). For a detailed variable description see Harrison Jr and Rubinfeld (1978, p.96-97). The data set was retrieved from the \texttt{Python} package \texttt{sklearn.datasets} of the \texttt{scikit-learn} library by \cite{scikit-learn2011}.
+
+\noindent
+\subsection{Simulation Setup}
+The implementation follows closely the seminal paper on Bagging by \cite{Breiman1996}. We use 50 bootstrap replications for the implementation of the Bagging predictor and 100 Monte Carlo iterations to approximate the MSPE. Regression Trees are grown to their maximal size. In contrast to our simulation study it is no possible to draw randomly new training sets in each Monte Carlo iteration. Therefore we divide the data set randomly into a training and a test set at the beginning of each repetition. We assign 90\% of the data to the training set and the remaining 10\% to the test set. The Monte Carlo Simulation of the MSPE is implemented as follows:
+	\begin{enumerate}
+\item For each simulation iteration follow this procedure
+	\begin{enumerate}
+		\item Randomly divide the data set into a training and a test set.
+		\item Fit the predictor (Tree, Bagging, Subagging) to the training set.
+		\item Using this new predictor make a prediction into the current test set and save the predicted values.
+		\item Compute the MSPE of the current test set and save the value.
+	\end{enumerate}
+\item Compute the (unconditional) MSPE as the mean over all iteration MSPEs.
+\end{enumerate}
+%Contrary to Section \ref{sub:simsetup}, this procedure gives an estimate for the expected prediction error \textit{independently} from input $X=x_0$, i.e. $E[MSPE(x_0)]$.
+
+\subsection{Bagging and Subagging in a Real World Scenario}
+Figure \ref{fig:plt_boston} reports on the MSPE of the Regression Tree, Bagging and Subagging (as a function of the subsample fraction $a$). Bagging reduces the MSPE drastically from 20.24 to 10.31. Hence, the application on the Boston Housing data sets confirms the performance improving effect of Bagging on Regression Trees observed in Section \ref{sub:bagging_table}. Note that contrary to the simulation we cannot report on bias and variance as the true mean of the data generating process is not observable.
+%\input{Real_Data/Table_Performance.tex}
+Similarly to our simulation results we observe a drastic reduction in MSPE by Subagging, if the subsample fraction is chosen in a suitable interval. The optimal choice of the subsample fraction in this application seems to lie in the interval between $0.6$ and $0.7$. Simulation studies in related literature and the simulation study provided in Section \ref{sub:subagging} suggest an optimal subsample fraction of $0.5$. However, the difference in terms of MSPE is relatively small and might be attributed to the small number of Monte Carlo iterations.
+
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.3]{../../out/figures/real_data_simulation/plot_boston.pdf}
+\caption[The effectiveness of Subagging and Bagging in comparison to the unbagged Regression Tree. (Real Data Application)]{The effectiveness of Subagging and Bagging in comparison to the unbagged Regression Tree in a real world scenario. The subsample ratio \textit{a} for Subagging is on the $x$-axis.}
+\label{fig:plt_boston}
+\end{figure}

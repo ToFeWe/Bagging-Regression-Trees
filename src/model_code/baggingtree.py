@@ -35,14 +35,14 @@ class BaggingTree:
         The sample size for the subsampling procedure. Each sample we draw for the algorithm will be of size
         math.ceil(n_observations * self.ratio).
 
-        In accordance with the theoretical treatment in the paper, one would want to choose *ratio*<1 for 
+        In accordance with the theoretical treatment in the paper, one would want to choose *ratio*<1 for
         (*bootstrap=False*).
 
     min_split_tree: int, optional (Default=2)
-        The minimal number of observations that can be within a terminal node of the Regression Trees to be 
-        considered for a split. 
+        The minimal number of observations that can be within a terminal node of the Regression Trees to be
+        considered for a split.
         Use this to control for the complexity of the Regression Tree.
-        
+
         Must be greater than 2.
 
     b_iterations: int, optional (Default=50)
@@ -67,10 +67,6 @@ class BaggingTree:
         self.b_iterations = b_iterations
         self.min_split_tree = min_split_tree
         self.random_state = np.random.RandomState(self.random_seed)
-
-        # Define list of estimators that will be fit to the different Bootstrap
-        # sample.
-        self.tree_estimators = []
 
 
     def _draw_sample(self, X, y):
@@ -118,6 +114,9 @@ class BaggingTree:
             The vector of the dependent variable *y* with the sample size n_size
 
         """
+        # Define list of estimators that will be fit to the different Bootstrap
+        # sample.
+        self.tree_estimators = []
 
         # The actual Bagging algorithm follows. This step is repeated
         # *b_iterations* times, which is the number of Bootstrap iterations.

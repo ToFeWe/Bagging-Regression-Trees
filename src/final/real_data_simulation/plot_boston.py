@@ -4,6 +4,9 @@ A module which creates figure 8 in the final paper. The calculations for this ha
 in :ref:`analysis`.
 
 """
+import matplotlib
+matplotlib.use('Agg')
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle

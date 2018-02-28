@@ -1,0 +1,29 @@
+\section{Summary and Concluding Remarks}
+The aim of this paper was to show that Bagging can improve the prediction accuracy of Regression Trees by reducing their variance while leaving the bias almost unaffected.\\
+In order to do this, we have illustrated the theoretical findings by \cite{Buhlmann2002}.
+In particular, they present a theoretical framework for Bagging and its subsampling alternative Subagging.
+Focusing on Stump predictors (one-split, two terminal nodes), their developed theoretical framework fails to explain Bagging due to the non-normal distribution of those predictors which leads to the inconsistency of the bootstrap. %\\
+Considering a subsampling variant, called Subagging, they were able to state upper bounds for the variance and mean squared error of Stump predictors. \\
+Simulation results undermined that Bagging improves the MSPE substantially. Additionally, empirical findings suggest that if the subsample size is chosen adequately Subagging can yield approximately the same results as Bagging while coming at a lower computational cost.\\
+This paper highlights the effectiveness of bagging Regression Trees. With slight further modifications this method is known as the Random Forest Algorithm, which is widely used in industries and academia for a wide range of prediction problems.%\footnote{While the Bagging procedure remains identically, the Random Forest Algorithm alters the Regression Trees used slightly. } 
+\\
+Further research can conduct the following questions.
+With the theoretical framework at hand we can not show why Bagging improves the prediction accuracy of Regression Trees as seen in the simulation studies of this paper.
+It is out of the scope of this paper, to extend or develop another framework for a predictor which has a non-normal distribution and cube root convergence rate.
+Moreover, from a theoretical point of view, it is not clear how to choose the optimal subsample size in order to calculate the subagged predictor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

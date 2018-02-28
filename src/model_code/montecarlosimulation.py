@@ -5,14 +5,14 @@ Bagging Algorithm as described in the paper:
 
 In all simulations we use the following procedure:
 i. Generate a test sample, without error term, according to the data generating processes of
-interest. This will be constant for the whole simulation study. All predictions will be made
-on this sample.10
+   interest. This will be constant for the whole simulation study. All predictions will be made
+   on this sample.10
 ii. For each simulation iteration we follow this procedure:
     (a) Draw new error terms for the test sample.
     (b) Draw a new training sample with regressors and error terms.
     (c) Fit the predictor (Tree, Bagging, Subagging) to the generated training data.
     (d) Using this new predictor make a prediction into the fixed test sample and save the
-    predicted values.
+        predicted values.
 iii. We compute the MSPE, squared bias and variance for the given predictor at the input point X = x0 with x0 being the test sample generated in (i).
 
 
@@ -275,6 +275,7 @@ class MonteCarloSimulation:
             The number of bootstrap iterations used to construct the subagging predictor in the simulation.
 
         """
+
         # Array must be of length four: MSPE, Bias, Variance, Noise
         array_length = 4
         # Create a range of subsampling ratios.

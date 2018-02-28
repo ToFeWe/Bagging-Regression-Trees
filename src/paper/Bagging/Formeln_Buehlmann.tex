@@ -1,0 +1,277 @@
+\section{Bagging}\label{bag}
+
+\subsection{Algorithm}
+Bagging (bootstrap aggregation) first proposed by \cite{Breiman1996} can improve the prediction performance of an algorithm or statistical estimator by reducing its variance while not increasing the bias too much (relative to the variance reduction).\\
+Bagging is based on the idea that the variance of the sample average is weakly smaller than the variance of the individual random variables.
+To make this more precise, let $X_1, \dots, X_n$ be i.i.d. random variables with $\mu = E[X_1]$ and $\sigma^2 = Var[X_1]$.
+Let $\bar{X}= \frac{1}{n}\sum_{i=1}^{n}X_{i}$.
+Due to independent (first equality) and identically distributed (second equality) random variables, it holds that
+$$
+Var[\bar{X}]= \frac{1}{n^2} \sum_{i=1}^{n} Var[X_i]=\\
+\frac{\sigma^2}{n} \leq \sigma^2.
+$$
+Observe also that the sample average is unbiased,
+$$
+E[\bar{X}]= \frac{1}{n} \sum_{i=1}^{n} E[X_i] = \mu.
+$$
+Averaging over the individual random variables reduces the variance while leaving the bias unaffected.
+As it will turn out, for Bagging this simple heuristic holds also but there will be an inherent bias-variance tradeoff.\\
+Based on those considerations, \cite{Buhlmann2002} define Bagging as follows:
+
+\begin{definition}\label{bagging}(Bagging)
+	\begin{enumerate}
+	\item Construct a bootstrap sample $L_{i}^{*} = (y_{i}^{*}, \mathbf{x_{i}^{*}}) \:(i = 1, \dots , n)$ (with replacement) according to the empirical distribution of the pairs $L_{i} = (y_{i}, \mathbf{x_{i}}) \: (i = 1, \dots , n)$ i.i.d.
+	\item Compute the bootstrapped predictor $\hat{\theta}_{n}^{*}(\mathbf{x})$ by the plug-in principle; that is, $\hat{\theta}_{n}^{*}(\mathbf{x}) = h_{n}(L_{1}^{*}, \dots, L_{n}^{*})(\mathbf{x})$, where $\hat{\theta}_{n}(\mathbf{x}) = h_{n}(L_{1},\dots, L_{n})(x)$.
+	\item The bagged predictor is $\hat{\theta}_{n;B}(\mathbf{x}) = E^{*} [\hat{\theta}_{n}^{*}(\mathbf{x})]$
+	\end{enumerate}
+\end{definition}
+
+The function $h_n(\cdot)$ is obtained by an algorithm as for example CART and $E^*[\cdot]$ denotes the expectation induced by the bootstrap sampling.\\
+Consider now the case where we want to predict for a new realization of a covariate vector, say $\mathbf{x^{new}}$, the bagged predicted value.
+In order to do this, we argue along Definition \ref{bagging}. Construct first a bootstrap sample $L_i^*$ by sampling with replacement from the original data $L_i$ $(i=1, \dots, n)$.
+In the second step, we compute the bootstrapped predictor by constructing a Regression Tree using the bootstrap sample from the previous step.
+Applying now the new realization to the bootstrapped predictor yields a  predicted value, say $\hat{y}^*$.
+If we repeat steps one and two $B \in \mathbb{N}$ times, we get $B$ different bootstrapped predictors (or equivalently Regression Trees) and hence $B$ different predicted values for the new realization $\mathbf{x^{new}}$, say $\hat{y}_1^*, \dots, \hat{y}_B^*$.
+Note that the Regression Trees constructed with the bootstrap samples can differ from each other in their splitting points or splitting variables.
+Averaging over $\hat{y}_1^*, \dots, \hat{y}_B^*$ yields the bagged predicted value.\footnote{A graphical illustration of this procedure can be found in Appendix \ref{App:Ill_Bag}.}
+In practice, step three is therefore usually obtained via a Monte Carlo simulation (see also Section \ref{sub:simsetup}).\\
+Note that in Definition \ref{bagging} the algorithm is written in terms of population.\\
+In order to relate Bagging to the notion of stability (Definition \ref{stability}) introduced in Section \ref{sec:stability}, we claim the following:
+\begin{claim}
+Bagging reduces the variance of unstable predictors.
+\end{claim}
+\noindent In order to verify this claim, we give a heuristic argument (see also \cite{Breiman1996}).\\
+Consider first a stable predictor (i.e. low variance).
+If small changes in the data set lead to small changes in the considered predictor $\hat{\theta}_{n}(\cdot)$ then indeed $\hat{\theta}_{n;B}(\cdot)$ should be close to the original predictor and Bagging should therefore have a negligible variance reducing effect.\\
+Conversely, for an unstable predictor (i.e. high variance even in the limit), small changes in the data set should cause large changes in $\hat{\theta}_{n}(\cdot)$.
+The bootstrapped predictor should also be very different from the original predictor.
+By averaging over those predictors the variance of the resulting predictor should be smaller than that of the original one.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Introductory Example}\label{introductionbagging}
+We start our analysis of Bagging with an introductory example which is adapted from \cite{Buhlmann2002}. \\
+Let $Y_{1}, Y_{2}, \dots, Y_{n}$ be i.i.d random variables with $\mu = E[Y_{1}]$ and $\sigma^{2} = Var[Y_{1}]$. Consider first the unbagged predictor,
+\begin{equation}\label{unbagged}
+\hat{\theta}_{n}(x) = \mathbbm{1}_{[\bar{Y}_{n} \leq x]},\quad x\in  \mathbb{R},
+\end{equation}
+where $\bar{Y}_{n} = \frac{1}{n}\sum_{i=1}^{n}Y_{i}.$ \\
+The indicator function assumes the value one if $x$ is above the threshold $\bar{Y}_n$ and zero otherwise. The analysis of an indicator function is of particular interest as the Tree predictor consists of a sum of indicator functions.\\
+We first check if the predictor stabilizes.
+Let $x$ for the sake of the argument be fixed.
+By the (weak) law of large numbers observe that $\bar{Y}_{n}\xrightarrow{p} \mu.$
+The considered predictor converges to a fixed target $\theta(x)=\mathbbm{1}_{[\mu \leq x]}$ as $n$ increases and hence stabilizes according to Definition \ref{stability}.
+As $x$ and $\mu$ are fixed, the indicator function will either always assume the value one or zero as $n$ increases.\\
+Figure \ref{plot_finite_sample} demonstrates the stabilization of the predictor measured via the mean squared error.
+As the predictor gets more and more accurate (due to the (weak) law of large numbers) the mean squared error decreases to zero.
+Moreover, observe that Bagging has asymptotically no effect.\footnote{See Appendix \ref{sec:App_FiniteSample} regarding implementation purposes.}
+\begin{figure}[t]
+\centering
+\includegraphics[scale = 0.4]{../../out/figures/theory_part_simulation/plot_finite_sample.pdf}
+\caption[Mean squared error for the predictor in (\ref{unbagged}) and a bagged version as a function of $c$ and for sample sizes $n \in \{100, 1000, 10000, 50000\}$ (with $\mu=0$, $\sigma =2$).]{Mean squared error for the predictor in (\ref{unbagged}) and a bagged version as a function of $c$ and for sample sizes $n \in \{100, 1000, 10000, 50000\}$ (with $\mu=0$, $\sigma =2$).}\label{plot_finite_sample}
+\end{figure}
+However, to analyze the effect of Bagging we require a locally unstable predictor.
+For this, we consider a $n^{-1/2}$-neighbourhood around $\mu$
+\begin{equation}\label{12region}
+ x = x_{n}(c)= \mu + c\sigma n^{-1/2}.
+\end{equation}
+Note that the second term in this expression is the deviation from the population mean $\mu$ which is governed by the deterministic value $c$.
+This choice is dynamic in the sense that as $n$ increases the sequence $x_1(c), x_2(c), \dots$ converges to $\mu$ at the rate $n^{-1/2}$.\\
+Note further that by a central limit theorem for $\bar{Y}_{n}$
+\begin{equation}\label{clt}
+n^{1/2}(\bar{Y}_{n} - \mu ) \xrightarrow{D} \mathcal{N}(0,\,\sigma^{2}).
+\end{equation}
+
+Plugging (\ref{12region}) into (\ref{unbagged}) and applying (\ref{clt}), one yields (see proof of the below Proposition \ref{prop1})
+$$\hat{\theta}_{n}(x_n(c))=\mathbbm{1}_{[n^{1/2}\frac{(\bar{Y}_{n} - \mu )}{\sigma} \leq c]} \xrightarrow{D} \mathbbm{1}_{[Z \leq c]}, \quad
+Z \sim \mathcal{N}(0,1).$$
+
+\begin{remark}
+For $n \rightarrow \infty$, it is $not$ the case that $\mathbbm{1}_{[\bar{Y}_{n} \leq x_n(c)]} \rightarrow \mathbbm{1}_{[\mu \leq \mu]}=1$.
+In order to see this, observe that (\ref{12region}) converges with the same rate to $\mu$ as $\bar{Y}_n$, namely $n^{-1/2}$.
+Intuitively speaking, this means that (\ref{12region}) and $\bar{Y}_n$ will disperse even asymptotically at the same magnitude.
+The considered predictor will therefore remain unstable even as $n$ tends to infinity.
+\end{remark}
+
+To derive the first and second moments note that the above expression is a Bernoulli-variable and hence
+$$E[\hat{\theta}_{n}(x)] \rightarrow P[Z \leq c] = \Phi(c)\quad (n \rightarrow \infty)$$
+$$Var[\hat{\theta}_{n}(x)] \rightarrow \Phi(c)(1-\Phi(c)) \quad(n \rightarrow \infty)$$
+
+We have constructed a predictor that is unstable according to Definition \ref{stability} as the variance does not decrease to zero (even as $n \rightarrow \infty$).\\
+Consider now a bagged predictor as in Definition \ref{bagging}. Some calculations show that
+\begin{equation}\label{bagged}
+\begin{split}
+\hat{\theta}_{n;B}(x_{n}(c))=E^{*}[\mathbbm{1}_{[\bar{Y}_{n}^{*} \leq x_{n}(c)]}]\\
+\xrightarrow{D} \Phi(c-Z), \quad Z \sim \mathcal{N}(0,1)
+\end{split}
+\end{equation}
+where $\Phi(\cdot)$ is the cdf of a standard normal distribution and $\bar{Y}_{n}^{*}$ the arithmetic mean induced by the bootstrap sample.\\
+The crucial assumption in order to derive this is that the bootstrap is consistent for $\bar{Y}_n$ (see proof of the below Proposition \ref{prop1}).\\
+The following immediate result summarizes the first two moments for the unbagged and bagged predictor, respectively.
+
+\begin{corollary}\label{corimpl}
+For the predictor in (\ref{unbagged}) with $x = 	x_{n}(c)$ as in (\ref{12region})
+
+	\begin{enumerate}
+	\item \label{assertioncor1}
+$\lim_{n \rightarrow \infty}E[\hat{\theta}_{n}(x_{n}(c))]=\Phi(c),\quad
+\lim_{n \rightarrow \infty}Var[\hat{\theta}_{n}(x_{n}(c))]=\Phi(c)(1-\Phi(c))$
+
+	\item \label{assertioncor2}
+$\lim_{n \rightarrow \infty}E[\hat{\theta}_{n;B}(x_{n}(c))]=\Phi*\phi(c),\quad
+\lim_{n \rightarrow \infty}Var[\hat{\theta}_{n;B}(x_{n}(c))]=\Phi^{2}*\phi(c)-(\Phi*\phi(c))^{2}$
+	\end{enumerate}
+Here, $\phi(\cdot)$ denotes the density of a standard normal distribution and the operator $*$ is the convolution of two real-valued functions.
+\end{corollary}
+
+Using Corollary \ref{corimpl}, we can calculate the squared bias, variance and mean squared error for (\ref{unbagged}) as a function of $c$. \\
+In this section, our notion of bias refers to the optimal asymptotic target, i.e. the unbagged predictor.\footnote{In Section \ref{sec:Simulation} our target for calculating the bias of the estimates will be the true underlying function.}
+This means, the asymptotic bias of the bagged predictor is given by $$\lim_{n \rightarrow \infty}E[\hat{\theta}_{n;B}(x_{n}(c))] - \theta(x_{n}(c)),$$ where $\theta(x_{n}(c))=\lim_{n \rightarrow \infty}E[\hat{\theta}_{n}(x_{n}(c))]$. The unbagged predictor is hence asymptotically unbiased.\\
+Figure \ref{plot_asy} shows the results for $c \leq |5|$ and demonstrates the inherent bias-variance-tradeoff.\\
+Consider the case $c=0$ (i.e. $x_{n}(0)=\mu$).
+At this point, the unbagged predictor has the highest variance and exhibits the greatest instability.
+To see this, suppose $c$ gets closer and closer to zero. Then, as $Z$ varies around its mean 0 with variance 1, the probability that the indicator function assumes either the value one or zero will become equally high.
+%any small change in $Z$ will result in a totally different outcome of the indicator function (either 0 or 1) since the true mean of $Z$ is zero and $Z$ disperses with variance 1.
+Vice versa, for $c >>0$, the probability that $Z$ is above  $c$ will be relatively small (as $Z$ is standard normally distributed). Thus, the indicator function will always assume the value 1.
+We observe hence from Figure \ref{plot_asy} that at $c=0$ Bagging drastically reduces the variance while leaving the squared bias unaffected.\\
+For cases $c \ne 0$, one can observe that Bagging still reduces the variance of the unbagged predictor although not so drastically as for the aforementioned case. However, there is now a (negligible) increase in the squared bias.
+Overall, we observe a  reduction in the mean squared error.\\
+Relating those observations to Figure \ref{plot_finite_sample}, we observe that as long as the predictor is not too stable Bagging has an effect on the mean squared error.
+\begin{figure}[t]
+\centering
+\includegraphics[scale = 0.5]{../../out/figures/theory_part_simulation/plot_toy_example.pdf}
+\caption[Variance, squared bias and asymptotic mean squared error for the predictor in (\ref{unbagged}) and a bagged version as a function of $c$.]{Variance, squared bias and asymptotic mean squared error for the predictor in (\ref{unbagged}) and a bagged version as a function of $c$.}\label{plot_asy}
+\end{figure}
+
+\subsection{General Indicator Predictor}
+For the example above, \cite{Buhlmann2002} consider a more general predictor which is not restricted to the arithmetic mean being the threshold,
+\begin{equation}\label{generalpredictor}
+\hat{\theta}_{n}(x) = \mathbbm{1}_{[\hat{d}_{n} \leq x]}, \quad x\in \mathbb{R}.
+\end{equation}
+Here $\hat{d}_{n}$ could be a splitting point as in the section on Trees.
+
+For consistency of the bootstrap, we require that the estimator $\hat{d}_{n}$ after proper standardization is asymptotically normal distributed which leads to the following assumption:
+
+\begin{assumption} \label{A1}
+For some increasing sequence $(b_{n})_{n \in \mathbb{N}}$ and the bootstrapped estimator $\hat{d}_{n}^{*},$ we assume
+$$b_{n}(\hat{d_{n}}-d^{0})\xrightarrow{D} \mathcal{N}(0,\,\sigma^{2}_{\infty})$$
+$$sup_{v \in \mathbb{R}}|P^{*}[b_{n}(\hat{d_{n}^{*}}-d^{0}) \leq v]- \Phi(v/\sigma_{\infty})|= o_{p}(1)$$ with $0 < \sigma^{2}_{\infty} < \infty.$
+
+\end{assumption}
+
+Based on this assumption, the following proposition gives expressions for the convergence in distribution behaviour of the general predictor.
+\begin{proposition}\label{prop1}
+	Assume Assumption \ref{A1}. For the predictor in (\ref{generalpredictor}) with $x = 	x_{n}(c)= d^{0} + c\sigma_{\infty}b_{n}^{-1}$,
+	$$
+	\hat{\theta}_{n}(x_{n}(c)) \xrightarrow{D} g(Z)=1_{[Z \leq c]}
+	$$
+	$$
+	\hat{\theta}_{n;B}(x_{n}(c)) \xrightarrow{D} g_{B}(Z)=\Phi(c-Z)
+	$$
+	where $Z \sim \mathcal{N}(0,1).$
+\end{proposition}
+Note that for $b_n=n^{1/2}$, $\hat{d}_{n}=\bar{Y}_n$, $d^{0}=\mu$ and $\sigma^{2}_{\infty}=\sigma^{2}$, Assumption \ref{A1} and Proposition \ref{prop1} give the expressions for the introductory example.\\
+Figure \ref{plot_asy} and its conclusions from Section \ref{introductionbagging} carry over to this more general framework.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Bagging Regression Trees}\label{sec:bagregtree}
+In this section, we want to translate the theoretical framework that we have developed so far to Regression Trees.
+In the following, we restrict our attention to so-called Stumps (one split, two terminal nodes). For extensions to full Regression Trees consult \cite{Buhlmann2002}.
+
+\subsection{Failure of Bootstrap Consistency}
+A natural way to extend our introductory example is to consider the sum of two indicator functions.
+Consider therefore the one-split Stump predictor ((\ref{eq:CARTpred}) with $K=2$) which can be written in the following way (using the notation from Section \ref{bag})
+\begin{equation}\label{stump}
+\hat{\theta}_{n}(x) = \hat{c}_1 \mathbbm{1}_{[\hat{d}_{n} \leq x]} + \hat{c}_2 \mathbbm{1}_{[\hat{d}_{n} > x]}, \quad x\in \mathbb{R}
+\end{equation}
+where $\hat{c}_1$ and $\hat{c}_2$ are the denotations used in Section \ref{sec:Tree_Pred}. Geometrically speaking, we partition an interval (spanned by the one-dimensional explanatory variable $x$) into two regions where the split point is given by $\hat{d}_n$.\\
+\cite{Buhlmann2002} (their Theorem 3.1) show that under some regularity and smoothness conditions the Stump predictor has a $n^{-1/3}$-convergence rate and a distribution which is non-normal.
+Assumption \ref{A1} is thus violated, in particular, the bootstrap is not consistent.
+In later parts of this paper we will see that Bagging applied to simulated data as well as to a real data set yields improved prediction results.
+We therefore conclude that the bootstrap consistency is not necessary for Bagging to work. A theoretical treatment is however rather difficult.
+
+\subsection{Subagging}\label{sec:Subagging}
+Subsampling considerations are the key to a theoretically more traceable analysis of Bagging Stumps called Subagging (subsample aggregation).
+In particular, we will follow the argumentation in \cite{Buhlmann2002} and state upper bounds for the variance and the mean squared error of subagged Stumps.\\
+\cite{politis1994} show that under very mild assumptions the sampling distribution of a statistic can be approximated by the statistic computed over smaller subsets of the data.\\
+Consider therefore the case $m \leq n$ and the subagged predictor
+
+$$
+\hat{\theta}_{n;SB(m)}=\binom{n}{m}^{-1} \sum_{i_{1}, \dots, i_{m}}h_{m}(L_{i_{1}}, \dots, L_{i_{m}})
+$$
+
+where $\sum_{i_{1}, \dots, i_{m}}$ denotes the summation over the $\binom{n}{m}$ combination of $m$ distinct elements $\{i_{1}, \dots, i_{m}\}$ from $\{1, \dots, n\}$ (cf. \cite{serfling}).
+Since $\binom{n}{m}$ may be large, $\hat{\theta}_{n;SB(m)}$ may be difficult to compute. It can be approximated by a Monte Carlo simulation (see Section \ref{sub:simsetup} for a detailed description on implementation).\footnote{For a proof see \cite{politis1994}.} Subagging can then be defined as follows:
+
+\begin{definition}[Subagging]
+Replace step one in Defintion \ref{bagging} with
+\begin{enumerate}
+	\item[1*.] Generate a random subsample $L_{1}^{*}, \dots, L_{m}^{*}$ by random drawing $m$ times without replacement from the data $L_{1}, \dots, L_{n}$
+
+\end{enumerate}
+\end{definition}
+
+
+The only restriction we impose is that the estimator $\hat{d}_{n}$ possesses a limit distribution after suitable standardization (cf. \cite{politis1994}).
+
+\begin{assumption} \label{A3}
+For some sequence $b_{n}=Cn^{\gamma} \quad (C>0, \gamma >0)$
+$$
+P[b_{n}(\hat{d}_{n} - d^{0}) \leq x] \rightarrow G(x) \quad (n \rightarrow \infty)
+$$
+where $G(\cdot)$ is the c.d.f. of a nondegenerate distribution.
+
+\end{assumption}
+
+In the simplest case where the scaling factor $C=1$, the rate of convergence $\gamma=1/2$ and $G(\cdot)$ is a standard normal distribution, the assumption resembles the definition of weak convergence of distribution functions.\footnote{Strictly speaking, $x$ must then be a continuity point of $\Phi(\cdot)$.}
+
+As in the case for Bagging, consider a similar neighborhood for an explanatory variable $x$
+$$ x = x_{n}(c)= d^{0} + c\sigma_{\infty} n^{-\gamma},$$
+where $\sigma_{\infty}$ denotes the variance of the estimator $\hat{d}_{n}$.\\
+For $\gamma \in \{1/2, 1/3\}$, this is the $n^{-\gamma}$-neighborhood for the predictor in (\ref{generalpredictor}) and (\ref{stump}), respectively. In the case of stump predictors, $d^{0}$ is the optimal splitting point.\\
+The main result of this section gives upper bounds on the variance and mean squared error for the subagged predictor as in (\ref{generalpredictor}) or (\ref{stump}).
+
+\begin{theorem}[Fraction Subagging for indicators and stumps]\label{fractionsubagging} Consider predictors as in (\ref{generalpredictor}) and (\ref{stump}) with $x = x_{n}(c)$ as above. Assume that Assumption \ref{A3} holds for some $\gamma > 0$. Suppose $m = [an]$ with $0 < a < 1$.\footnote{Here, $[\alpha]$  denotes the smallest integer $\geq \alpha$.}
+Then,
+$$
+\lim_{n \rightarrow \infty}E[\hat{\theta}_{n;SB(m)}(x_{n}(c))]= c_{1}^{0}+(c_{2}^{0}-c_{1}^{0})G(ca^{\gamma})
+$$
+$$
+\limsup_{n \rightarrow \infty}Var[\hat{\theta}_{n;SB(m)}(x_{n}(c))] \leq (c_{2}^{0}-c_{1}^{0})^{2}aG(ca^{\gamma})(1-G(ca^{\gamma}))
+$$
+$$
+\limsup_{n \rightarrow \infty}E[(\hat{\theta}_{n;SB(m)}(x_{n}(c))-E[\hat{\theta}_{n}(x_{n}(c))])^2]
+\leq (c_{2}^{0} - c_{1}^{0})^{2}((G(ca^{\gamma})-G(c))^{2} + aG(ca^{\gamma})(1-G(ca^{\gamma})))
+$$
+where $c_{1}^{0}=0$, $c_{2}^{0}=1$ for the predictor in (\ref{generalpredictor}).
+\end{theorem}
+
+In order to interpret this result, consider the predictor in (\ref{generalpredictor}) with $G(\cdot)=\Phi(\cdot)$ being a standard normal distribution and $\gamma=1/2$.
+In the limit, the expectation of the subagged predictor is then given by $E[\hat{\theta}_{n;SB(m)}(x_{n}(c))] \rightarrow \Phi(ca^{1/2})$.
+For $a=1$, this is the expression for the initial (unbagged) predictor that we have already derived in Section \ref{introductionbagging}.
+The bias is therefore given by~$\Phi(ca^{1/2}) - \Phi(c)$. \\
+The variance of the subagged predictor is bounded above by the expression $a\Phi(ca^{\gamma})(1-\Phi(ca^{\gamma})$. For $a=1$, we get the variance of the initial (unbagged) predictor.\\
+Based on those considerations, the mean squared error of the subagged predictor is hence bounded above by the sum of the squared bias and the variance.
+
+\begin{remark}
+For $x$ chosen to be in a suitable interval around $d^{0}$ (i.e. $\mu$ for the predictor in (\ref{generalpredictor}) and optimal split points for (\ref{stump}), respectively), it follows that
+$$
+\limsup_{n \rightarrow \infty}\frac{E[(\hat{\theta}_{n;SB(m)}(x_{n}(c))-\theta(x(c)))^2]}{E[(\hat{\theta}_{n}(x_{n}(c))-\theta(x(c)))^2]} < 1
+$$
+where $\theta(x(c)) = \lim_{n \rightarrow \infty}E[\hat{\theta}_{n}(x_{n}(c))].$
+\end{remark}
+
+This means that we can find a subsample fraction $a$ such that the mean squared error of the subagged predictor is strictly smaller than the mean squared error of the initial (unbagged) predictor (in some $n^{-\gamma}$-neighborhood).
+\begin{figure}[b]
+\centering
+\includegraphics[scale = 0.5]{../../out/figures/theory_part_simulation/plot_normal_splits.pdf}
+\caption[Variance, squared bias and asymptotic mean squared error for the predictor in (\ref{unbagged}) and a subagged version as a function of $c$.]{Variance, squared bias and asymptotic mean squared error for the predictor in (\ref{unbagged}) and a subagged version as a function of $c$.}\label{plot_normal_splits_together}
+\end{figure}
+For illustration purposes, consider now the predictor in (\ref{generalpredictor}). Figure \ref{plot_normal_splits_together} shows the resulting mean squared error, variance and squared bias for several values for $a$.
+We make the following observations for $a \in \{2/3, 1/2\}$.
+If $c$ is in a suitable interval then the variance of the subagged predictor will be bounded above by the initial (unbagged) predictor (labeled original, $a=1$).
+Further, if we increase $a$, the squared bias decreases while the variance increases. We can conclude that the subsample fraction $a$ is a tuning parameter for  the inherent bias-variance tradeoff in the subagged predictor.
+Moreover, for $0<c<1.5$ the mean squared errors for $a=2/3$ and $a=1/2$ behave as expected (see Remark). Comparing those results with Figure \ref{plot_asy}, Subagging seems to be a valid variant for Bagging.\\
+For the case $a=1/10$, the subagged predictor exhibits a relatively low variance and a high bias. This effect will be particularly pronounced for smaller values of $a$ (Small Order Subagging, see \cite{Buhlmann2002}, their Theorem 3.3). For those cases the remark does not hold as the mean squared error explodes for $c \geq 1.5$.\\
+For the stump predictor in (\ref{stump}) the figure looks similar.
+However, we do not report any results here since the distribution function involves Airy functions which are out of the scope of this paper.
+The interested reader may consult \cite{Buhlmann2002} and their references.

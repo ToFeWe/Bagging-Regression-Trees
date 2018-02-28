@@ -6,13 +6,13 @@ The conceptual overview of the project
 
 Overview for the project
 ========================
-The implementation of the of the concepts and simulations described in the term paper has been split up across various modules. The objective of this section is
+The implementation of the simulations described in the term paper has been split up across various modules. The objective of this section is
 to explain the conception and structure.
 
 The part :ref:`model_code` contains explanations for all basic algorithms and functions that are used for the main parts of the simulation. Amongst them the implementation
-of the Bagging Algorithm for Regression Trees and the ``MonteCarloSimulation`` Class, which is used to perform the simulations of part 5 of the term paper.
+of the Bagging Algorithm for Regression Trees and the ``MonteCarloSimulation`` Class, which is used to perform the simulations of Section 5 of the term paper.
 Within :ref:`analysis` the documentation for the main calculations and simulations of the paper can be found.
-In :ref:`final` the modules for creating the figures are documented. All model specifications are defined in :file:'.json' files. An overview for those can be
+In :ref:`final` the modules for creating the figures are documented. All model specifications are defined in .json files. An overview for those can be
 found in :ref:`model_specs`.
 Finally, the overview of the final output files is listed in :ref:`paper`. In this folder you can also find further figures, that have not been created during the
 build process.
@@ -29,7 +29,7 @@ To run the code yourself you have to follow the following steps:
   * Move to the root directory of the project in the shell
   * Run ``source set-env.sh`` (Linux, MacOS) or ``set-env.bat`` to set up the conda environment specific to this project.
   * Run ``python waf.py configure`` and then ``python waf.py build`` to run the whole project. Note that if you use the
-    parameter specification used in the paper, this may take some time (~ 6 hrs with i5-6200 CPU @ 2.3 GHz, 8 GB RAM).
+    parameter specification used in the paper, this may take some time (~ 40 min with i5-6200 CPU @ 2.3 GHz, 8 GB RAM).
     If you are interested in the implementation you can also scale down the parameters of the simulations in the
     respective JSON files described in :ref:`model_specs`.
 

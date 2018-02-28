@@ -6,7 +6,7 @@ i. For each simulation iteration follow this procedure
     (a) Randomly divide the data set into a training and a test set
     (b) Fit the predictor (Tree, Bagging, Subagging) to the training set
     (c) Using this new predictor make a prediction into the current test set and save the
-    predicted values
+        predicted values
     (d) Compute the average prediction error of the current test set and save the value
 ii. Compute the MSPE as the mean of average prediction errors of each iteration
 
@@ -198,7 +198,6 @@ def simulate_subagging_parallel(
                 a_ratio=a_value) for i in range(
                     general_settings['n_repeat']))
         mse_subagging[index_a] = np.mean(mse_not_expected)
-        print(np.mean(mse_not_expected), a_value)
     return mse_subagging
 
 

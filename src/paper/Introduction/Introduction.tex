@@ -1,0 +1,31 @@
+\section{Introduction}
+In statistical estimation, most prediction problems encounter a bias-variance tradeoff. \\
+A class of predictors for which this is pronounced are so-called Regression Trees (\cite{Breiman1984}). 
+Those kind of predictors partition the domain of the explanatory variables by a recursive algorithm and fit then a simple regression model to each resulting region. 
+While yielding low biased estimates due to flexible adaption to the data, Tree predictors react very sensitive to small changes in the underlying dataset.
+This high variance caused by the recursive structure of the algorithm can
+result in large changes in the predicted values. \cite{breiman1996B} declares such kind of predictors as unstable.\\
+The so-called Bagging algorithm proposed by \cite{Breiman1996} bypasses this tradeoff by reducing the variance of the unstable predictor, while leaving its bias mostly unaffected.
+In particular, Bagging uses repeated bootstrap sampling to construct multiple versions of the same prediction model like Regression Trees and averages over the resulting predictions.\\
+In this paper we will show that Bagging can reduce the variance of Regression Tree predictors and thereby improves their prediction accuracy in terms of the mean squared prediction error (MSPE).\\
+For this, we illustrate the theoretical framework given in \cite{Buhlmann2002} tailored to Regression Trees. In particular, they show that Bagging smooths discontinuities induced by the Regression Tree predictor which leads to a variance reduction.
+Focusing on the simplest type of Regression Trees, so-called Stump predictors, their theoretical treatments of Bagging however has its limitations due to the non-normal distribution of the predictor and therefore the failure of the bootstrap. When replacing the bootstrap procedure of Bagging by subsampling without replacement, they obtain a method that is more traceable from a theoretical perspective under very mild assumptions. Using this method, called Subagging, it is possible to state upper bounds for the variance and mean squared error of the predictor given an appropriate choice of the subsample size.\\
+Our simulation studies and application to a real data set undermine the presented theoretical framework and are in line with former findings (e.g. \cite{breiman1998}, \cite{Bauer1999} and \cite{Dietterich2000}). Bagging can achieve a reduction of the MSPE of up to  50\% compared to unbagged Regression Trees. 
+A critical point in order to calculate the bagged predictor are the number of bootstrap iterations. 
+Our simulation studies suggest that 50 bootstrap replications are sufficient.\\ 
+It is common practice to restrict the model complexity of the Tree predictor in order to govern the bias variance tradeoff. However, our simulation results indicate that the higher the model complexity the greater the MSPE-reduction via Bagging will be.\\
+While Subagging is more traceable from a theoretical perspective, our simulations suggest that Subagging with half of the dataset can achieve approximately the same results as Bagging.\\
+In the literature it is widely discussed why Bagging works. \\
+\cite{Grandvalet2004} argues that Bagging lessens the importance of observations which have a high influence on the prediction accuracy.
+He concludes that depending on whether the observation would improve the prediction performance or not, Bagging can be beneficial or harmful.\\
+Another theoretical framework based on continuous and differentiable predictors is provided by \cite{friedman2007}.
+Their argument relies on a decomposition of the predictor into a linear and non-linear component via a truncated Taylor series.
+Based on a heuristic argument, they conclude that Bagging reduces the variance of the non-linear part while leaving the linear component unaffected.\\
+For the concept of generalized averages (U-statistics) \cite{buja2006} show that Bagging can increase both bias and variance.
+Furthermore, they show that Subagging with half of the data set is equivalent to Bagging in this case.
+For Tree predictors they observe empirically that this kind of Subagging yields approximately the same results as Bagging.\\
+The rest of this paper is structured as follows.
+Section 2 introduces Regression Trees as an example for an unstable predictor. Section 3 and 4 analyze Bagging and Subagging and relates them to Regression Trees.
+In Section 5 simulation results are presented. Section 6 applies Bagging and Regression Trees to a real world data set.
+A summary and concluding remarks can be found in section 7. Proofs are collected in the Technical Appendix \ref{sec:Tec_App}.
+

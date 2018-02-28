@@ -50,7 +50,7 @@ The Case of Subagging
 Varying the Number of Bootstrap Iterations
 ******************************************
 
-.. automodule:: src.analysis.main_simulation.calc_simulation_convergences
+.. automodule:: src.analysis.main_simulation.calc_simulation_convergence
     :members:
 
 

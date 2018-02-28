@@ -1,0 +1,123 @@
+\section{Simulation Study} \label{sec:Simulation}
+%In the following section we present simulation results regarding the presented methods. After introducing our data generating processes in Section \ref{sub:DGP} and the simulation setup in Subsection \ref{sub:simsetup}, we compare the Bagging Algorithm applied to Regression Trees to unbagged Regression Trees in Subsection \ref{sub:bagging_table}. We then give some insight in how to choose the number of bootstrap iteration in part \ref{sub:boot_i}. Eventually, we consider Subagging and compare it to Bagging in Subsection \ref{sub:subagging}.
+
+\subsection{Data Generating Processes and Model Assessment} \label{sub:DGP}
+The data  $\{y_{i},\mathbf{x}_{i} \}_{i=1}^{n}$ has been generated according to the model
+$$
+y_{i} = f(\mathbf{x}_{i}) + \epsilon_{i}
+$$
+where $f(\mathbf{x}_{i})$ is the regression function and $\epsilon_{i}$ the error term.
+In all simulations each $\mathbf{x}_{i}$ and each $\epsilon_{i}$ is identically and independent distributed with $\epsilon_{i} \sim N(0,1) \text{ and } \mathbf{x}_{i} \sim U^{10}[0,1]$.
+%for $\forall i \in [1,n]$
+Within this simulation study, we consider two different target functions $f(X)$
+that will be described below. We report here all results for two different functional forms of $f(X)$ as we want to emphasize that Bagging and also Subagging work for a variety of functions. In fact, the Bagging Algorithm, when applied to Regression Trees improves our prediction results in terms of MSPE consistently. Note that for both target functions described below only half of the ten predictor variables contribute to $f(X)$. Hence the other five variables are irrelevant for the value of $f(X)$ and can be considered as "noise" variables.\\
+\\
+\textbf{Friedman \#1 Model.}
+Firstly, we consider the Friedman \#1 Model where $f(X)$ takes the following form
+$$
+f(X) = 10 \sin(\pi x_{1} x_{2}) + 20(x_{3} - \frac{1}{2})^{2} + 10 x_{4} + 5 x_{5}.
+$$
+This nonlinear function has been introduced by \cite{friedman1991} in the context of multi adaptive regression splines and has been widely used afterwards to evaluate the effectiveness of different supervised learning algorithms. Also it has been one of the reference functions in the literature of bagging Regression Trees (see for instance \cite{Breiman1996} or \cite{Buhlmann2002}).\\
+\\
+\textbf{Linear Model}.
+As the second function for our data generating process we consider a simple linear model that has been used by \cite{friedman2007}.
+$$
+f(X) = \sum_{j=1}^{5} j \cdot x_{j}
+$$
+In contrast to the Friedman \#1 Model it is less complex and linear and therefore offers an interesting counterpart to the former model.\\
+\\
+%\subsection{Model Assessment} \label{model_ass}
+In order to assess the prediction accuracy of the different predictors in the following simulation study, we use the mean squared prediction error (MSPE). \newline
+Denote the regression fit of a prediction model as $\hat{f}(\mathbf{x})$ and a new observation from the same population by $x_{0}$. The mean squared prediction error at the new input $\mathbf{x} = \mathbf{x_{0}}$ is then given by $E[(y-\hat{f}(\mathbf{x_0}))^2|\mathbf{x_i}=\mathbf{x_0}]$. Similarly to the decomposition of the MSE, we can decompose the MSPE at the input $\mathbf{x_0}$ into three parts:
+\begin{align*}
+MSPE(\mathbf{x_0}) &= E[(y-\hat{f}(\mathbf{x_0}))^2|\mathbf{x_i}=\mathbf{x_0}]\\
+&= \underbrace{\sigma_{\epsilon}^2}_\text{Variance of $\epsilon_{i}$} + \underbrace{[E[\hat{f}(\mathbf{x_0})]-f(\mathbf{x_0})]^2}_{\text{Bias}^2} + \underbrace{E[\hat{f}(\mathbf{x_0}) - E[\hat{f}(\mathbf{x_0})]]^2}_\text{Variance}
+\end{align*}
+The first term denotes the variance of realizations around the true mean of the data generating process and will be equal to the variance of the error term $\epsilon_{i}$.
+%\footnote{As we have chosen $\epsilon_{i}$ to be standard normally distributed, it will be constant at one for the whole simulation study.}
+The second term denotes the squared bias, which is the squared difference between the average of the predictor's estimate and the true mean. The last term denotes the variance of the estimator  $\hat{f}(\mathbf{x})$.
+
+\subsection{Simulation Setup}\label{sub:simsetup}
+
+In order to construct the Bootstrap Predictor we use 50 bootstrap replications. While this value may seem restrictively low at first glance, we will see in Section \ref{sub:boot_i} of this simulation study that the value is sufficiently high.
+For the Monte Carlo Simulations 100 repetitions for each model and each specification are used to approximate the MSPE, squared bias, the variance and the noise term.\footnote{The simulation setup follows closely \cite{Buhlmann2002}.} Note that we do not report the noise term for the whole simulation study. As we have chosen a standard normally distributed error term $\epsilon$ the noise term will always be constant at one. The sample size is chosen to 500 for all test and training samples that have been generated.\\
+In all simulations we use the following procedure:
+\begin{enumerate}
+  \item Generate a test sample, without error term, according to the data generating processes of interest. This will be constant for the whole simulation study. All predictions will be made on this sample.\footnote{Note that we need a fixed test sample to obtain the squared bias of the predictor, precisely $f(\mathbf{x_0})$. Speaking in terms of the notation introduced in Section \ref{sub:DGP} and following \cite{EoSL} the test sample is the new input variable $\mathbf{x}=\mathbf{x_0}$}
+  \item For each simulation iteration we follow this procedure:
+  \begin{enumerate}
+    \item Draw new error terms for the test sample.
+    \item Draw a new training sample with regressors and error terms.
+    \item Fit the predictor (Tree, Bagging, Subagging) to the generated training data.
+    \item Using this new predictor make a prediction into the fixed test sample and save the predicted values.
+  \end{enumerate}
+
+  \item We compute the MSPE, squared bias and variance for the given predictor as described in Subsection \ref{sub:DGP} at the input point $\mathbf{x}=\mathbf{x_{0}}$ with $\mathbf{x_{0}}$ being the test sample generated in (i).
+\end{enumerate}
+The Bagging and Subagging Predictors have been implemented in \texttt{Python} in accordance to the theoretical framework explained in Section \ref{bag}. For a detailed description of the implementation we refer you to Section \ref{sec:Sim_Impl_App} of the Appendix and the code documentation that can be found on \url{https://tofewe.github.io/bagging-documentation/}.\\ We build the Regression Trees using the function \texttt{sklearn.tree.DecisionTreeRegressor} within the \texttt{Python} package \texttt{scikit-learn} by \cite{scikit-learn2011}. If not stated otherwise Trees have always been grown to its maximal size such that only one observation is left in each terminal node.
+
+
+\subsection{Bagging applied to Regression Trees} \label{sub:bagging_table}
+
+First, we consider the effect of Bagging, when applied to Regression Trees and compare it to unbagged Regression Trees. For both methods, we report in Table \ref{table:baggingtree} the MSPE for both models that have been introduced in Subsection \ref{sub:DGP}. Furthermore, we report the decomposition of the MSPE into the variance and squared bias. We indicate by red the lower and so to say better value for each term.
+\begin{table}[H]
+  \caption[The effect of Bagging applied to Regression Trees.]{The effect of Bagging applied to Regression Trees. The relative error is defined as $(MSPE_{\text{Tree}} - MSPE_{\text{Bagging}})/ MSPE_{\text{Tree}}$.}
+  \centering
+\input{../../out/tables/table_bagging}
+ \label{table:baggingtree}
+\end{table}
+
+As we can observe from Table \ref{table:baggingtree}, Bagging improves the performance for both models drastically by reducing the MSPE by around 50\%. This increased prediction accuracy can be accounted to the reduction in variance, while leaving the squared bias almost unaffected. The variance for the Friedman \#1 Model and the Linear Model drops due to Bagging by approximately 85\%. In line with the theoretical treatment of the introductory example in Section \ref{introductionbagging}, the squared bias increases only slightly, when we use Bagging. Hence, the squared bias is actually \textit{lower} for the unbagged Regression Tree. Note however that this effect can be neglected if the improvement of our prediction results in terms of MSPE is of main interest, as the magnitude of the increase in the bias is relatively small in both cases. \newline
+To make the magnitude of the decrease in MSPE even clearer, we also report the relative error which is 0.55 for the Friedman \#1 and 0.51 for the Linear
+Model.
+
+
+
+\subsection{Number of Bootstrap Iterations}\label{sub:boot_i}
+For the majority of this simulation study the number of bootstrap iterations to construct the actual Bagging Predictor is chosen to 50. While this value may seem restrictively low at first glance, it turns out to be sufficient to obtain the desired reduction in MSPE. \tabularnewline
+In general, the number of bootstrap iterations governs the accuracy of our approximation of $\mathbb{E}^{*}[\cdot]$ for the Bagging Predictor $\hat{\theta}_{n;B}(x)=\mathbb{E}^{*}[\hat{\theta}^{*}_{n}(x)]$. Thus, from a theoretical point of view, we can never lose by choosing more bootstrap iterations as our estimate of $\mathbb{E}^{*}[\cdot]$ will become more accurate. Therefore in comparison to the subsampling ratio \textit{a}, when using Subagging, the number of bootstrap iterations \textit{B} is \textit{not} a tuning parameter. Ideally we would want \textit{B} $\rightarrow \infty $.
+\tabularnewline
+In applications however the choice of \textit{B} is not as clear, as choosing some large \textit{B} is computational infeasible due to limited computational resources. Hence, we would like to find a value for \textit{B} that is sufficiently high to achieve the variance reducing effect that we have visualized in Subsection \ref{sub:bagging_table}, while being computational cheap.
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.5]{../../out/figures/main_simulation/plot_simulation_convergence.pdf}
+\caption[The effect of varying the number of bootstrap iterations \textit{B} in the case of Bagging.]{The effect of varying the number of bootstrap iterations \textit{B} in the case of Bagging. The minimal number of bootstrap iterations is chosen to 2. The light blue line indicates the MSPE for \textit{B}=500}
+\label{fig:b_iterations}
+\end{figure}
+
+In Figure \ref{fig:b_iterations}, we plot the number of bootstrap iterations on the $x$-axis against the MSPE, the variance and the squared bias of the Bagging Predictor.
+One can observe that the variance of the predictor (displayed by the dashed line), converges towards a stable level, when increasing the number of bootstrap iterations. As the squared bias (dotted line) remains unaffected by this, the MSPE converges as well. After 50 bootstrap iterations the MSPE reaches a stable value and does, relatively, not improve much from there on. In order to make this point even clearer, we included for both models the MSPE for 500 bootstrap iterations, which is indicated by the light blue line. One can observe that we can still improve the MSPE by a small amount, when increasing the number of iterations further. This improvement however comes at computational costs, which might be too high in applications to justify more bootstrap iterations. \newline
+Hence, $B=50$ turns out to be a reasonable choice for the approximation of $\mathbb{E}^{*}[\cdot]$ for the Bagging Predictor.
+One explanation why 50 iterations are sufficient is that we bootstrap the mean of the predictions. Under the assumption that the density of those predictions is not too skewed, its mean will be close the median. Hence, the probability that we bootstrap observations around the mean is high. Thus, in comparison to the usage of the bootstrap for approximating an extreme event or estimating e.g. 95\%-confidence intervals, we can pick fewer bootstrap iterations to obtain the desired result.
+
+\subsection{Subagging}\label{sub:subagging}
+Subagging was introduced in Section \ref{sec:Subagging}, as it is more traceable from a theoretical perspective. It turns out that Subagging can also be of interest for application purposes.
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.5]{../../out/figures/main_simulation/plot_simulation_subagging.pdf}
+\caption[The effectiveness of Subagging and Bagging in comparison to the unbagged Regression Tree. (Simulation)]{The effectiveness of Subagging and Bagging in comparison to the unbagged Regression Tree. The subsample ratio \textit{a} for Subagging is on the $x$-axis.}
+\label{fig:subagging}
+\end{figure}
+In Figure \ref{fig:subagging} we report the results for the case of Subagging (red line) and compare it to the MSPE of Bagging (blue line) and the unbagged Regression Tree (green line). When using subsampling \textit{without} replacement the MSPE, variance and squared bias become a function of the subsampling ratio \textit{a}. When increasing the subsampling ratio, we decrease the squared bias while at the same time increasing the variance.\footnote{\cite{friedman2007} argue that the bias is decreasing in the subsampling fraction as a smaller sample limits the size of the Regression Trees. This means that the resulting Tree is not flexible enough to adapt to the true relationship in the data. For further intuition on how the Tree size affects its bias and variance see also the next subsection.}
+Thus, when using subsampling instead of the standard bootstrap with replacement, there is an inherent bias-variance tradeoff and we need to pick a subsampling fraction \textit{a} such that the MSPE is minimized. Those considerations are in line with the observations we have made in Section \ref{sec:Subagging} for Stumps. \newline
+Naturally, if we would choose $a=1$, we would draw for each Subagging iteration the same sample and therefore end-up with the initial unbagged predictor. On the other hand, we can improve our prediction in terms of MSPE in comparison to the unbagged Tree by Subagging, if we pick $a$ in a suitable interval. To be more precise, choosing $a=0.5$, which means that we subsample over 50\% of the data for each iteration, we can obtain results that are almost identically to the results for Bagging. This finding holds again true for both models we consider in this simulation study and is in line with the findings of \cite{friedman2007}, who show that Subagging with $a=0.5$ yields similar results as Bagging for a variety of functional forms for $f(X)$.\newline
+Hence, Subagging with $a=0.5$ can also be of interest for application purposes. While it offers similar results as Bagging, it is computationally cheaper, as we only need 50\% of the data for each bootstrap iteration to construct the estimator. \newline
+It is worthwhile to emphasize however that this finding is only based on simulation results. In general \textit{a} is a tuning parameter without any clear choice from a theoretical perspective.
+
+\subsection{Tree Depth and Bagging}\label{sec:Sim_TreeDepth}
+In the previous simulations, we always choose to grow the Trees fully. In this part we want to give some insight why this is optimal, when Bagging is applied to Regression Trees. \newline
+As discussed in Section \ref{sec:BiasVariance}, Regression Trees tend to overfit the data. Overfitting is specifically a problem, when we grow a Tree to its maximal size. The terminal nodes will consist of only a single observation, making it thereby likely that we fit the noise in the data. Thus usually when fitting single Trees to the data it is common to restrict the size of the Tree to reduce overfitting and thereby reduce the variance. \newline
+Interestingly, it turns out that it is \textit{not} the optimal choice in terms of MSPE to restrict the Tree size if we apply Bagging to Regression Trees as we can see in Figure \ref{fig:leafsize}.
+\begin{figure}[H]
+\centering
+
+\includegraphics[scale=0.5]{../../out/figures/main_simulation/plot_simulation_tree_depth.pdf}
+\caption[The effect of varying the complexity of the Regression Tree for the unbagged and bagged Tree.]{The effect of varying the complexity of the Regression Tree for the unbagged and bagged Tree. The minimal size for each terminal node is displayed on the $x$-axis. A higher minimal size for each terminal node implies a less complex Tree.}
+\label{fig:leafsize}
+\end{figure}
+
+In Figure \ref{fig:leafsize} we plot the MSPE, the variance and the squared bias for bagged and unbagged Trees against the Tree depth. We control the size of each Tree by restricting the minimal size of each terminal node. A larger minimal size for each terminal node implies a smaller and thus less complex Tree.
+We report the results for the unbagged Regression Tree and Bagging applied to Regression Trees as in Section \ref{sub:bagging_table} for both regression functions.
+\newline
+The MSPE for Trees is minimized at a smaller Tree size as for Bagging. Whereas for Bagging we obtain the best result by growing the Tree to the maximal length, the optimum for normal Regression Trees can be achieved by restricting the minimal size for each terminal node to around 20 observations. Lower values result in a higher MSPE for Trees. While we decrease the squared bias by increasing the size of the Tree, we overfit the data and have a predictor with a high variance. %\newline
+Bagging on the other hand works best if there are no restrictions on the Tree size. As discussed in Section \ref{bag} and \ref{sec:bagregtree}, Bagging reduces the variance of the predictor while leaving the squared bias almost unaffected. As Regression Trees have the lowest bias for maximal grown Trees, it is therefore optimal not to restrict the size of the Trees, when using Bagging.

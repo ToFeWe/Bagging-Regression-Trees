@@ -1,0 +1,161 @@
+\documentclass[11pt,a4paper,leqno]{article}
+\usepackage{a4wide}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{float, afterpage, rotating, graphicx}
+\usepackage{longtable, booktabs, tabularx, multirow}
+\usepackage{verbatim}
+\usepackage{eurosym, calc, chngcntr}
+\usepackage{amsmath, amssymb, amsfonts, amsthm, bm, delarray}
+\usepackage{caption}
+\usepackage{tkz-graph}
+\usetikzlibrary{arrows,positioning,snakes,shapes,shapes.multipart,patterns,mindmap,shadows}
+
+\usepackage[toc,page]{appendix} %%Umgebung für Appendix
+
+\numberwithin{equation}{section} %Nummerierung der Gleichungen entspr. Section
+
+
+\usepackage{bbm} %indicator fct
+
+%referencing
+%\usepackage[natbibapa]{apacite}
+\usepackage[
+    natbib=true,
+    bibencoding=inputenc,
+    bibstyle=authoryear-ibid,
+    style=bwl-FU,
+    %citestyle=authoryear-comp,
+    maxcitenames=3,
+    maxbibnames=10,
+    useprefix=false,
+    sortcites=true,
+    backend=biber
+      ]
+   {biblatex}
+\AtBeginDocument{\toggletrue{blx@useprefix}}
+\AtBeginBibliography{\togglefalse{blx@useprefix}}
+
+  \addbibresource{Bibliography/MetricsBibliography.bib}
+ \usepackage[unicode=true]{hyperref}
+ \renewcommand{\theenumi}{\roman{enumi}}
+ \hypersetup{colorlinks=true, linkcolor=black, anchorcolor=black, citecolor=black, filecolor=black, menucolor=black, runcolor=black, urlcolor=black}
+ \setlength{\parskip}{.5ex}
+ \setlength{\parindent}{0ex}
+ 
+ %Packages David
+ \usepackage{comment}
+ \usepackage{tikz}
+ \usepackage{subcaption}
+ 
+ %Packages Tobi
+ 
+ \usepackage{algorithm}
+ \usepackage{algpseudocode}
+
+ %Seitenlayout
+ \usepackage{geometry}
+ \geometry{a4paper,
+ left=3cm,
+ right=2cm,
+ top=2cm,
+ bottom=2cm}
+ \usepackage[onehalfspacing]{setspace}
+
+%\theoremstyle{definition}
+%!TeX spellcheck = en-US,en-DE
+
+%Umgebung für Theoreme, Propositionen, Lemma
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem*{remark}{Remark}
+\newtheorem*{claim}{Claim}
+
+\begin{document}
+\pagenumbering{gobble}
+
+\begin{titlepage}
+	\centering
+	{\scshape\LARGE University of Bonn \par}
+	\vspace{1cm}
+	{\scshape\Large Term Paper in the Project Module Econometrics and Statistics WS 17/18\par}
+	\vspace{1.5cm}
+	{\huge\bfseries Bagging Regression Trees\par}
+	\vspace{2cm}
+	{\Large\itshape Robin Kraft, Tobias Felix Werner and David Zeimentz\par}
+	\vfill
+	supervised by\par
+	Professor~Alois \textsc{Kneip} \par
+	JProfessor~Dominik \textsc{Liebl}
+	\vfill
+
+% Bottom of the page
+	{\large \today\par}
+\end{titlepage}
+\newpage
+
+\pagenumbering{roman} %Seitenzahlen Römisch
+\tableofcontents
+\newpage
+
+%List of Figures
+\listoffigures
+\addcontentsline{toc}{section}{List of Figures}
+
+%List of Tables
+\listoftables
+\addcontentsline{toc}{section}{List of Tables}
+
+\newpage
+
+%%%%%%%%%%%%% H A U P T T E I L %%%%%%%%%%%%%%%%
+\pagenumbering{arabic} %Seitenzahlen ab hier arabisch
+
+%Intro
+\input{Introduction/Introduction}
+
+%Trees
+
+\input{Trees/Text_Trees.tex}
+
+
+
+%Bagging
+\input{Bagging/Formeln_Buehlmann}
+
+%Simulation
+\input{Simulation/simulation_formeln}
+
+%Real Data
+\input{Real_Data/Real_Data_Text.tex}
+
+%Ende
+\input{End/end}
+
+\newpage
+
+
+%%%%%%% A P P E N D I X %%%%%%%%%%%%%%%%%%%
+\begin{appendix}
+\input{Appendix/Appendix}
+
+\end{appendix}
+
+\newpage
+
+\setstretch{1}
+\printbibliography
+\setstretch{1.5}
+
+
+%\bibliographystyle{agsm}
+%\bibliography{Bibliography/MetricsBibliography.bib}
+
+
+
+\end{document}
+

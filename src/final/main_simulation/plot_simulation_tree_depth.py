@@ -4,6 +4,9 @@ A module which creates figure 7 in the final paper. The calculations for this ha
 in :ref:`analysis`.
 
 """
+import matplotlib
+matplotlib.use('Agg')
+
 import numpy as np
 import matplotlib.pyplot as plt
 import json
@@ -47,8 +50,8 @@ def plot_tree_depth_two_models(settings_plotting, tree_depth_settings, models):
         ax = fig.add_subplot(2,2,index+1)
 
         # First plot the results for the MSE.
-        ax.plot(min_split_array,output_tree_depth['bagging'][:,0],ls=settings_plotting['ls']['mse'],color=settings_plotting['colors']['bagging'],label='$MSE \: Bagging$')
-        ax.plot(min_split_array,output_tree_depth['trees'][:,0],ls=settings_plotting['ls']['mse'],color=settings_plotting['colors']['trees'],label='$MSE \: Tree$')
+        ax.plot(min_split_array,output_tree_depth['bagging'][:,0],ls=settings_plotting['ls']['mse'],color=settings_plotting['colors']['bagging'],label='$MSPE \: Bagging$')
+        ax.plot(min_split_array,output_tree_depth['trees'][:,0],ls=settings_plotting['ls']['mse'],color=settings_plotting['colors']['trees'],label='$MSPE \: Tree$')
 
         # Then the results for the squared-bias.
         ax.plot(min_split_array,output_tree_depth['bagging'][:,1],ls=settings_plotting['ls']['bias'],color=settings_plotting['colors']['bagging'],label='$Bias^{2} \: Bagging$')

@@ -4,7 +4,7 @@
 A module to calculate the results for the introductory example in subsection 3.2 of the paper without the dynamic environment
 of x.
 
-Without choosing a dynamic environment for x, the estimator developed by X-X and
+Without choosing a dynamic environment for x, the estimator developed by Bühlmann and Yu (2002) and
 illustrated in our paper stabilizes by the (weak) Law of Large Numbers.
 We simulate this here for a range of sample sizes for a given mean and variance,
 assuming that Y follows a Gaussian distribution.

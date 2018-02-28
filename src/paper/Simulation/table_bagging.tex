@@ -1,0 +1,15 @@
+
+\begin{tabular}{ l l c c c c}
+\toprule
+\textbf{Model} & \textbf{Method} & \textbf{MSPE} &\textbf{Variance} & \textbf{Bias$^{2}$} & \textbf{Relative Error}\tabularnewline
+\toprule
+\multirow{2}{*}{Friedman \# 1}
+& Tree & 9.94 & 6.58 & \textcolor{red}{\textbf{2.36}} & \multirow{2}{*}{0.53}\tabularnewline
+& Bagging & \textcolor{red}{\textbf{4.71}} & \textcolor{red}{\textbf{0.98}} & 2.74 &\tabularnewline
+\midrule
+\multirow{2}{*}{Linear}
+& Tree & 2.79 & 1.63 & \textcolor{red}{\textbf{0.17}} & \multirow{2}{*}{0.48}\tabularnewline
+& Bagging & \textcolor{red}{\textbf{1.46}} & \textcolor{red}{\textbf{0.24}} & 0.22 &\tabularnewline
+\bottomrule
+\end{tabular}
+

@@ -12,7 +12,7 @@ def build(ctx):
                 ctx.path_to(ctx, 'IN_MODEL_CODE', 'datasimulation.py'),
                 ctx.path_to(ctx, 'IN_MODEL_CODE', 'baggingtree.py'),
                 ctx.path_to(ctx, 'IN_MODEL_CODE', 'montecarlosimulation.py'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings_small.json'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings.json'),
                 ctx.path_to(ctx, 'IN_MODEL_SPECS', 'subagging_settings.json')
             ],
             target=[
@@ -29,7 +29,7 @@ def build(ctx):
                 ctx.path_to(ctx, 'IN_MODEL_CODE', 'datasimulation.py'),
                 ctx.path_to(ctx, 'IN_MODEL_CODE', 'baggingtree.py'),
                 ctx.path_to(ctx, 'IN_MODEL_CODE', 'montecarlosimulation.py'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings_small.json'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings.json'),
                 ctx.path_to(ctx, 'IN_MODEL_SPECS', 'convergence_settings.json')
             ],
             target=[
@@ -46,7 +46,7 @@ def build(ctx):
                 ctx.path_to(ctx, 'IN_MODEL_CODE', 'datasimulation.py'),
                 ctx.path_to(ctx, 'IN_MODEL_CODE', 'baggingtree.py'),
                 ctx.path_to(ctx, 'IN_MODEL_CODE', 'montecarlosimulation.py'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings_small.json'),
+                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings.json'),
                 ctx.path_to(ctx, 'IN_MODEL_SPECS', 'tree_depth_settings.json')
             ],
             target=[

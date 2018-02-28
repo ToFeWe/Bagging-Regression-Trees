@@ -4,7 +4,8 @@ A module which creates figure 6 in the final paper. The calculations for this ha
 in :ref:`analysis`.
 
 """
-
+import matplotlib
+matplotlib.use('Agg')
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,7 +25,7 @@ def plot_subagging_two_models(settings_plotting, subagging_settings, models):
     settings_plotting: Dictionary as described in :ref:`model_specs`
         The dictionary contains all plotting specifications that are shared across various modules.
 
-    subagging_settings: Dictionary as described in :ref:`model_specs` 
+    subagging_settings: Dictionary as described in :ref:`model_specs`
         The dictionary defines the simulation set-up that is specific to the subagging simulation.
 
     models: list of shape = 2
@@ -59,8 +60,8 @@ def plot_subagging_two_models(settings_plotting, subagging_settings, models):
                 ls=settings_plotting['ls']['bias'], label = '$Bias^{2} \: Subagging$')
         ax.plot(ratio_range,output_subagging['subagging'][:,2], color=settings_plotting['colors']['subagging'],
                 ls=settings_plotting['ls']['variance'], label = '$Variance \: Subagging$')
-        ax.plot(ratio_range,bagging_mse_plot,ls=settings_plotting['ls']['mse'], color=settings_plotting['colors']['bagging'], label = '$MSE \: Bagging$')
-        ax.plot(ratio_range,tree_mse_plot,ls=settings_plotting['ls']['mse'], color=settings_plotting['colors']['trees'],  label = '$MSE \: Tree$')
+        ax.plot(ratio_range,bagging_mse_plot,ls=settings_plotting['ls']['mse'], color=settings_plotting['colors']['bagging'], label = '$MSPE \: Bagging$')
+        ax.plot(ratio_range,tree_mse_plot,ls=settings_plotting['ls']['mse'], color=settings_plotting['colors']['trees'],  label = '$MSPE \: Tree$')
         ax.set_xlabel('$a$')
         ax.set_title(('$'+ model.capitalize()+' \: Model$'))
         # Kann man dann ja noch entscheiden, ob man das folgende drin lässt
