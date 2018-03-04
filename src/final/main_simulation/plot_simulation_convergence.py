@@ -1,5 +1,5 @@
 """
-A module which creates figure 5 in the final paper. The calculations for this have been performed in the module
+A module which creates figure 5 in the final paper and a figure with the same style for the indicator function for the appendix. The calculations for this have been performed in the module
 *calc_simulation_convergence*, which can be found under *src.analysis.main_simulation* and has been described
 in :ref:`analysis`.
 
@@ -11,13 +11,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 import json
-
 from bld.project_paths import project_paths_join as ppj
 
 
-def plot_convergence_two_models(settings_plotting, convergence_settings, models):
+def plot_convergence(settings_plotting, convergence_settings, models, appendix):
     """
-    A function that creates figure 5 in the final paper.
+    A function that creates figure 5 in the final paper and a figure with the same style for the indicator function for the appendix.
 
     Parameters
     ----------
@@ -36,7 +35,11 @@ def plot_convergence_two_models(settings_plotting, convergence_settings, models)
 
     """
     plt.style.use([settings_plotting['style']])
-    fig = plt.figure(figsize=settings_plotting['figsize'])
+
+    if appendix:
+        fig = plt.figure(figsize=settings_plotting['figsize']['single_model'])
+    else:
+        fig = plt.figure(figsize=settings_plotting['figsize']['two_models'])
 
     n_bootstraps_array = np.arange(convergence_settings['min_bootstrap'],convergence_settings['max_bootstrap'],convergence_settings['steps_bootstrap'])
 
@@ -46,7 +49,11 @@ def plot_convergence_two_models(settings_plotting, convergence_settings, models)
             output_convergence = pickle.load(in_file)
 
 
-        ax = fig.add_subplot(2,2,index+1)
+        # Check if we plot the indicator model for the appendix, which would mean that we only need one subplot.
+        if appendix:
+            ax = fig.add_subplot(1, 1, index+1)
+        else:
+            ax = fig.add_subplot(1, 2, index+1)
         mse_converged = np.ones(n_bootstraps_array.size) * output_convergence['bagging_large'][0]
         ax.plot(n_bootstraps_array,output_convergence['bagging_range'][:,0],ls=settings_plotting['ls']['mse'], color=settings_plotting['colors']['bagging'],label='$MSPE$')
         ax.plot(n_bootstraps_array,output_convergence['bagging_range'][:,1],ls=settings_plotting['ls']['bias'],color=settings_plotting['colors']['bagging'],label='$Bias^{2}$')
@@ -55,23 +62,32 @@ def plot_convergence_two_models(settings_plotting, convergence_settings, models)
         ax.set_xlabel('$B$')
         ax.set_title(('$'+ model.capitalize()+' \: Model$'))
 
-    ax.legend(bbox_to_anchor=(-0.6, -0.3), ncol=3,loc='lower left',frameon=True, fontsize=15)
-    fig.tight_layout(pad=0.4, w_pad=1, h_pad=2.5)
+        handles_fig, labels_fig = ax.get_legend_handles_labels()
 
-    fig.savefig(ppj("OUT_FIGURES_MAIN","plot_simulation_convergence.pdf"), bbox_inches='tight')
+    # Adjust the positioning of the legend accordingly and save.
+    if appendix:
+        plt.legend(ncol=3, loc='lower left', bbox_to_anchor=(0.05, -0.27), frameon=True, fontsize=12,
+                   handles=handles_fig, labels=labels_fig)
+        fig.tight_layout(pad=0.4, w_pad=1, h_pad=2.5)
+        fig.savefig(ppj("OUT_FIGURES_MAIN","plot_simulation_convergence_appendix.pdf"), bbox_inches='tight')
+    else:
+        plt.legend(ncol=3, loc='lower left', bbox_to_anchor=(-0.47, -0.27), frameon=True, fontsize=12,
+                   handles=handles_fig, labels=labels_fig)
+        fig.tight_layout(pad=0.4, w_pad=1, h_pad=2.5)
+        fig.savefig(ppj("OUT_FIGURES_MAIN", "plot_simulation_convergence.pdf"), bbox_inches='tight')
 
 
 if __name__ == '__main__':
-    with open(ppj("IN_MODEL_SPECS","settings_plotting.json")) as f:
+    with open(ppj("IN_MODEL_SPECS", "settings_plotting.json")) as f:
         settings_plotting_imported = json.load(f)
 
-    with open(ppj("IN_MODEL_SPECS","dgp_models.json")) as f:
-        dgp_models_imported = json.load(f)
+    # For the main plots of the paper, we only use the 'friedman' and the 'linear' model.
+    dgp_models_in_plot = ['friedman', 'linear']
+    dgp_model_appendix = ['indicator']
+
 
     with open(ppj("IN_MODEL_SPECS","convergence_settings.json")) as f:
         convergence_settings_imported = json.load(f)
 
-    # We use only the first two models for plotting.
-    dgp_models_in_plot = dgp_models_imported[:2]
-
-    plot_convergence_two_models(settings_plotting_imported, convergence_settings_imported, dgp_models_in_plot)
+    plot_convergence(settings_plotting_imported, convergence_settings_imported, dgp_models_in_plot, appendix=False)
+    plot_convergence(settings_plotting_imported, convergence_settings_imported, dgp_model_appendix, appendix=True)

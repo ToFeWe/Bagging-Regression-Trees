@@ -32,10 +32,7 @@ random_seed_split: int
   Starting point for the random seeds for the test_train_split
 random_seed_fit: int
   Random seed for the fitting procedure
-cores: int
-  Number of cores to be used
-  The simulation for the boston data runs in parallel.
-
+  
 convergence_settings.json
 *************************
 The dictionary defines the simulation set-up that is specific to the convergence of the Bagging Algorithm.

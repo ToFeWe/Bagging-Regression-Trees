@@ -64,8 +64,7 @@ if __name__ == '__main__':
     with open(ppj("IN_MODEL_SPECS","dgp_models.json")) as f:
         dgp_models_imported = json.load(f)
 
-    # We use only the first two models for the table.
-    dgp_models_in_table = ['friedman','linear']
-    #dgp_models_imported[:2]
+    # For the table of the paper, we only use the 'friedman' and the 'linear' model as for the main plots.
+    dgp_models_in_table = ['friedman', 'linear']
 
     make_table(dgp_models_in_table)

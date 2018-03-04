@@ -13,8 +13,6 @@ ii. Compute the MSPE as the mean of average prediction errors of each iteration
 For this we use the BaggingTree Class described in :ref:`model_code` in the simulate_convergence() function
 and return the results as a dictionary.
 
-Parts of the simulation run in parallel using the joblib library.
-
 """
 
 
@@ -102,7 +100,7 @@ def split_fit_predict_bagging(
     return y_mse
 
 
-def simulate_bagging_parallel(X, y, general_settings, boston_settings):
+def simulate_bagging(X, y, general_settings, boston_settings):
     """
     A  function that simulates the MSPE for the Bagging Algorithm using the Boston Housing data.
 
@@ -131,24 +129,22 @@ def simulate_bagging_parallel(X, y, general_settings, boston_settings):
     # Note that we change the random seed for each iteration of Parallel.
     # Surely, this is not best practice, but it works well and safe in this
     # context.
-    mse_not_expected = Parallel(
-        n_jobs=boston_settings['cores'])(
-        delayed(split_fit_predict_bagging)(
-            X,
-            y,
-            ratio_test=boston_settings['ratio_test'],
-            random_seed_split=boston_settings['random_seed_split'] + i,
-            random_seed_fit=boston_settings['random_seed_fit'],
-            bootstrap_bool=True,
-            b_iterations = general_settings['b_iterations'],
-            min_split_tree = general_settings['min_split_tree'],
-            a_ratio=general_settings['BAGGING_RATIO']) for i in range(
-                general_settings['n_repeat']))
+    mse_not_expected = np.array([split_fit_predict_bagging(
+        X,
+        y,
+        ratio_test=boston_settings['ratio_test'],
+        random_seed_split=boston_settings['random_seed_split'] + i,
+        random_seed_fit=boston_settings['random_seed_fit'],
+        bootstrap_bool=True,
+        b_iterations = general_settings['b_iterations'],
+        min_split_tree = general_settings['min_split_tree'],
+        a_ratio=general_settings['BAGGING_RATIO']) for i in range(
+            general_settings['n_repeat'])])
     mse_sim = np.mean(mse_not_expected)
     return mse_sim
 
 
-def simulate_subagging_parallel(
+def simulate_subagging(
         X,
         y,
         general_settings,
@@ -186,7 +182,7 @@ def simulate_subagging_parallel(
         # Note that we change the random seed for each iteration of Parallel.
         # Surely, this is not best practice, but it works well and safe in this
         # context.
-        mse_not_expected =  Parallel(n_jobs=boston_settings['cores'])(delayed(split_fit_predict_bagging)(
+        mse_not_expected = np.array([split_fit_predict_bagging(
                 X,
                 y,
                 ratio_test=boston_settings['ratio_test'],
@@ -196,7 +192,7 @@ def simulate_subagging_parallel(
                 b_iterations = general_settings['b_iterations'],
                 min_split_tree = general_settings['min_split_tree'],
                 a_ratio=a_value) for i in range(
-                    general_settings['n_repeat']))
+                    general_settings['n_repeat'])])
         mse_subagging[index_a] = np.mean(mse_not_expected)
     return mse_subagging
 
@@ -215,8 +211,8 @@ if __name__ == '__main__':
     boston_X = boston_full['data']
     boston_y = boston_full['target']
 
-    mse_bagging = simulate_bagging_parallel(boston_X, boston_y, general_settings_imported, boston_settings_imported)
-    mse_subagging = simulate_subagging_parallel(
+    mse_bagging = simulate_bagging(boston_X, boston_y, general_settings_imported, boston_settings_imported)
+    mse_subagging = simulate_subagging(
         boston_X, boston_y, general_settings_imported, subagging_settings_imported, boston_settings_imported)
     print('MSE for Bagging: ', mse_bagging)
     print('MSE for the different subsampling ratios: \n', mse_subagging)

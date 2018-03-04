@@ -31,7 +31,7 @@ def plot_toy_example(settings_plotting, output_toy_example):
     """
 
     plt.style.use([settings_plotting['style']])
-    fig, ax = plt.subplots(figsize=settings_plotting['figsize_theory'], ncols=3)
+    fig, ax = plt.subplots(figsize=settings_plotting['figsize']['theory'], ncols=3)
 
     # Variance Subplot
     ax[0].plot(output_toy_example['c_range'],output_toy_example['bagged']['variance'], color=settings_plotting['colors']['bagging'])

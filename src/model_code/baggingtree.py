@@ -7,8 +7,17 @@ Predictions on a new sample can be made using the predict() function.
 
 """
 import numpy as np
+import sys
 import math
 from sklearn.tree import DecisionTreeRegressor
+
+try:
+    from joblib import Parallel, delayed
+except ImportError:
+    sys.exit("""You need joblib to run the simulations, which is installed by
+                the enviroment setup provided with this project.
+                Else install it from https://pythonhosted.org/joblib/
+                or run:> pip install joblib.""")
 
 
 class BaggingTree:
@@ -92,7 +101,7 @@ class BaggingTree:
             obs_range = self.random_state.choice(
                 n_observations, size=draw_size, replace=False)
 
-        # Create the draw for both arrays *X* and *y* accordig to the
+        # Create the draw for both arrays *X* and *y* according to the
         # observation range *obs_range* that was created beforehand.
         X_draw = X[obs_range, :].copy()
         y_draw = y[obs_range].copy()
@@ -101,7 +110,7 @@ class BaggingTree:
 
     def fit(self, X, y):
         """
-        Fit the Bagging Algorithm to a sample (usually training sample) that consists of the covariant matrix *X* and
+        Fit the Bagging Algorithm *newly* to a sample (usually training sample) that consists of the covariant matrix *X* and
         the vector the dependent variable *y*.
 
         Parameters
@@ -114,7 +123,7 @@ class BaggingTree:
             The vector of the dependent variable *y* with the sample size n_size
 
         """
-        # Define list of estimators that will be fit to the different Bootstrap
+        # Define a new list of estimators that will be fit to the different Bootstrap
         # sample.
         self.tree_estimators = []
 
@@ -125,6 +134,7 @@ class BaggingTree:
             X_draw, y_draw = self._draw_sample(X, y)
 
             # We create a new tree instance for each iteration.
+            # Note that the random seed can be constant here for each iteration.
             tree = DecisionTreeRegressor(
                 max_depth=None,
                 min_samples_split=self.min_split_tree,

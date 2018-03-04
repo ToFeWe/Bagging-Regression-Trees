@@ -30,7 +30,7 @@ def plot_normal_splits(settings_plotting, output_normal_splits):
 
     """
     plt.style.use([settings_plotting['style']])
-    fig, ax = plt.subplots(figsize=settings_plotting['figsize_theory'], ncols=3)
+    fig, ax = plt.subplots(figsize=settings_plotting['figsize']['theory'], ncols=3)
 
     # Variance Subplot
     ax[0].plot(output_normal_splits['c_range'],output_normal_splits[0]['variance'], label = '$orginal$', color = settings_plotting['colors']['normal_splits'][0])

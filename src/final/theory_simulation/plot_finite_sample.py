@@ -32,7 +32,7 @@ def plot_finite_sample(settings_plotting, output_finite_sample):
 
 
     plt.style.use([settings_plotting['style']])
-    fig = plt.figure(figsize=settings_plotting['figsize'])
+    fig = plt.figure(figsize=settings_plotting['figsize']['finite_sample'])
 
     x_grid = output_finite_sample['x_range']
 

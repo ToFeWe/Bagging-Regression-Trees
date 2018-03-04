@@ -32,7 +32,7 @@ def plot_boston(settings_plotting, subagging_settings, output_boston):
 
     """
     plt.style.use([settings_plotting['style']])
-    fig = plt.figure(figsize=settings_plotting['figsize'])
+    fig = plt.figure(figsize=settings_plotting['figsize']['single_model'])
 
     # Create a range of subsampeling ratios as it was used in all simulations.
     ratio_range = np.linspace(subagging_settings['min_ratio'], subagging_settings['max_ratio'] ,subagging_settings["n_ratios"])

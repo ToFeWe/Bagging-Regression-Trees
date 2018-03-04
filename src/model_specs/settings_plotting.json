@@ -1,7 +1,11 @@
 {
   "style": "seaborn-white",
-  "figsize": [10, 10],
-  "figsize_theory":[10,3],
+  "figsize": {
+    "two_models": [10, 5],
+    "single_model": [5,5],
+    "theory": [10,3],
+    "finite_sample": [10,10]
+              } ,
   "colors": {
     "bagging": "tab:blue",
     "converged": "#d3e9f8",
