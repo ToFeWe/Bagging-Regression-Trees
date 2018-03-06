@@ -42,20 +42,17 @@ def plot_boston(settings_plotting, subagging_settings, output_boston):
     # For ratio=1 subagging is the same as fitting a single tree.
     tree_mse_plot = np.ones(subagging_settings["n_ratios"]) * output_boston['mse_subagging'][-1]
 
-
-
-
     plt.plot(ratio_range,output_boston['mse_subagging'], color=settings_plotting['colors']['subagging'],
-            label = '$MSE \: Subagging$')
-    plt.plot(ratio_range,bagging_mse_plot, color=settings_plotting['colors']['bagging'], label = '$MSE \: Bagging$')
-    plt.plot(ratio_range,tree_mse_plot, color=settings_plotting['colors']['trees'],  label = '$MSE \: Tree$')
+            label = '$MSPE \: Subagging$')
+    plt.plot(ratio_range,bagging_mse_plot, color=settings_plotting['colors']['bagging'], label = '$MSPE \: Bagging$')
+    plt.plot(ratio_range,tree_mse_plot, color=settings_plotting['colors']['trees'],  label = '$MSPE \: Tree$')
     plt.xlabel('$a$')
     plt.ylim(ymin=0)
-    plt.title(('$MSE \: for \: Boston \: Housing \:Data$'))
-
-    plt.legend(bbox_to_anchor=(0.13, -0.13), ncol=3,loc='lower left',frameon=True, fontsize=15)
+    plt.title(('$MSPE \: for \: Boston \: Housing \:Data$'))
+    plt.legend(ncol=3, loc='lower left', bbox_to_anchor=(-0.1, -0.27), frameon=True, fontsize=12)
     plt.tight_layout(pad=0.4, w_pad=1, h_pad=2.5)
     fig.savefig(ppj("OUT_FIGURES_REAL_DATA","plot_boston.pdf"), bbox_inches='tight')
+
 
 if __name__ == '__main__':
 

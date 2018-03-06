@@ -4,9 +4,9 @@ This module performs the simulations of the MSPE and its decomposition into squa
 Bagging Algorithm as described in the paper:
 
 In all simulations we use the following procedure:
-i. Generate a test sample, without error term, according to the data generating processes of
-   interest. This will be constant for the whole simulation study. All predictions will be made
-   on this sample.10
+i.  Generate a test sample, without error term, according to the data generating processes of
+    interest. This will be constant for the whole simulation study. All predictions will be made
+    on this sample.10
 ii. For each simulation iteration we follow this procedure:
     (a) Draw new error terms for the test sample.
     (b) Draw a new training sample with regressors and error terms.
@@ -279,13 +279,13 @@ class MonteCarloSimulation:
         # Array must be of length four: MSPE, Bias, Variance, Noise
         array_length = 4
         # Create a range of subsampling ratios.
-        ratiorange = np.linspace(min_ratio, max_ratio, n_ratios)
+        ratio_range = np.linspace(min_ratio, max_ratio, n_ratios)
 
         # Create an array to save simulation for each ratio.
         output_array_subagging = np.ones((n_ratios, array_length)) * np.nan
 
         # We loop over all ratios and save the results to an array.
-        for index, ratio in enumerate(ratiorange):
+        for index, ratio in enumerate(ratio_range):
             output_array_subagging[index,
                                    :] = self.calc_mse(ratio=ratio,
                                                       bootstrap=False,

@@ -1,35 +1,36 @@
 #! python
 
+
 def build(ctx):
-      ctx(
-          features='run_py_script',
-          source='calc_finite_sample.py',
-          deps=[
-              ctx.path_to(ctx, 'IN_MODEL_SPECS', 'finite_sample_settings.json'),
-          ],
-          target=[
-              ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_finite_sample.pickle'),
-          ]
-      )
+    ctx(features='run_py_script',
+        source='calc_finite_sample.py',
+        deps=[ctx.path_to(ctx,
+                          'IN_MODEL_SPECS',
+                          'finite_sample_settings.json'),
+              ],
+        target=[ctx.path_to(ctx,
+                            'OUT_ANALYSIS_THEORY',
+                            'output_finite_sample.pickle'),
+                ])
 
-      ctx(
-          features='run_py_script',
-          source='calc_normal_splits.py',
-          deps=[
-              ctx.path_to(ctx, 'IN_MODEL_SPECS', 'normal_splits_settings.json'),
-          ],
-          target=[
-              ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_normal_splits.pickle'),
-          ]
-      )
+    ctx(features='run_py_script',
+        source='calc_normal_splits.py',
+        deps=[ctx.path_to(ctx,
+                          'IN_MODEL_SPECS',
+                          'normal_splits_settings.json'),
+              ],
+        target=[ctx.path_to(ctx,
+                            'OUT_ANALYSIS_THEORY',
+                            'output_normal_splits.pickle'),
+                ])
 
-      ctx(
-          features='run_py_script',
-          source='calc_toy_example.py',
-          deps=[
-              ctx.path_to(ctx, 'IN_MODEL_SPECS', 'toy_example_settings.json'),
-          ],
-          target=[
-              ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_toy_example.pickle'),
-          ]
-      )
+    ctx(features='run_py_script',
+        source='calc_toy_example.py',
+        deps=[ctx.path_to(ctx,
+                          'IN_MODEL_SPECS',
+                          'toy_example_settings.json'),
+              ],
+        target=[ctx.path_to(ctx,
+                            'OUT_ANALYSIS_THEORY',
+                            'output_toy_example.pickle'),
+                ])

@@ -78,20 +78,24 @@ def calculate_normal_splits(settings):
 
     # Create a range of c values that we will iterate over for each subsampling
     # fraction a and save it to output dictionary for plotting.
-    c_range = np.linspace(settings['c_min'], settings['c_max'], num=settings['c_gridpoints'])
+    c_range = np.linspace(
+        settings['c_min'],
+        settings['c_max'],
+        num=settings['c_gridpoints'])
     output['c_range'] = c_range
 
     # Create the array with the a_range. The formation is chosen this way, for
     # plotting reasons.
-    # Note that the first a is always one as a reference (unbagged). Hence no fraction.
+    # Note that the first a is always one as a reference (unbagged). Hence no
+    # fraction.
     a_range = np.array([
-            settings['a_array']['first_a'],
-            settings['a_array']['second_a'][0] /
-            settings['a_array']['second_a'][1],
-            settings['a_array']['third_a'][0] /
-            settings['a_array']['third_a'][1],
-            settings['a_array']['fourth_a'][0] /
-            settings['a_array']['fourth_a'][1]
+        settings['a_array']['first_a'],
+        settings['a_array']['second_a'][0] /
+        settings['a_array']['second_a'][1],
+        settings['a_array']['third_a'][0] /
+        settings['a_array']['third_a'][1],
+        settings['a_array']['fourth_a'][0] /
+        settings['a_array']['fourth_a'][1]
     ])
 
     # Loop over the range of c values.
@@ -103,11 +107,12 @@ def calculate_normal_splits(settings):
         var_array = np.ones(settings['c_gridpoints']) * np.nan
 
         for i_c, c in np.ndenumerate(c_range):
-            # The calculation are done straight forward following the derivations in the paper.
-            bias_array[i_c] = bias_normal_splits(c, a , settings['gamma'])
+            # The calculation are done straight forward following the
+            # derivations in the paper.
+            bias_array[i_c] = bias_normal_splits(c, a, settings['gamma'])
             var_array[i_c] = variance_normal_splits(c, a, settings['gamma'])
 
-        mse_array= np.add(bias_array, var_array)
+        mse_array = np.add(bias_array, var_array)
 
         # Save the results to the dictonary. Note that we use the iteration number
         # as the key, since we follow a similar logic in the plotting part. As
@@ -120,10 +125,11 @@ def calculate_normal_splits(settings):
 
 
 if __name__ == '__main__':
-    with open(ppj("IN_MODEL_SPECS","normal_splits_settings.json")) as f:
+    with open(ppj("IN_MODEL_SPECS", "normal_splits_settings.json")) as f:
         normal_splits_settings_imported = json.load(f)
 
-    calculate_normal_splits = calculate_normal_splits(normal_splits_settings_imported)
+    calculate_normal_splits = calculate_normal_splits(
+        normal_splits_settings_imported)
 
-    with open(ppj("OUT_ANALYSIS_THEORY","output_normal_splits.pickle"), "wb") as out_file:
+    with open(ppj("OUT_ANALYSIS_THEORY", "output_normal_splits.pickle"), "wb") as out_file:
         pickle.dump(calculate_normal_splits, out_file)

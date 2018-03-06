@@ -1,15 +1,16 @@
 #! python
 
+
 def build(ctx):
-      ctx(
-          features='run_py_script',
-          source='calc_boston.py',
-          deps=[
-              ctx.path_to(ctx, 'IN_MODEL_SPECS', 'subagging_settings.json'),
-              ctx.path_to(ctx, 'IN_MODEL_SPECS', 'boston_settings.json'),
-              ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings.json')
-          ],
-          target=[
-              ctx.path_to(ctx, 'OUT_ANALYSIS_REAL_DATA', 'output_boston.pickle'),
-          ]
-      )
+    ctx(
+        features='run_py_script',
+        source='calc_boston.py',
+        deps=[
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'subagging_settings.json'),
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'boston_settings.json'),
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'general_settings.json')
+        ],
+        target=[
+            ctx.path_to(ctx, 'OUT_ANALYSIS_REAL_DATA', 'output_boston.pickle'),
+        ]
+    )

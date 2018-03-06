@@ -15,7 +15,8 @@ import pickle
 
 from bld.project_paths import project_paths_join as ppj
 
-def indicator(x_value,Y_bar):
+
+def indicator(x_value, Y_bar):
     """
     A indicator function that returns 1 if the threshold *Y_bar* smaller or equal the
     x value *x_value*.
@@ -53,10 +54,12 @@ def bagged_indicator(x_value, sample, b_iterations=50):
     """
     predictions = np.ones(b_iterations) * np.nan
     for m in range(b_iterations):
-        bootstrapsample = np.random.choice(sample,size=(sample.size,), replace=True)
+        bootstrapsample = np.random.choice(
+            sample, size=(sample.size,), replace=True)
         Y_bootstrap = bootstrapsample.mean()
-        predictions[m] = indicator(x_value,Y_bootstrap)
+        predictions[m] = indicator(x_value, Y_bootstrap)
     return predictions.mean()
+
 
 def simulate_finite_sample(settings):
     """
@@ -75,8 +78,8 @@ def simulate_finite_sample(settings):
 
     # Create array with x values we want to consider.
     x_range = np.linspace(settings['x_min'],
-                            settings['x_max'],
-                            settings['x_gridpoints'])
+                          settings['x_max'],
+                          settings['x_gridpoints'])
 
     # Save x_range to Dictionary as we want to plot the results later.
     output['x_range'] = x_range
@@ -94,26 +97,34 @@ def simulate_finite_sample(settings):
             y_se_bagged = np.ones(settings['n_repeat']) * np.nan
             y_se_unbagged = np.ones(settings['n_repeat']) * np.nan
 
-            # Set random state s.t. for each grid point we draw the same sequence
+            # Set random state s.t. for each grid point we draw the same
+            # sequence
             random_state = np.random.RandomState(settings['random_seed'])
             # Calculate the true prediction for the given x.
-            true_prediction = indicator(x,settings['mu'])
+            true_prediction = indicator(x, settings['mu'])
 
             # Simulate the Expected MSPE for given x.
             for i_repeat in range(settings['n_repeat']):
 
-                # Draw a new sample and make a prediction for bagging and without bagging
-                Y_sample = random_state.normal(settings['mu'], settings['sigma'], size=sample_size)
+                # Draw a new sample and make a prediction for bagging and
+                # without bagging
+                Y_sample = random_state.normal(
+                    settings['mu'], settings['sigma'], size=sample_size)
                 prediction_unbagged = indicator(x, Y_sample.mean())
-                prediction_bagged = bagged_indicator(x, Y_sample, b_iterations=settings['b_iterations'])
+                prediction_bagged = bagged_indicator(
+                    x, Y_sample, b_iterations=settings['b_iterations'])
 
                 # Calculate the Squared Error for the given repetition
-                y_se_bagged[i_repeat] = (true_prediction - prediction_bagged) ** 2
-                y_se_unbagged[i_repeat] = (true_prediction - prediction_unbagged) ** 2
+                y_se_bagged[i_repeat] = (
+                    true_prediction - prediction_bagged) ** 2
+                y_se_unbagged[i_repeat] = (
+                    true_prediction - prediction_unbagged) ** 2
 
             # Calculate the MSPE
-            mse_array_bagging[i_x] = y_se_bagged.sum(axis=0) / settings['n_repeat']
-            mse_array_unbagged[i_x] = y_se_unbagged.sum(axis=0) / settings['n_repeat']
+            mse_array_bagging[i_x] = y_se_bagged.sum(
+                axis=0) / settings['n_repeat']
+            mse_array_unbagged[i_x] = y_se_unbagged.sum(
+                axis=0) / settings['n_repeat']
 
         # Save the results of the given sample size.
         output[sample_size] = {}
@@ -124,10 +135,11 @@ def simulate_finite_sample(settings):
 
 
 if __name__ == '__main__':
-    with open(ppj("IN_MODEL_SPECS","finite_sample_settings.json")) as f:
+    with open(ppj("IN_MODEL_SPECS", "finite_sample_settings.json")) as f:
         finite_sample_settings_imported = json.load(f)
 
-    simulation_finite_sample = simulate_finite_sample(finite_sample_settings_imported)
+    simulation_finite_sample = simulate_finite_sample(
+        finite_sample_settings_imported)
 
-    with open(ppj("OUT_ANALYSIS_THEORY","output_finite_sample.pickle"), "wb") as out_file:
+    with open(ppj("OUT_ANALYSIS_THEORY", "output_finite_sample.pickle"), "wb") as out_file:
         pickle.dump(simulation_finite_sample, out_file)

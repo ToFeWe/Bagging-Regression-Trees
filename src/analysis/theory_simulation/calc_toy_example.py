@@ -19,10 +19,6 @@ import json
 from bld.project_paths import project_paths_join as ppj
 
 
-
-
-
-
 def convolution_cdf_df(c):
     """ Calculate the convolution as defined by Bühlmann and Yu (2002) and as
     used in the introductory example of our paper for the the c.d.f of the standard
@@ -36,8 +32,11 @@ def convolution_cdf_df(c):
 
     """
 
-    convolution = integrate.quad(lambda y: norm.cdf(c-y) * norm.pdf(y), -np.inf,np.inf)[0]
+    convolution = integrate.quad(
+        lambda y: norm.cdf(
+            c - y) * norm.pdf(y), -np.inf, np.inf)[0]
     return convolution
+
 
 def convolution_cdf_squared_df(c):
     """ Calculate the convolution as defined by Bühlmann and Yu (2002) and as
@@ -52,8 +51,10 @@ def convolution_cdf_squared_df(c):
 
     """
 
-    convolution  = integrate.quad(lambda y: norm.cdf(c-y) ** 2 * norm.pdf(y), -np.inf,np.inf)[0]
+    convolution = integrate.quad(lambda y: norm.cdf(
+        c - y) ** 2 * norm.pdf(y), -np.inf, np.inf)[0]
     return convolution
+
 
 def calculate_bias_bagged(c_value):
     """ Calculate the squared bias for the bagged predictor given the grid point
@@ -68,6 +69,7 @@ def calculate_bias_bagged(c_value):
     bias_bagged = (convolution_cdf_df(c_value) - norm.cdf(c_value)) ** 2
     return bias_bagged
 
+
 def calculate_var_bagged(c_value):
     """ Calculate the variance for the bagged predictor given the grid point
     *c_value*
@@ -78,8 +80,10 @@ def calculate_var_bagged(c_value):
         The gridpoint to be considered.
 
     """
-    var_bagged = convolution_cdf_squared_df(c_value) - convolution_cdf_df(c_value) ** 2
+    var_bagged = convolution_cdf_squared_df(
+        c_value) - convolution_cdf_df(c_value) ** 2
     return var_bagged
+
 
 def calculate_var_unbagged(c_value):
     """ Calculate the variance for the bagged predictor given the grid point
@@ -95,6 +99,7 @@ def calculate_var_unbagged(c_value):
     var_unbagged = norm.cdf(c_value) * (1 - norm.cdf(c_value))
     return var_unbagged
 
+
 def calculate_toy_example(settings):
     """
     Calculate the Bias and the Variance for the case of bagged and unbagged predictor based on the calulation settings
@@ -107,7 +112,10 @@ def calculate_toy_example(settings):
 
     """
     # Create grid with *c* values that we want to consider.
-    c_range = np.linspace(settings['c_min'],settings['c_max'], num=settings['c_gridpoints'])
+    c_range = np.linspace(
+        settings['c_min'],
+        settings['c_max'],
+        num=settings['c_gridpoints'])
 
     # Create the arrays that will be used to save the results.
     bagged_var = np.ones(settings['c_gridpoints']) * np.nan
@@ -139,10 +147,11 @@ def calculate_toy_example(settings):
 
 
 if __name__ == '__main__':
-    with open(ppj("IN_MODEL_SPECS","toy_example_settings.json")) as f:
+    with open(ppj("IN_MODEL_SPECS", "toy_example_settings.json")) as f:
         toy_example_settings_imported = json.load(f)
 
-    calculate_toy_example = calculate_toy_example(toy_example_settings_imported)
+    calculate_toy_example = calculate_toy_example(
+        toy_example_settings_imported)
 
-    with open(ppj("OUT_ANALYSIS_THEORY","output_toy_example.pickle"), "wb") as out_file:
+    with open(ppj("OUT_ANALYSIS_THEORY", "output_toy_example.pickle"), "wb") as out_file:
         pickle.dump(calculate_toy_example, out_file)
