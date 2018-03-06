@@ -52,7 +52,7 @@ class BaggingTree:
         of the Regression Trees to be considered for a split.
         Use this to control for the complexity of the Regression Tree.
 
-        NEeds to be greater than 1.
+        Needs to be greater than 1.
 
     b_iterations: int, optional (Default=50)
         The number of bootstrap iterations used to construct the bagging/subagging
@@ -87,8 +87,8 @@ class BaggingTree:
 
     def _set_ratio(self, ratio):
         """ A function to check if *ratio* is specified correctly. """
-        assert isinstance(
-            ratio, float), ' The *ratio* needs to be of type float'
+        assert np.issubdtype(
+            type(ratio), np.float), ' The *ratio* needs to be of type float'
         assert 1 >= ratio > 0, \
             'It is required that 1 >= *ratio* > 0. You provided ratio={}'.format(ratio)
         self.ratio = ratio
@@ -97,7 +97,7 @@ class BaggingTree:
         """ A function to check if *bootstrap* is specified correctly. """
         assert isinstance(bootstrap, bool), \
             '*bootstrap* needs to be of type *bool*'
-        if self.ratio != 1.0:
+        if self.ratio != 1.0 and bootstrap:
             warnings.warn('You are using subsampling without replacement'
                           '(default for bagging) but *ratio* != 1.'
                           ' Hence you use neither the m out of n bootstrap'
@@ -106,17 +106,19 @@ class BaggingTree:
 
     def _set_b_iterations(self, b_iterations):
         """ A function to check if *b_iterations* is specified correctly. """
-        assert isinstance(b_iterations, int) and b_iterations > 0, \
+        assert np.issubdtype(type(b_iterations), np.integer), \
             ('*b_iterations* need to be an integer greater than zero.'
              ' You provided b_iteartions={}'.format(b_iterations))
         self.b_iterations = b_iterations
+        # and b_iterations < 0
 
     def _set_min_split_tree(self, min_split_tree):
         """ A function to check if *min_split_tree* is specified correctly. """
-        assert isinstance(min_split_tree, int) and min_split_tree > 1, \
+        assert np.issubdtype(type(min_split_tree), np.integer), \
             ('*min_split_tree* need to be an integer greater than one. '
              'You provided min_split_tree={}'.format(min_split_tree))
         self.min_split_tree = min_split_tree
+        #  and min_split_tree > 1
 
     def _draw_sample(self, X, y):
         """Draws sample of the given data. Use on the class level *self.ratio* 
