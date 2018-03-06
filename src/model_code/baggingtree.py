@@ -106,19 +106,17 @@ class BaggingTree:
 
     def _set_b_iterations(self, b_iterations):
         """ A function to check if *b_iterations* is specified correctly. """
-        assert np.issubdtype(type(b_iterations), np.integer), \
+        assert np.issubdtype(type(b_iterations), np.integer) and b_iterations > 0, \
             ('*b_iterations* need to be an integer greater than zero.'
              ' You provided b_iteartions={}'.format(b_iterations))
         self.b_iterations = b_iterations
-        # and b_iterations < 0
 
     def _set_min_split_tree(self, min_split_tree):
         """ A function to check if *min_split_tree* is specified correctly. """
-        assert np.issubdtype(type(min_split_tree), np.integer), \
+        assert np.issubdtype(type(min_split_tree), np.integer) and min_split_tree > 1, \
             ('*min_split_tree* need to be an integer greater than one. '
              'You provided min_split_tree={}'.format(min_split_tree))
         self.min_split_tree = min_split_tree
-        #  and min_split_tree > 1
 
     def _draw_sample(self, X, y):
         """Draws sample of the given data. Use on the class level *self.ratio* 
