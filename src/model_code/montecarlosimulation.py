@@ -28,6 +28,7 @@ range of subsampling ratios.
 
 # Import the needed packages
 import numpy as np
+import warnings
 from src.model_code.baggingtree import BaggingTree
 from src.model_code.datasimulation import DataSimulation
 
@@ -38,7 +39,7 @@ class MonteCarloSimulation:
 
     Parameters
     ----------
-    random_seeds: tuple of size 4 consisting of int or None, optional (Default: (None, None, None, None))
+    random_seeds: tuple or list of size 4 consisting of int or None, optional (Default: (None, None, None, None))
         Specify the random seeds that will be used for the simulation study. We have to use different random seeds, as
         we define different RandomState instances for each part of the simulation.
 
@@ -46,57 +47,155 @@ class MonteCarloSimulation:
         random_seeds[1]: Defines the RandomState for the BaggingTree class
         random_seeds[2]: Defines the RandomState for the training sample draws
         random_seeds[3]: Defines the RandomState for the test sample draw
-
+        
+        All random seeds need to be different from one another and specified 
+        as a usual random seed as it is deployed to numpy.random.
+        
         One random_seed is used to specify the RandomState for numpy.random.
         It is shared accros all functions of the class.
 
-        IMPORTANT: This random seed is fixed for a specific instance, as it specifies a new RandomState for all numpy functions
-        used in the class. As a result this random_seed is *not* overwritten by numpy
-        random seeds that are defined outside of specific class instance. The reason for
-        this is that it makes reproducibility easier accross different simulations and
-        modules.
-        Note however that the downside is, that we have to specify for each class (each instance)
-        a different random seed and it is not possible to specify one random seed at the beginning
-        of the whole simulation, as this will define the RandomState within each class.
+        IMPORTANT: This random seed is fixed for a specific instance, as it 
+        specifies a new RandomState for all numpy functions used in this class. 
+        As a result this random_seed is *not* overwritten by numpy random seeds
+        that are defined outside of specific class instance. The reason for 
+        this is that it makes reproducibility easier across different simulations 
+        and modules. Note however that the downside is, that we have to specify
+        for each class (each instance) a different random seed and it is not 
+        possible to specify one random seed at the beginning of the whole 
+        simulation, as this will define the RandomState within each class.
+        
+        For further informtation on this see in :ref:`design_choices`.
 
     noise: int, float, optional (Default=1.0)
-        The variance of the error term that is used for the data generating
+        The standard deviation of the error term that is used for the data generating
         processes.
-        The default of *noise* = 1.0 indicates that we draw without an error term
+        The default of *noise* = 1.0 indicates that we draw an error term
         that is standard normally distributed.
+        
+        Needs to be greater than zero.
+        
+        Note that we cannot draw *noise=0* as this would not be inline with the
+        simulation setup that we have chosen.
 
-    n_test_train: tuple of size 2 with int, optional(Default= (500, 500))
+    n_test_train: tuple or list of size 2 with int, optional(Default= (500, 500))
         Specify the sample size of the test sample and the training samples.
 
         n_test_train[0]: Defines the size for the test sample
         n_test_train[1]: Defines the size for the training samples
+        
+        Both need to be greater than zero.
 
-    data_process: string, optional (Default="fiedman")
+    data_process: string, optional (Default='fiedman')
         Defines which data generating process we use.
-        Other options are "linear" and "indicator".
+        The options are 'fiedman', 'linear' and 'indicator'.
+    
+    n_repeat: int, optional (Default=100)
+        The number of Monte Carlo repitions to use for the simulation.
+        
+        Needs to be greater than zero.
 
     """
 
     def __init__(self,
                  n_repeat=100,
                  noise=1,
-                 data_process="friedman",
+                 data_process='friedman',
                  n_test_train=(500, 500),
                  random_seeds=(None, None, None, None),
                  ):
+        # Order matters here
+        self._set_noise(noise)
+        self._set_n_repeat(n_repeat)
+        self._set_random_seeds(random_seeds)
+        self._set_n_train_test(n_test_train)
+        self._set_data_process(data_process)
+    
+    def _set_n_repeat(self, n_repeat):
+        """ A function to check if the tuple *n_repeat* is specified correctly."""
+        assert np.issubdtype(type(n_repeat), np.integer) and n_repeat > 0, \
+            ('*b_iterations* need to be an integer greater than zero.'
+             ' You provided b_iteartions={}, which is of type {}.'
+             ''.format(n_repeat, type(n_repeat)))
         self.n_repeat = n_repeat
+    
+    def _set_noise(self, noise):
+        """ A function to check if the tuple *noise* is specified correctly."""
+        assert np.issubdtype(type(noise), (np.number)) and noise > 0, \
+            ('*noise* needs to be of type integer or float and greater or equal' 
+             ' to zero. You provided noise={}, which is of type {}.'
+             ''.format(noise, type(noise)))
         self.noise = noise
-        self.data_process = data_process
-        self.n_test = n_test_train[0]
-        self.n_train = n_test_train[1]
 
+    def _set_random_seeds(self, random_seeds):
+        """ A function to check if the tuple *n_test_train* is specified correctly."""
+        assert isinstance(random_seeds, (list,tuple)), \
+            (' *random_seeds* is not specified correctly. It must be of type'
+             ' *list* or *tuple*. The object you have provided is of type'
+             ' {}'.format(type(random_seeds)))       
+        assert all((isinstance(seed, int) or seed is None) for seed in random_seeds), \
+            ('All seeds specified in *random_seeds* must be either None or a'
+             ' positive integer.')
+        assert len(random_seeds) == 4, \
+            ('*random_seeds* must be of length 4 for the different' 
+             ' random seeds. The list/tuple provided'
+             ' is of length {}'.format(len(random_seeds)))
+            
+        # We want the random seeds to be different unless they are None.
+        if len(set(random_seeds)) != 4:
+            if (random_seeds.count(None) + len(set(random_seeds))) != 5:
+                raise AssertionError('Some random seeds are the same. '
+                                     'Make sure to choose 4 random '
+                                     ' seeds that are different from '
+                                     ' one another.')
+        
+        if random_seeds.count(None) != 0:
+            warnings.warn('At least one of your random seeds is defined as '
+                          '*None*. Note that the results will not be '
+                          'deterministic as usually desired.')
+
+        
         # Define the random states. For further details on why we do this, see
         # in the documentation.
-
         self.random_seed_noise = random_seeds[0]
         self.random_seed_fit = random_seeds[1]
         self.random_seed_train = random_seeds[2]
         self.random_seed_test = random_seeds[3]
+        
+    def _set_n_train_test(self, n_test_train):
+        """ A function to check if the tuple *n_test_train* is specified correctly."""
+
+        assert isinstance(n_test_train, (list,tuple)), \
+            (' *n_test_train* is not specified correctly. It must be of type'
+             ' *list* or *tuple*. The object you have provided is of type'
+             ' {}'.format(type(n_test_train)))
+        assert len(n_test_train) == 2, \
+            ('*n_test_train* must be of length 2 with the first(second) element'
+             ' being the test(training) sample size. The list/tuple provided'
+             ' is of lenngth {}'.format(len(n_test_train)))
+        assert (np.issubdtype(type(n_test_train[0]), np.integer) and
+                np.issubdtype(type(n_test_train[1]), np.integer)), \
+                    ('The size of the training and the test sample '
+                     '*n_train_test* has to be a positive integer.')
+        assert n_test_train[0] > 0 and n_test_train[1] > 0, \
+                ('The size of the training and the test sample '
+                 '*n_train_test* has to be a positive integer.')
+        self.n_test = n_test_train[0]
+        self.n_train = n_test_train[1]
+
+    def _set_data_process(self, data_process):
+        """ A function to check if *data_process* is specified correctly.
+        Furthermore it creates the test sample conisting of *X_test* and *f_test*(dependend variable without error)
+        according to the given data generating process.
+        
+        """
+        # Check if the data_process is correct
+        assert data_process in ('friedman','linear','indicator'), \
+            ('You didnt use a supported data generating process. '
+             'Choose among "friedman", "linear" and "indicator". '
+             'You povided "{}"'.format(data_process))
+        
+        # Set the data process as a class variable
+        self.data_process = data_process
 
         # Create one X_test and f_test that will be same for all following
         # simulation steps. This is important as we want to make for each
@@ -106,17 +205,18 @@ class MonteCarloSimulation:
             noise=self.noise,
             without_error=True,
             random_seed=self.random_seed_test)
+        
         # Create test sample according to the given data generating process.
-        if self.data_process == 'friedman':
+        if data_process == 'friedman':
             self.X_test, self.f_test = self.test_simulation.friedman_1_model()
-        elif self.data_process == 'indicator':
+        elif data_process == 'indicator':
             self.X_test, self.f_test = self.test_simulation.indicator_model()
-        elif self.data_process == 'linear':
+        elif data_process == 'linear':
             self.X_test, self.f_test = self.test_simulation.linear_model()
-
+        
     def calc_mse(
             self,
-            ratio=1,
+            ratio=1.0,
             bootstrap=True,
             min_split_tree=2,
             b_iterations=50):
@@ -152,8 +252,8 @@ class MonteCarloSimulation:
             Specify if the you use the standard bootstrap (Bagging) or m out of n bootstrap (Subagging).
 
             Default=True implies that we use Bagging.
+            
         """
-
         # Create the instance of the bagging algorithm class, with the given
         # parameters, that will be used for the rest of the simulation run.
         bagging_instance = BaggingTree(random_seed=self.random_seed_fit,
@@ -233,7 +333,7 @@ class MonteCarloSimulation:
             self,
             n_ratios=10,
             min_ratio=0.1,
-            max_ratio=1,
+            max_ratio=1.0,
             min_split_tree=2,
             b_iterations=50):
         """
@@ -256,27 +356,40 @@ class MonteCarloSimulation:
         Parameters
         ----------
         n_ratios: int, optional (Default=10)
-            The number of subsampling fractions we want to consider for the simulation.
+            The number of subsampling fractions we want to consider for the 
+            simulation.
+            
+            Needs to be greater than 1.
 
         min_ratio: float, optional (Default=0.1)
             The minimal subsampling fraction to be considered.
+            
+            Needs to be between zero and one and smaller than *max_ratio*.
 
         max_ratio: float, optional (Default=1.0)
             The maximal subsampling fraction to be considered.
+            
+            Needs to be between zero and one and larger than *min_ratio*.
 
         min_split_tree: int, optional (Default=2)
-            The minimal number of observations within a terminal node of the Regression Trees to be
-            considered for a split that are used in the simulation.
+            The minimal number of observations within a terminal node of the 
+            Regression Trees to be considered for a split that are used in the
+            simulation.
             Use this to control for the complexity of the Regression Tree.
 
             Must be greater than 2.
 
         b_iterations: int, optional (Default=50)
-            The number of bootstrap iterations used to construct the subagging predictor in the simulation.
+            The number of bootstrap iterations used to construct the subagging 
+            predictor in the simulation.
+            
+            Must be greater than zero.
 
         """
+        # Check inputs, that are not checked used methods anyways, first.
+        self._check_calc_mse_all_ratios(n_ratios,min_ratio,max_ratio)
 
-        # Array must be of length four: MSPE, Bias, Variance, Noise
+        # The arrray must be of length four: MSPE, Bias, Variance, Noise
         array_length = 4
         # Create a range of subsampling ratios.
         ratio_range = np.linspace(min_ratio, max_ratio, n_ratios)
@@ -292,3 +405,32 @@ class MonteCarloSimulation:
                                                       min_split_tree=min_split_tree,
                                                       b_iterations=b_iterations)
         return output_array_subagging
+
+    def _check_calc_mse_all_ratios(self, n_ratios, min_ratio, max_ratio):
+        """ A function to check if *calc_mse_all_ratios()* is specified 
+        correctly. 
+        
+        Note that it does not check values that are checked by used methods 
+        anyways.
+        
+        """
+        assert np.issubdtype(type(n_ratios), np.integer) and n_ratios > 1, \
+            ('*n_ratios* need to be an integer greater than one. '
+             'You provided n_ratios={}, which is of type'
+             ' {}'.format(n_ratios,type(n_ratios)))
+            
+        assert np.issubdtype(type(min_ratio), np.float) and min_ratio >= 0, \
+            ('*min_ratio* need to be an float greater than zero. '
+             'You provided min_ratio={}, which is of type'
+             ' {}'.format(min_ratio,type(min_ratio)))
+            
+        assert np.issubdtype(type(max_ratio), np.float) and max_ratio <= 1, \
+            ('*max_ratio* need to be an float greater than zero. '
+             'You provided max_ratio={}, which is of type'
+             ' {}'.format(max_ratio,type(max_ratio)))
+            
+        assert min_ratio < max_ratio, \
+            '*min_ratio* needs to be smaler than *max_ratio*.'
+
+        
+    
