@@ -18,19 +18,27 @@ class DataSimulation:
     ----------
     random_seed: int or None, optional (Default: None)
         random_seed is used to specify the RandomState for numpy.random.
-        It is shared accros all functions of the class.
+        It is shared across all functions of the class.
+        
+        Needs to be specified as a usual random seed 
+        as it is deployed to numpy.random.
 
-        IMPORTANT: This random seed is fixed for a specific instance, as it specifies a new RandomState for all numpy functions
-        used in the class. As a result this random_seed is *not* overwritten by numpy
-        random seeds that are defined outside of specific class instance. The reason for
-        this is that it makes reproducibility easier accross different simulations and
-        modules.
-        Note however that the downside is, that we have to specify for each class (each instance)
-        a different random seed and it is not possible to specify one random seed at the beginning
-        of the whole simulation, as this will define the RandomState within each class.
+        IMPORTANT: This random seed is fixed for a specific instance, as it 
+        specifies a new RandomState for all numpy functions used in this class. 
+        As a result this random_seed is *not* overwritten by numpy random seeds
+        that are defined outside of specific class instance. The reason for 
+        this is that it makes reproducibility easier across different simulations 
+        and modules. Note however that the downside is, that we have to specify
+        for each class (each instance) a different random seed and it is not 
+        possible to specify one random seed at the beginning of the whole 
+        simulation, as this will define the RandomState within each class.
+        
+        For further informtation on this see in :ref:`design_choices`.
 
     n_size: int, optional (Default=500)
         The sample size, when calling one of the data geenrating functions.
+        
+        Needs to be greater than 0.
 
     noise: int, float, optional (Default=1.0)
         The variance of the error term that is used for the data geenrating
@@ -42,8 +50,8 @@ class DataSimulation:
         Specify if the data should be generated with an error term already added.
 
         Default=False implies that it is created *with* an error term.
-        Change this option to *True* if you want to create a test sample for which you draw
-        an error term for each simulation iteration.
+        Change this option to *True* if you want to create a test sample for 
+        which you draw an error term for each simulation iteration.
 
     """
 
@@ -53,48 +61,40 @@ class DataSimulation:
             n_size=500,
             noise=1.0,
             without_error=False):
-        self._check_random_seed(random_seed)
-        self._check_n_size(n_size)
-        self._check_noise(noise)
-        self._check_without_error(without_error)
 
-    def _check_random_seed(self, random_seed):
-        """ Checks if the *random_seed* is specified correctly"""
-        if random_seed is None or isinstance(random_seed, int):
-            self.random_seed = random_seed
-            self.random_state = np.random.RandomState(random_seed)
-        else:
-            raise ValueError(
-                'Must pass integer value or None as the random seed for the data generating process.'
-            )
+        # We define the random state. For further details on why we do this, see
+        # in the documentation.
+        # No function to check the seed as it is done directly by numpy.
+        self.random_state = np.random.RandomState(random_seed)
 
-    def _check_n_size(self, n_size):
-        """ Checks if the *n_size* is specified correctly"""
-        if not isinstance(n_size, int) or n_size < 1:
-            raise ValueError(
-                'Must pass a postitive integer as the sample size for the process'
-            )
-        else:
-            self.n_size = n_size
+        # Check and then set the inputs to avoid programming errors.
+        self._set_n_size(n_size)
+        self._set_noise(noise)
+        self._set_without_error(without_error)
 
-    def _check_noise(self, noise):
-        """ Checks if the *noise* is specified correctly"""
-        if isinstance(noise, (float, int)):
-            self.noise = noise
-        else:
-            raise ValueError(
-                'Must pass float or int as the noise term.'
-            )
 
-    def _check_without_error(self, without_error):
-        """ Checks if the *without_error* is specified correctly"""
-        if isinstance(without_error, bool):
-            self.without_error = without_error
-        else:
-            raise ValueError(
-                'Must pass bool as without_error to specify if you want' +
-                'to draw with or without error term.'
-            )
+    def _set_n_size(self, n_size):
+        """ A function to check if *n_size* is specified correctly."""
+        assert np.issubdtype(type(n_size), np.integer) and n_size > 0, \
+            ('*n_size* need to be an integer greater than zero.'
+             ' You provided b_iteartions={}, which is of type {}.'
+             ''.format(n_size, type(n_size)))
+        self.n_size = n_size
+
+    def _set_noise(self, noise):
+        """ A function to check if *noise* is specified correctly. """
+        assert np.issubdtype(type(noise), (np.float)) and noise > 0, \
+            ('*noise* needs to be of type integer or float and greater or equal' 
+             ' to zero. You provided noise={}, which is of type {}.'
+             ''.format(noise, type(noise)))
+        self.noise = noise
+
+    def _set_without_error(self, without_error):
+        """ A function to check if *without_error* is specified correctly. """
+        assert isinstance(without_error, bool), \
+            ('*without_error* needs to be of type *bool*. '
+             'The provided value is of type {}'.format(type(without_error)))
+        self.without_error = without_error
 
     def friedman_1_model(self):
         """
@@ -234,6 +234,7 @@ class DataSimulation:
                self._indicator_function(x_1, 0, x_2, 1) +
                3 *
                self._indicator_function(x_2, 0, x_3, 1))
+        
         # Create the covariante matrix by stacking the corresponding variables
         X = np.stack((x_1, x_2, x_3, x_4, x_5), axis=1)
 

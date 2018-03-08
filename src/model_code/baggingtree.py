@@ -23,6 +23,9 @@ class BaggingTree:
     random_seed: int or None, optional (Default: None)
         random_seed is used to specify the RandomState for numpy.random.
         It is shared across all functions of the class.
+        
+        Needs to be specified as a usual random seed 
+        as it is deployed to numpy.random.
 
         IMPORTANT: This random seed is fixed for a specific instance, as it 
         specifies a new RandomState for all numpy functions used in this class. 
@@ -96,7 +99,8 @@ class BaggingTree:
     def _set_bootstrap(self, bootstrap):
         """ A function to check if *bootstrap* is specified correctly. """
         assert isinstance(bootstrap, bool), \
-            '*bootstrap* needs to be of type *bool*'
+            ('*bootstrap* needs to be of type *bool*. '
+             'The provided value is of type {}'.format(type(bootstrap)))
         if self.ratio != 1.0 and bootstrap:
             warnings.warn('You are using subsampling without replacement'
                           '(default for bagging) but *ratio* != 1.'
@@ -108,14 +112,16 @@ class BaggingTree:
         """ A function to check if *b_iterations* is specified correctly. """
         assert np.issubdtype(type(b_iterations), np.integer) and b_iterations > 0, \
             ('*b_iterations* need to be an integer greater than zero.'
-             ' You provided b_iteartions={}'.format(b_iterations))
+             ' You provided b_iteartions={}, which is of type {}.'
+             ''.format(b_iterations, type(b_iterations)))
         self.b_iterations = b_iterations
 
     def _set_min_split_tree(self, min_split_tree):
         """ A function to check if *min_split_tree* is specified correctly. """
         assert np.issubdtype(type(min_split_tree), np.integer) and min_split_tree > 1, \
             ('*min_split_tree* need to be an integer greater than one. '
-             'You provided min_split_tree={}'.format(min_split_tree))
+             'You provided min_split_tree={}, which is of type {}.'
+             ''.format(min_split_tree, type(min_split_tree)))
         self.min_split_tree = min_split_tree
 
     def _draw_sample(self, X, y):

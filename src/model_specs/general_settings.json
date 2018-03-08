@@ -1,7 +1,7 @@
 {
   "n_repeat": 10,
   "n_test_train": [500, 500],
-  "noise": 1,
+  "noise": 1.0,
   "b_iterations": 50,
   "min_split_tree": 2,
   "random_seeds": [3003, 2017, 1304, 2206],

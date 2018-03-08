@@ -98,7 +98,7 @@ class MonteCarloSimulation:
 
     def __init__(self,
                  n_repeat=100,
-                 noise=1,
+                 noise=1.0,
                  data_process='friedman',
                  n_test_train=(500, 500),
                  random_seeds=(None, None, None, None),
@@ -111,7 +111,7 @@ class MonteCarloSimulation:
         self._set_data_process(data_process)
     
     def _set_n_repeat(self, n_repeat):
-        """ A function to check if the tuple *n_repeat* is specified correctly."""
+        """ A function to check if *n_repeat* is specified correctly."""
         assert np.issubdtype(type(n_repeat), np.integer) and n_repeat > 0, \
             ('*b_iterations* need to be an integer greater than zero.'
              ' You provided b_iteartions={}, which is of type {}.'
@@ -119,15 +119,15 @@ class MonteCarloSimulation:
         self.n_repeat = n_repeat
     
     def _set_noise(self, noise):
-        """ A function to check if the tuple *noise* is specified correctly."""
-        assert np.issubdtype(type(noise), (np.number)) and noise > 0, \
+        """ A function to check if *noise* is specified correctly."""
+        assert np.issubdtype(type(noise), (np.float)) and noise > 0, \
             ('*noise* needs to be of type integer or float and greater or equal' 
              ' to zero. You provided noise={}, which is of type {}.'
              ''.format(noise, type(noise)))
         self.noise = noise
 
     def _set_random_seeds(self, random_seeds):
-        """ A function to check if the tuple *n_test_train* is specified correctly."""
+        """ A function to check if the tuple/list *n_test_train* is specified correctly."""
         assert isinstance(random_seeds, (list,tuple)), \
             (' *random_seeds* is not specified correctly. It must be of type'
              ' *list* or *tuple*. The object you have provided is of type'
@@ -154,7 +154,7 @@ class MonteCarloSimulation:
                           'deterministic as usually desired.')
 
         
-        # Define the random states. For further details on why we do this, see
+        # We define the random states. For further details on why we do this, see
         # in the documentation.
         self.random_seed_noise = random_seeds[0]
         self.random_seed_fit = random_seeds[1]
