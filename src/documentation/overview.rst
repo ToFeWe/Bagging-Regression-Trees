@@ -1,4 +1,4 @@
-.. _concept:
+.. _overview:
 
 **************************************
 The conceptual overview of the project
@@ -9,13 +9,25 @@ Overview for the project
 The implementation of the simulations described in the term paper has been split up across various modules. The objective of this section is
 to explain the conception and structure.
 
-The part :ref:`model_code` contains explanations for all basic algorithms and functions that are used for the main parts of the simulation. Amongst them the implementation
+The part :ref:`model_code` contains explanations for all basic algorithms and functions that are used for the main parts of the simulation, which can be found in Section 5. Amongst them is the implementation
 of the Bagging Algorithm for Regression Trees and the ``MonteCarloSimulation`` Class, which is used to perform the simulations of Section 5 of the term paper.
-Within :ref:`analysis` the documentation for the main calculations and simulations of the paper can be found.
-In :ref:`final` the modules for creating the figures are documented. All model specifications are defined in .json files. An overview for those can be
-found in :ref:`model_specs`.
+Within :ref:`analysis` the documentation for the main calculations and simulations of the paper can be found. The analysis part has been split up into three subfolders to maintain a clear
+structure for the project. The three subfolders coincide with the three computationally intensive parts of the paper, which are the calculations for the theoretical part in Sections 3 and 4,
+the main simulations in Section 5 and the application of the Bagging Algorithm to real data in Section 6. As the simulation setup differs drastically between those parts, it made sense
+to reflect this also in the structure of the project.
+In :ref:`final` the modules for creating the figures and tables are documented. Note that here we also maintain the structure chosen in :ref:`analysis`.
+All model specifications for the different simulations are defined in .json files.This way we can easily ensure that modules/simulations that should share common attributes
+actually share them. An overview for the different .json files can be found in :ref:`model_specs`.
 Finally, the overview of the final output files is listed in :ref:`paper`. In this folder you can also find further figures, that have not been created during the
 build process.
+
+Overview and explanations for different design choices
+======================================================
+
+In the following we will give an overview over different design choices that have been made within this project.
+We will focus on those that might seem unintuitive at first glance and give a short explanation to those.
+
+
 
 
 How to run parts of the code? How to replicate the output myself?

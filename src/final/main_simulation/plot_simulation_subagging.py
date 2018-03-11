@@ -47,7 +47,7 @@ def plot_subagging(settings_plotting, subagging_settings, models, appendix):
         fig = plt.figure(figsize=settings_plotting['figsize']['two_models'])
 
 
-    # Create a range of subsampeling ratios as it was used in all simulations.
+    # Create the array as it was used in the calculations (same dict and method).
     ratio_range = np.linspace(subagging_settings['min_ratio'], subagging_settings['max_ratio'] ,subagging_settings["n_ratios"])
 
     for index, model in enumerate(models):

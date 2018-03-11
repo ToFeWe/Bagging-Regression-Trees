@@ -41,7 +41,7 @@ def plot_tree_depth(settings_plotting, tree_depth_settings, models, appendix):
     else:
         fig = plt.figure(figsize=settings_plotting['figsize']['two_models'])
 
-    # Create array as it was used in the simulation.
+    # Create the array as it was used in the calculations (same dict and method).
     min_split_array = np.arange(tree_depth_settings['min_split'],tree_depth_settings['max_split']+tree_depth_settings["steps_split"],tree_depth_settings["steps_split"])[::-1]
 
 

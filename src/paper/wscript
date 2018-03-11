@@ -1,6 +1,5 @@
 #! python
 
-
 def build(ctx):
 
   for s in 'bagging_pres', 'bagging_paper':

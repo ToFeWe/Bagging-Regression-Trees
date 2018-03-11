@@ -40,7 +40,8 @@ def plot_convergence(settings_plotting, convergence_settings, models, appendix):
         fig = plt.figure(figsize=settings_plotting['figsize']['single_model'])
     else:
         fig = plt.figure(figsize=settings_plotting['figsize']['two_models'])
-
+    
+    # Create the array as it was used in the calculations (same dict and method).
     n_bootstraps_array = np.arange(convergence_settings['min_bootstrap'],convergence_settings['max_bootstrap'],convergence_settings['steps_bootstrap'])
 
     # Loop over all models that we consider and add the subplot to the figure.

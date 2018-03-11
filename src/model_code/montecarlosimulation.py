@@ -6,7 +6,7 @@ Bagging Algorithm as described in the paper:
 In all simulations we use the following procedure:
 i.  Generate a test sample, without error term, according to the data generating processes of
     interest. This will be constant for the whole simulation study. All predictions will be made
-    on this sample.10
+    on this sample.
 ii. For each simulation iteration we follow this procedure:
     (a) Draw new error terms for the test sample.
     (b) Draw a new training sample with regressors and error terms.

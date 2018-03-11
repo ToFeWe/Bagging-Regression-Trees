@@ -99,14 +99,14 @@ def calculate_normal_splits(settings):
     ])
 
     # Loop over the range of c values.
-    for i_a, a in np.ndenumerate(a_range):
+    for i_a, a in enumerate(a_range):
         # For the list of a values (subsampling fraction).
 
         # Create an array that save the results for Bias and Variance
         bias_array = np.ones(settings['c_gridpoints']) * np.nan
         var_array = np.ones(settings['c_gridpoints']) * np.nan
 
-        for i_c, c in np.ndenumerate(c_range):
+        for i_c, c in enumerate(c_range):
             # The calculation are done straight forward following the
             # derivations in the paper.
             bias_array[i_c] = bias_normal_splits(c, a, settings['gamma'])
@@ -115,12 +115,11 @@ def calculate_normal_splits(settings):
         mse_array = np.add(bias_array, var_array)
 
         # Save the results to the dictonary. Note that we use the iteration number
-        # as the key, since we follow a similar logic in the plotting part. As
-        # *i_a* is a tuple with one entry we pick the first, hence [0].
-        output[i_a[0]] = {}
-        output[i_a[0]]['bias'] = bias_array
-        output[i_a[0]]['variance'] = var_array
-        output[i_a[0]]['mse'] = mse_array
+        # as the key, since we follow a similar logic in the plotting part.
+        output[i_a] = {}
+        output[i_a]['bias'] = bias_array
+        output[i_a]['variance'] = var_array
+        output[i_a]['mse'] = mse_array
     return output
 
 

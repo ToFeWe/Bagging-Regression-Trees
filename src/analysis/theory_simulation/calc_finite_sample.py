@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 
 A module to calculate the results for the introductory example in subsection 3.2 of the paper without the dynamic environment

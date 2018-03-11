@@ -85,7 +85,6 @@ def simulate_tree_depth(general_settings, tree_depth_settings, model):
 
         output_array_bagging[index, :] = output_bagging
         output_array_tree[index, :] = output_tree
-        print('Done with split:', split, ' for the Model', model)
 
     return output_array_bagging, output_array_tree
 
