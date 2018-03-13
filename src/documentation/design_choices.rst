@@ -167,18 +167,10 @@ improvement. Further information on this can be found in the :ref:`model_code`
 part of the documentation.
 
 
-Violation of PEP8 Naming Conventions and other Convention
-=========================================================
+Violation of Python Conventions
+=============================
 
-Some of the variable names within the different modules violate the PEP8 Naming
-Conventions. Namely, the one stating that variable names should only consist of
-lower case letters. Variables that describe a matrix-like object, are named in
-capital letters.
-The PEP8 convention is violated at some parts of the code to remain inline with the
-mathematical notation and the naming convention introduced by popular python
-packages like ``scikit-learn`` or ``PyTorch``.
-
-Furthermore, we define within the ``BaggingTrees`` class, a class attribute
+We define within the ``BaggingTrees`` class, a class attribute
 outside the ``__init__`` function. This violates ``python`` conventions
 according to an analysis run with ``pylint``, but is of great use in the case
 of bagging, as we want to pass a newly trained class instance each time after

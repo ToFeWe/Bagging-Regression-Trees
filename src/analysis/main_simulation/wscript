@@ -20,6 +20,7 @@ def build(ctx):
                 ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_subagging_{}.pickle'.format(model)),
             ],
             append=model,
+            name='calc_simulation_subagging_{}'.format(model)
         )
 
         # Start the simulation for the convergence of Bagging.
@@ -37,6 +38,8 @@ def build(ctx):
                 ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_convergence_{}.pickle'.format(model)),
             ],
             append=model,
+            name='calc_simulation_convergence_{}'.format(model)
+
         )
 
         # Start the simulation for the tree depth.
@@ -54,4 +57,5 @@ def build(ctx):
                 ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_{}.pickle'.format(model)),
             ],
             append=model,
+            name='calc_simulation_convergence_{}'.format(model)
         )

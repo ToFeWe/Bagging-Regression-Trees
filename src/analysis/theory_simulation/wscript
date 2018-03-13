@@ -2,61 +2,70 @@
 
 import os
 
+
 def build(ctx):
-    ctx(features='run_py_script',
-        source='calc_finite_sample.py',
-        deps=[ctx.path_to(ctx,
-                          'IN_MODEL_SPECS',
-                          'finite_sample_settings.json'),
-              ],
-        target=[ctx.path_to(ctx,
-                            'OUT_ANALYSIS_THEORY',
-                            'output_finite_sample.pickle'),
-                ])
+    ctx(
+        features='run_py_script', source='calc_finite_sample.py',
+        deps=[
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'finite_sample_settings.json')
+        ],
+        target=[
+            ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_finite_sample.pickle')
+        ],
+        name='calc_finite_sample'
+    )
 
-    ctx(features='run_py_script',
-        source='calc_normal_splits.py',
-        deps=[ctx.path_to(ctx,
-                          'IN_MODEL_SPECS',
-                          'normal_splits_settings.json'),
-              ],
-        target=[ctx.path_to(ctx,
-                            'OUT_ANALYSIS_THEORY',
-                            'output_normal_splits.pickle'),
-                ])
+    ctx(
+        features='run_py_script', source='calc_normal_splits.py',
+        deps=[
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'normal_splits_settings.json')
+        ],
+        target=[
+            ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_normal_splits.pickle')
+        ],
+        name='calc_normal_splits'
+    )
 
-    ctx(features='run_py_script',
-        source='calc_toy_example.py',
-        deps=[ctx.path_to(ctx,
-                          'IN_MODEL_SPECS',
-                          'toy_example_settings.json'),
-              ],
-        target=[ctx.path_to(ctx,
-                            'OUT_ANALYSIS_THEORY',
-                            'output_toy_example.pickle'),
-                ])
+    ctx(
+        features='run_py_script', source='calc_toy_example.py',
+        deps=[
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'toy_example_settings.json')
+        ],
+        target=[
+            ctx.path_to(ctx, 'OUT_ANALYSIS_THEORY', 'output_toy_example.pickle')
+        ],
+        name='toy_example_settings'
+    )
 
-        
-    abspath_toy_example = os.path.join(ctx.path.abspath(), 'test_toy_example.py')
-    
-    ctx(features='run_py_script',
+    abspath_toy_example = (
+        os.path.join(ctx.path.abspath(), 'test_toy_example.py')
+    )
+
+    ctx(
+        features='run_py_script',
         source='test_toy_example.py',
         deps='calc_toy_example.py',
         append=abspath_toy_example
-        )
-    
-    abspath_normal_splits = os.path.join(ctx.path.abspath(), 'test_normal_splits.py')
-    
-    ctx(features='run_py_script',
+    )
+
+    abspath_normal_splits = (
+        os.path.join(ctx.path.abspath(), 'test_normal_splits.py')
+    )
+
+    ctx(
+        features='run_py_script',
         source='test_normal_splits.py',
         deps='calc_normal_splits.py',
         append=abspath_normal_splits
-        )
-    
-    abspath_finite_sample = os.path.join(ctx.path.abspath(), 'test_finite_sample.py')
-    
-    ctx(features='run_py_script',
+    )
+
+    abspath_finite_sample = (
+        os.path.join(ctx.path.abspath(), 'test_finite_sample.py')
+    )
+
+    ctx(
+        features='run_py_script',
         source='test_finite_sample.py',
         deps='calc_finite_sample.py',
         append=abspath_finite_sample
-        )
+    )

@@ -7,10 +7,10 @@ to a training sample. Predictions on a new sample can be made using the predict(
 function.
 
 """
-import numpy as np
 import math
-from sklearn.tree import DecisionTreeRegressor
 import warnings
+import numpy as np
+from sklearn.tree import DecisionTreeRegressor
 
 
 class BaggingTree:
@@ -37,7 +37,7 @@ class BaggingTree:
         possible to specify one random seed at the beginning of the whole
         simulation, as this will define the RandomState within each class.
 
-        For further informtation on this see in :ref:`design_choices`.
+        For further information on this see in :ref:`design_choices`.
 
     ratio: float, optional (Default=1.0)
         The sample size for the subsampling procedure. Each sample we draw for
@@ -124,7 +124,7 @@ class BaggingTree:
              ''.format(min_split_tree, type(min_split_tree)))
         self.min_split_tree = min_split_tree
 
-    def _draw_sample(self, X, y):
+    def _draw_sample(self, x_matrix, y_vector):
         """Draws sample of the given data. Use on the class level *self.ratio*
         and *self.bootstrap* to specify if you want to draw with replacement
         (Bootstrap) and how large your sample should be relative to the original
@@ -133,44 +133,46 @@ class BaggingTree:
         """
 
         # Number of observations in data set
-        n_observations = X.shape[0]
+        n_observations = x_matrix.shape[0]
         # Number of observations for each draw
         draw_size = math.ceil(n_observations * self.ratio)
 
         # Draw array of integers with/without replacement - those will be the rows
         # for the bootstrap/subsample sample.
         if self.bootstrap:
-            obs_range = self.random_state.choice(
-                n_observations, size=draw_size, replace=True)
+            obs_range = (
+                self.random_state.choice(n_observations, size=draw_size, replace=True)
+            )
         else:
-            obs_range = self.random_state.choice(
-                n_observations, size=draw_size, replace=False)
+            obs_range = (
+                self.random_state.choice(n_observations, size=draw_size, replace=False)
+            )
 
-        # Create the draw for both, the matrix *X* and the vector *y*, according
+        # Create the draw for both, the matrix *x_matrix* and the vector *y_vector*, according
         # to the observation range *obs_range* that was created beforehand.
-        X_draw = X[obs_range, :].copy()
-        y_draw = y[obs_range].copy()
+        x_matrix_draw = x_matrix[obs_range, :].copy()
+        y_draw = y_vector[obs_range].copy()
 
-        return X_draw, y_draw
+        return x_matrix_draw, y_draw
 
-    def fit(self, X, y):
+    def fit(self, x_matrix, y_vector):
         """
         Fit the Bagging Algorithm *newly* to a sample (usually training sample)
-        that consists of the covariant matrix *X* and the vector the dependent
-        variable *y*.
+        that consists of the covariant matrix *x_matrix* and the vector the dependent
+        variable *y_vector*.
 
         Parameters
         ----------
-        X: numpy-array with shape = [n_size, n_features] (Default: None)
-            The covariant matrix *X* with the sample size n_size and
+        x_matrix: numpy-array with shape = [n_size, n_features] (Default: None)
+            The covariant matrix *x_matrix* with the sample size n_size and
             n_features of covariants.
 
-        y: numpy-array with shape = [n_size,] (Default: None)
-            The vector of the dependent variable *y* with the sample size n_size
+        y_vector: numpy-array with shape = [n_size,] (Default: None)
+            The vector of the dependent variable *y_vector* with the sample size n_size
 
         """
         # We check the inputs for the function.
-        self._check_fit(X, y)
+        self._check_fit(x_matrix, y_vector)
 
         # Define a new list of estimators that will be fit to the different Bootstrap
         # samples.
@@ -178,9 +180,9 @@ class BaggingTree:
 
         # The actual Bagging algorithm follows. This step is repeated
         # *b_iterations* times, which is the number of Bootstrap iterations.
-        for sample in range(self.b_iterations):
+        for _ in range(self.b_iterations):
             # Draw a new bootstrap sample
-            X_draw, y_draw = self._draw_sample(X, y)
+            x_matrix_draw, y_draw = self._draw_sample(x_matrix, y_vector)
 
             # We create a new tree instance for each iteration.
             # Note that the random seed can be constant here for each
@@ -191,7 +193,7 @@ class BaggingTree:
                 random_state=self.random_seed)
 
             # Fit Regression Tree to the Bootstrap Sample.
-            fitted_tree = tree.fit(X_draw, y_draw)
+            fitted_tree = tree.fit(x_matrix_draw, y_draw)
 
             # Append the fitted tree to the list, that contains all Regression
             # Trees.
@@ -199,35 +201,41 @@ class BaggingTree:
         # We return *self*, as we want be able to pass a trained instance.
         return self
 
-    def _check_fit(self, X, y):
-        """ A function to check the inputs fot the *fit()* function. """
+    @staticmethod
+    def _check_fit(x_matrix, y_vector):
+        """
+        A static function to check the inputs fot the *fit()* function.
+        As it is static, we used the ``staticmethod`` decorator and
+        dropped *self* from the attributes.
 
-        assert isinstance(X, np.ndarray), \
-            'Your input X is not a numpy array. Currently only those are supported.'
-        assert isinstance(y, np.ndarray), \
-            'Your input X is not a numpy array. Currently only those are supported.'
-        assert X.ndim == 2, 'The convariant matrix *X* must be two dimensional.'
-        assert y.ndim == 1, 'The vector *y* must be one dimensional.'
+        """
 
-    def predict(self, X):
+        assert isinstance(x_matrix, np.ndarray), \
+            'Your input x_matrix is not a numpy array. Currently only those are supported.'
+        assert isinstance(y_vector, np.ndarray), \
+            'Your input x_matrix is not a numpy array. Currently only those are supported.'
+        assert x_matrix.ndim == 2, 'The convariant matrix *x_matrix* must be two dimensional.'
+        assert y_vector.ndim == 1, 'The vector *y_vector* must be one dimensional.'
+
+    def predict(self, x_matrix):
         """
         Make a new prediction for a **trained** class instance (using the fit()
-        function first) on a new covariant matrix *X* (test sample).
+        function first) on a new covariant matrix *x_matrix* (test sample).
 
         Parameters
         ----------
-        X: numpy-array with shape = [n_size, n_features] (Default: None)
-            The covariant matrix *X* of the new test sample with size n_size and
+        x_matrix: numpy-array with shape = [n_size, n_features] (Default: None)
+            The covariant matrix *x_matrix* of the new test sample with size n_size and
             n_features covariants.
 
         """
         # We check the inputs for the function.
-        self._check_predict(X)
+        self._check_predict(x_matrix)
 
         # Number of observations for which we make a prediction.
         # Might differ from *n_observations* in the *fit()* function, that is
         # why it is not defined on the class level.
-        n_observations = X.shape[0]
+        n_observations = x_matrix.shape[0]
 
         # Initialize the array of predictors of the *b_iterations* Regression
         # Trees given the sample size *n_observations*.
@@ -235,23 +243,23 @@ class BaggingTree:
 
         # Get prediction values for each tree.
         for i in range(self.b_iterations):
-            predictions[i, :] = self.tree_estimators[i].predict(X)
+            predictions[i, :] = self.tree_estimators[i].predict(x_matrix)
 
         # Compute the mean over all *b_iterations* predictions for each
-        # observation in X.
+        # observation in x_matrix.
         bagging_estimate = predictions.mean(axis=0)
 
         return bagging_estimate
 
-    def _check_predict(self, X):
+    def _check_predict(self, x_matrix):
         """ A function that checks the inputs of the *predict()* function"""
 
         assert hasattr(self, 'tree_estimators'), \
             ('The predict method needs a trained BaggingTree instance. First '
              'fit a BaggingTree to a training set using the *fit()* function.')
-        assert isinstance(X, np.ndarray), \
-            'Your input X is not a numpy array. Currently only those are supported.'
-        assert X.ndim == 2, 'The convariant matrix *X* must be two dimensional.'
-        assert self.tree_estimators[0].n_features_ == X.shape[1], \
+        assert isinstance(x_matrix, np.ndarray), \
+            'Your input x_matrix is not a numpy array. Currently only those are supported.'
+        assert x_matrix.ndim == 2, 'The convariant matrix *x_matrix* must be two dimensional.'
+        assert self.tree_estimators[0].n_features_ == x_matrix.shape[1], \
             ('The number of features between sample used in the *fit()* and '
              'the *predict()* functions must be the same.')

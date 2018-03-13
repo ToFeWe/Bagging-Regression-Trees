@@ -12,5 +12,6 @@ def build(ctx):
         ],
         target=[
             ctx.path_to(ctx, 'OUT_ANALYSIS_REAL_DATA', 'output_boston.pickle'),
-        ]
+        ],
+        name='calc_boston'
     )

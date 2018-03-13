@@ -2,27 +2,31 @@
 
 import os
 
-def build(ctx):        
+
+def build(ctx):
     abspath_baggingtree = os.path.join(ctx.path.abspath(), 'test_baggingtree.py')
-    
-    ctx(features='run_py_script',
+
+    ctx(
+        features='run_py_script',
         source='test_baggingtree.py',
         deps='baggingtree.py',
         append=abspath_baggingtree
-        )
-    
+    )
+
     abspath_montecarlosimulation = os.path.join(ctx.path.abspath(), 'test_montecarlosimulation.py')
-    
-    ctx(features='run_py_script',
+
+    ctx(
+        features='run_py_script',
         source='test_montecarlosimulation.py',
         deps='montecarlosimulation.py',
         append=abspath_montecarlosimulation
-        )
-    
+    )
+
     abspath_datasimulation = os.path.join(ctx.path.abspath(), 'test_datasimulation.py')
-    
-    ctx(features='run_py_script',
+
+    ctx(
+        features='run_py_script',
         source='test_datasimulation.py',
         deps='datasimulation.py',
         append=abspath_datasimulation
-        )
+    )

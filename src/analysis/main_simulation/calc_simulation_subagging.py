@@ -1,42 +1,50 @@
 """
-This module simulates the dependence of the subagging results on the subsampling faction and sets it in relation to bagging.
+This module simulates the dependence of the subagging results on the
+subsampling faction and sets it in relation to bagging.
 
-For this we use the MonteCarloSimulation Class described in :ref:`model_code` in the simulate_bagging_subagging() function
-and return the results as a dictionary.
+For this we use the MonteCarloSimulation Class described in :ref:`model_code`
+in the *simulate_bagging_subagging()* function and return the results as a
+dictionary.
 
 """
 
 
 import sys
-from src.model_code.montecarlosimulation import MonteCarloSimulation
-import numpy as np
 import json
 import pickle
+from src.model_code.montecarlosimulation import MonteCarloSimulation
 
 from bld.project_paths import project_paths_join as ppj
 
 
 def simulate_bagging_subagging(general_settings, subagging_settings, model):
     """
-    A  function that simulates the subsampling ratio dependency  of the Subagging Algorithm.
+    A  function that simulates the subsampling ratio dependency  of the Subagging
+    Algorithm.
 
     Parameters
     ----------
     general_settings: Dictionary as described in :ref:`model_specs`
-        The dictionary is shared across various simulations and defines the overall simulation set-up.
+        The dictionary is shared across various simulations and defines the
+        overall simulation set-up.
 
     subagging_settings: Dictionary as described in :ref:`model_specs`
-        The dictionary defines the simulation set-up that is specific to the subagging simulation.
+        The dictionary defines the simulation set-up that is specific to the
+        subagging simulation.
 
     model: String that defines the data generating process to be considered.
-        The option are 'friedman', 'linear' and 'indicator' which is usually passed as the first system argument.
+        The option are 'friedman', 'linear' and 'indicator' which is usually
+        passed as the first system argument.
 
     Returns a tuple of the simulation results:
         tuple[0]: numpy array of shape = 4
-                  The array consists of the MSPE decompositions for the Bagging Algorithm.
-        tuple[1]: numpy array of shape = [*n_ratios*, 4], where *n_ratios* is the number of subsampling ratios to be
-                  considered. This is defined by keys in *subagging_settings*.
-                  The array consists of the MSPE decompositions for each of those subsampling fraction.
+                  The array consists of the MSPE decompositions for the Bagging
+                  Algorithm.
+        tuple[1]: numpy array of shape = [*n_ratios*, 4], where *n_ratios* is
+                  the number of subsampling ratios to be considered. This is
+                  defined by keys in *subagging_settings*. The array consists
+                  of the MSPE decompositions for each of those subsampling
+                  fraction.
 
     """
     # Create a MonteCarloSimulation instance that defines the attributes For
@@ -68,20 +76,21 @@ def simulate_bagging_subagging(general_settings, subagging_settings, model):
 
 
 if __name__ == '__main__':
-    dgp_model = sys.argv[1]
+    DGP_MODEL = sys.argv[1]
     with open(ppj("IN_MODEL_SPECS", "general_settings.json")) as f:
-        general_settings_imported = json.load(f)
+        GENERAL_SETTINGS_IMPORTED = json.load(f)
 
     with open(ppj("IN_MODEL_SPECS", "subagging_settings.json")) as f:
-        subagging_settings_imported = json.load(f)
+        SUBAGGING_SETTINGS_IMPORTED = json.load(f)
 
-    output_simulation = simulate_bagging_subagging(
-        general_settings_imported, subagging_settings_imported, dgp_model)
+    OUTPUT_SIMULATION = simulate_bagging_subagging(
+        GENERAL_SETTINGS_IMPORTED, SUBAGGING_SETTINGS_IMPORTED, DGP_MODEL)
 
-    simulation_subagging = {}
-    simulation_subagging['bagging'] = output_simulation[0]
-    simulation_subagging['subagging'] = output_simulation[1]
+    SIMULATE_SUBAGGING = {}
+    SIMULATE_SUBAGGING['bagging'] = OUTPUT_SIMULATION[0]
+    SIMULATE_SUBAGGING['subagging'] = OUTPUT_SIMULATION[1]
 
-    with open(ppj("OUT_ANALYSIS_MAIN", "output_subagging_{}.pickle".format(dgp_model)), "wb") as out_file:
-        pickle.dump(simulation_subagging, out_file)
-    print('Done with the Subagging Simulation for the {} model'.format(dgp_model))
+    with open(ppj("OUT_ANALYSIS_MAIN", "output_subagging_{}.pickle"
+                  .format(DGP_MODEL)), "wb") as out_file:
+        pickle.dump(SIMULATE_SUBAGGING, out_file)
+    print('Done with the Subagging Simulation for the {} model'.format(DGP_MODEL))

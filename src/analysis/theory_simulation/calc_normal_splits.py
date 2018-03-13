@@ -4,21 +4,19 @@ A module to calculate the results for the general stump predictor in Subsection
 4.2 (Theorem 4.1) of the paper for the dynamic environment of x.
 
 Replacing the bootstrap procedure by a subsampling scheme, we can here calculate
-upper bounds for the Variance and the Bias of stump predictors seen in 
+upper bounds for the Variance and the Bias of stump predictors seen in
 subsection 4.2 and following the framework developed by :cite:`Buhlmann2002`.
 
 """
-
-import numpy as np
-from scipy.stats import norm
-
 import json
 import pickle
+import numpy as np
+from scipy.stats import norm
 
 from bld.project_paths import project_paths_join as ppj
 
 
-def bias_normal_splits(c, a, gamma):
+def bias_normal_splits(c_value, a_value, gamma):
     """
     Calculates the squared bias for stump predictors as defined in the paper in
     Theorem 4.1.
@@ -26,10 +24,10 @@ def bias_normal_splits(c, a, gamma):
     Parameters
     ----------
 
-    c: int, float
+    c_value: int, float
         The gridpoint to be considered.
 
-    a: float
+    a_value: float
         The subsampling fraction.
 
     gamma: float
@@ -37,11 +35,11 @@ def bias_normal_splits(c, a, gamma):
 
     Returns the squared bias.
     """
-    bias = (norm.cdf(c * a ** gamma) - norm.cdf(c)) ** 2
+    bias = (norm.cdf(c_value * a_value ** gamma) - norm.cdf(c_value)) ** 2
     return bias
 
 
-def variance_normal_splits(c, a, gamma):
+def variance_normal_splits(c_value, a_value, gamma):
     """
     Calculates the variance for stump predictors as defined in the paper in
     Theorem 4.1.
@@ -49,10 +47,10 @@ def variance_normal_splits(c, a, gamma):
     Parameters
     ----------
 
-    c: int, float
+    c_value: int, float
         The gridpoint to be considered.
 
-    a: float
+    a_value: float
         The subsampling fraction.
 
     gamma: float
@@ -60,7 +58,10 @@ def variance_normal_splits(c, a, gamma):
 
     Returns the variance.
     """
-    variance = (a * norm.cdf(c * a ** gamma) * (1 - norm.cdf(c * a ** gamma)))
+    variance = (
+        a_value * norm.cdf(c_value * a_value ** gamma) *
+        (1 - norm.cdf(c_value * a_value ** gamma))
+    )
     return variance
 
 
@@ -70,7 +71,7 @@ def calculate_normal_splits(settings):
     calculation settings defined in *settings*.
 
     settings: Dictionary as described in :ref:`model_specs`
-        The dictionary defines the calculation set-up that is specific to the 
+        The dictionary defines the calculation set-up that is specific to the
         stump predictor simulation.
 
     Returns the calculated values as a dictionary.
@@ -79,7 +80,7 @@ def calculate_normal_splits(settings):
 
     output = {}
 
-    # Create a range of c values that we will iterate over for each subsampling
+    # Create a range of c_value values that we will iterate over for each subsampling
     # fraction a and save it to output dictionary for plotting.
     c_range = np.linspace(
         settings['c_min'],
@@ -101,19 +102,19 @@ def calculate_normal_splits(settings):
         settings['a_array']['fourth_a'][1]
     ])
 
-    # Loop over the range of c values.
-    for i_a, a in enumerate(a_range):
+    # Loop over the range of c_value values.
+    for i_a, a_value in enumerate(a_range):
         # For the list of a values (subsampling fraction).
 
         # Create an array that save the results for Bias and Variance
         bias_array = np.ones(settings['c_gridpoints']) * np.nan
         var_array = np.ones(settings['c_gridpoints']) * np.nan
 
-        for i_c, c in enumerate(c_range):
+        for i_c, c_value in enumerate(c_range):
             # The calculation are done straight forward following the
             # derivations in the paper.
-            bias_array[i_c] = bias_normal_splits(c, a, settings['gamma'])
-            var_array[i_c] = variance_normal_splits(c, a, settings['gamma'])
+            bias_array[i_c] = bias_normal_splits(c_value, a_value, settings['gamma'])
+            var_array[i_c] = variance_normal_splits(c_value, a_value, settings['gamma'])
 
         mse_array = np.add(bias_array, var_array)
 
@@ -128,10 +129,10 @@ def calculate_normal_splits(settings):
 
 if __name__ == '__main__':
     with open(ppj("IN_MODEL_SPECS", "normal_splits_settings.json")) as f:
-        normal_splits_settings_imported = json.load(f)
+        NORMAL_SPLITS_SETTINGS_IMPORTED = json.load(f)
 
-    calculate_normal_splits = calculate_normal_splits(
-        normal_splits_settings_imported)
+    CALCULATE_NORMAL_SPLITS = calculate_normal_splits(
+        NORMAL_SPLITS_SETTINGS_IMPORTED)
 
     with open(ppj("OUT_ANALYSIS_THEORY", "output_normal_splits.pickle"), "wb") as out_file:
-        pickle.dump(calculate_normal_splits, out_file)
+        pickle.dump(CALCULATE_NORMAL_SPLITS, out_file)
