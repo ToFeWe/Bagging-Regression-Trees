@@ -16,7 +16,6 @@ and return the results as a dictionary.
 """
 
 
-import sys
 from src.model_code.baggingtree import BaggingTree
 import numpy as np
 from sklearn.datasets import load_boston
@@ -31,12 +30,8 @@ def split_fit_predict_bagging(
         X,
         y,
         ratio_test,
-        random_seed_split,
-        random_seed_fit,
-        bootstrap_bool,
-        b_iterations,
-        min_split_tree,
-        a_ratio):
+        random_state,
+        bagging_object):
     """
     A  function that splits the data consisting of *X* and *y* into a new test and training sample, fits the Bagging
     Algorithm on the training sample and makes a prediction on the test sample.
@@ -54,44 +49,21 @@ def split_fit_predict_bagging(
     ratio_test: float
         The ratio of the data used for the test sample.
 
-    random_seed_split: int
-        The random seed for the train_test_split.
-        Note: It defines a RandomState instance and thus we don't reseed the module.
+    random_state: Numpy RandomState container
+        The RandomState instance to perform the train/test split.
 
-    random_seed_fit: int
-        The random seed for the BaggingTree instance.
-        Note: It defines a RandomState instance and thus we don't reseed the module.
-
-    bootstrap_bool: bool
-        Defines if we use the standard bootstrap or m out of n bootstrap.
-        *bootstrap_bool=True* would imply that we use the standard bootstrap.
-
-    b_iterations: int
-        Number of Bootstrap iterations used to construct the Bagging Predictor.
-
-    min_split_tree: int
-        Defines the tree depth by setting the minimal size of a terminal node to be considered for a split.
-    a_ratio: float
-        Defines the subsampling ratio.
+    bagging_object: Instance of the class *BaggingTrees*
+        The bagging instance used to fit the algorithm to the newly splitted
+        data.
 
     Returns the MSPE for one iteration.
     """
     # Split the sample into train and test using the RandomState instance.
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=ratio_test, random_state=random_seed_split)
-
-    # Train the bagged Regression Tree.
-    # The random seed can be fixed here.
-    bagging_instance = BaggingTree(
-        random_seed=random_seed_fit,
-        ratio=a_ratio,
-        bootstrap=bootstrap_bool,
-        b_iterations=b_iterations,
-        min_split_tree=min_split_tree
-    )
+        X, y, test_size=ratio_test, random_state=random_state)
 
     # Fit the Model and make a prediction on the test sample
-    fitted_model = bagging_instance.fit(X_train, y_train)
+    fitted_model = bagging_object.fit(X_train, y_train)
     predictions = fitted_model.predict(X_test)
 
     # Calculate the MSPE
@@ -125,22 +97,26 @@ def simulate_bagging(X, y, general_settings, boston_settings):
     random_state_split = np.random.RandomState(
         boston_settings['random_seed_split'])
 
-    # Calculate the mse for each iteration  and compute the MSE.
-    mse_not_expected = np.array(
-        [
-            split_fit_predict_bagging(
-                X,
-                y,
-                ratio_test=boston_settings['ratio_test'],
-                random_seed_split=random_state_split,
-                random_seed_fit=boston_settings['random_seed_fit'],
-                bootstrap_bool=True,
-                b_iterations=general_settings['b_iterations'],
-                min_split_tree=general_settings['min_split_tree'],
-                a_ratio=general_settings['BAGGING_RATIO']
-            ) for i in range(general_settings['n_repeat'])
-        ]
+    # Train the bagged Regression Tree.
+    # The random seed can be fixed here.
+    bagging_instance = BaggingTree(
+        random_seed=boston_settings['random_seed_fit'],
+        ratio=general_settings['bagging_ratio'],
+        bootstrap=True,
+        b_iterations=general_settings['b_iterations'],
+        min_split_tree=general_settings['min_split_tree']
     )
+    mse_not_expected = np.ones(general_settings['n_repeat']) * np.nan
+
+    for i_n_repeat in range(general_settings['n_repeat']):
+        mse_not_expected[i_n_repeat] = split_fit_predict_bagging(
+            X,
+            y,
+            ratio_test=boston_settings['ratio_test'],
+            random_state=random_state_split,
+            bagging_object=bagging_instance
+        )
+
     mse_sim = np.mean(mse_not_expected)
     return mse_sim
 
@@ -182,30 +158,34 @@ def simulate_subagging(
         subagging_settings['max_ratio'],
         subagging_settings['n_ratios'])
 
-    for index_a, a_value in enumerate(ratio_range):
+    for i_a, a_value in enumerate(ratio_range):
         # Define a RandomState for the train_test_split
-        # Note:Inside the loop as we want to have a smooth plot -> same sample
+        # Note:Inside the loop as we want to have a smooth plot -> same
+        # samples.
         random_state_split = np.random.RandomState(
             boston_settings['random_seed_split'])
 
-        # Calculate the mse for each iteration in parallel and compute the MSE.
-        mse_not_expected = np.array(
-            [
-                split_fit_predict_bagging(
-                    X,
-                    y,
-                    ratio_test=boston_settings['ratio_test'],
-                    random_seed_split=random_state_split,
-                    random_seed_fit=boston_settings['random_seed_fit'],
-                    bootstrap_bool=False,
-                    b_iterations=general_settings['b_iterations'],
-                    min_split_tree=general_settings['min_split_tree'],
-                    a_ratio=a_value
-                )
-                for i in range(general_settings['n_repeat'])
-            ]
+        # Train the bagged Regression Tree.
+        # The random seed can be fixed here.
+        bagging_instance = BaggingTree(
+            random_seed=boston_settings['random_seed_fit'],
+            ratio=a_value,
+            bootstrap=False,
+            b_iterations=general_settings['b_iterations'],
+            min_split_tree=general_settings['min_split_tree']
         )
-        mse_subagging[index_a] = np.mean(mse_not_expected)
+        mse_not_expected = np.ones(general_settings['n_repeat']) * np.nan
+
+        for i_n_repeat in range(general_settings['n_repeat']):
+            mse_not_expected[i_n_repeat] = split_fit_predict_bagging(
+                X,
+                y,
+                ratio_test=boston_settings['ratio_test'],
+                random_state=random_state_split,
+                bagging_object=bagging_instance
+            )
+
+        mse_subagging[i_a] = np.mean(mse_not_expected)
     return mse_subagging
 
 
@@ -236,11 +216,12 @@ if __name__ == '__main__':
         subagging_settings_imported,
         boston_settings_imported
     )
-    print('MSE for Bagging: ', mse_bagging)
-    print('MSE for the different subsampling ratios: \n', mse_subagging)
+    print(mse_bagging)
+    print(mse_subagging)
     simulation_boston = {}
     simulation_boston['mse_bagging'] = mse_bagging
     simulation_boston['mse_subagging'] = mse_subagging
 
     with open(ppj("OUT_ANALYSIS_REAL_DATA", "output_boston.pickle"), "wb") as out_file:
         pickle.dump(simulation_boston, out_file)
+    print('Done with the real data simulation')

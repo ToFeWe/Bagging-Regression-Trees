@@ -2,6 +2,8 @@
 
 Tests for the *BaggingTree* class.
 
+Wrong parameter inputs are tested directly in the class. 
+
 """
 
 import sys

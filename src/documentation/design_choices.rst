@@ -5,7 +5,7 @@ Overview and explanations for different design choices
 ******************************************************
 In the following we will give an overview over different general and overreaching design choices that have been made within this project.
 We will focus on those that might seem unintuitive at first glance and give a short explanation to those.
-
+:cite:`Gaudecker2014`.
 Within each subsection of the documentation further design choices are explained in more detail.
 
 
@@ -93,10 +93,12 @@ class separately.
 Reseeding the whole numpy process by ``np.random.seed()`` within an estimator or utility class
 should be considered bad practice. The reason for this is that it would change the seed
 for all numpy.random functions in the module of usage.
-Hence, the choice to define a new `container<https://docs.scipy.org/doc/numpy/reference/generated/numpy.random.RandomState.html>`_ for the random number generator within
+Hence, the choice to define a new `container <https://docs.scipy.org/doc/numpy/reference/generated/numpy.random.RandomState.html>`_ for the random number generator within
 each class yields a high degree of encapsulation and avoids unsafe reseeding.
 It is worth noting that this procedure is also considered best practice for popular
-packages like ``scikit-learn``.
+packages like ``scikit-learn``. See for instance the implementation of the bagging
+algorithm by `scikit-learn <https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/ensemble/bagging.py#L399>`_.
+
 
 2. The second reason why define new RandomState containers instead of defining
 one random seed at the beginning of the simulation is more of practical reason.
@@ -104,7 +106,7 @@ The simulation for bagging Regression Trees is computationally expensive. For
 each simulation iteration we have to draw bootstrap samples and fit Regression
 Trees to those bootstrap sample.
 Because of this in combination with limited computational resources and as we wanted to follow the simulation
-specifications of Bühlmann and Yu (2002), we limited our number of Monte Carlo
+specifications of :cite:`Buhlmann2002`, we limited our number of Monte Carlo
 Iterations to 100.
 Now, as we want to observe the changes in MSPE decomposition, while keeping the
 data simulated for each iteration constant.
@@ -165,8 +167,8 @@ improvement. Further information on this can be found in the :ref:`model_code`
 part of the documentation.
 
 
-Variable Names and the PEP8 Naming Conventions
-==============================================
+Violation of PEP8 Naming Conventions and other Convention
+=========================================================
 
 Some of the variable names within the different modules violate the PEP8 Naming
 Conventions. Namely, the one stating that variable names should only consist of
@@ -175,3 +177,10 @@ capital letters.
 The PEP8 convention is violated at some parts of the code to remain inline with the
 mathematical notation and the naming convention introduced by popular python
 packages like ``scikit-learn`` or ``PyTorch``.
+
+Furthermore, we define within the ``BaggingTrees`` class, a class attribute
+outside the ``__init__`` function. This violates ``python`` conventions
+according to an analysis run with ``pylint``, but is of great use in the case
+of bagging, as we want to pass a newly trained class instance each time after
+we fit the data. We decided to keep it like this, as it is also used by other
+`packages <https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/ensemble/bagging.py#L335>`_.

@@ -6,7 +6,7 @@ The predictors which are most frequently used in combination with Bagging are Cl
 Consider the following setting. Assume we are interested in the prediction of a continuous response variable denoted as $y$ on the basis of a set of $p$ explanatory variables $\mathbf{x}=(x_1,x_2,...,x_p)^T$. Furthermore, assume our data consists of $n$ observations, so we have $L_i = (y_i,\mathbf{x}_i)$ for data instances $i=1,...,n$. The setting and denotations carry over to subsequent sections.\\
 A Regression Tree model consists of a sequence of binary decision rules, which can be summarized in a tree diagram. A decision rule is defined by an explanatory variable (splitting variable) and a value in the domain of the respective variable (split point). We refer to decision rules as nodes. An exemplary Regression Tree for a two-dimensional predictor space $\mathbf{x}=(x_1,x_2)^T \in [0,1]^2$ is provided in Figure \ref{fig:Tree_FigTreePar} (a).
 
-\input{Trees/Tree_FigTreePar.tex}
+\input{external_figures/tree_figtreepar}
 
 \noindent
 A prediction for a new observation $\mathbf{x^{new}}$ is obtained by following down the tree diagram, starting at the top node. At each node continue on the left branch if the decision rule is satisfied and on the right if not. This procedure is continued until a final branch of the tree diagram is reached. We refer to final branches as terminal nodes and to the number of final branches as size of the Tree. Each terminal node is labeled with a constant $\hat{c}_k$ with $k \in \{1,...,6\}$. This constant is used as predicted value for an observation $\mathbf{x^{new}}$ reaching the corresponding terminal node. For instance, the prediction for an exemplary observation $\mathbf{x^{new}}=(0.4,0.4)^T$ using the Regression Tree of Figure~\ref{fig:Tree_FigTreePar}~(a) is $\hat{c}_2=6$.
@@ -32,13 +32,13 @@ The inner minimization problem determines the best choice (in terms of residual 
 Now consider a partition of the feature space into $K$ regions $R_1,...,R_K$. The regression function for this partition can be expressed as follows
 \begin{equation}
 \label{eq:CARTpred}
-\hat{\theta}(\mathbf{x})= h_{n}(L_{1},\dots, L_{n})(\mathbf{x})=\sum\limits_{k=1}^{K}\hat{c}_k\mathbbm{1}_{[\mathbf{x}\in R_k]}, 
+\hat{\theta}(\mathbf{x})= h_{n}(L_{1},\dots, L_{n})(\mathbf{x})=\sum\limits_{k=1}^{K}\hat{c}_k\mathbbm{1}_{[\mathbf{x}\in R_k]},
 \end{equation}
 where the function  $h_n:\mathbb{R}^{p} \rightarrow \mathbb{R}$ is the CART algorithm.\\
 Similarly to the solution to the inner minimization problem of \eqref{eq:CARTmin} the optimal choice for the constant is given by the sample average of observations in the respective region (Breiman et al. (1984, p.230)). Expression \eqref{eq:CARTpred} reveals that the true data generating process is approximated by a piecewise constant step function.
 
 \subsection{Bias-Variance Tradeoff} \label{sec:BiasVariance}
-Breiman et al. (1984, p.272) state that any further node will never increase the (expected) sum of squared errors. This means that any further split will (weakly) improve the fit to the initial data set. For instance, if we grow a Tree to its maximal size, i.e. until only one observation is left in each terminal node, the initial data set is fit identically. The number of terminal nodes is governed by stopping rules. Consequently, stopping rules influence the flexibility of the regression function to adapt to the data set. 
+Breiman et al. (1984, p.272) state that any further node will never increase the (expected) sum of squared errors. This means that any further split will (weakly) improve the fit to the initial data set. For instance, if we grow a Tree to its maximal size, i.e. until only one observation is left in each terminal node, the initial data set is fit identically. The number of terminal nodes is governed by stopping rules. Consequently, stopping rules influence the flexibility of the regression function to adapt to the data set.
 
 First consider a stopping rule which allows for large Regression Trees. These models can adapt flexibly to any complex true relationship in the data and will therefore exhibit a low bias. The problem with this adaptiveness is the risk of fitting the artificial noise in the data (overfitting). Fitting the artificial noise of the data will result in a sensitivity to changes in the data, i.e. a high variance. In contrast, if we select a more restrictive stopping rule we might not capture the fundamental relationships in the data (underfitting). However, this procedure will be more robust to changes in the data. In conclusion we encounter a tradeoff between bias and variance in the specification of Regression Tree models, which is governed by stopping rules.\footnote{This trade-off between bias and variance is not specific to Regression Trees but rather a common problem in statistical modeling.}
 
@@ -50,4 +50,4 @@ A statistic $\hat{\theta}_{n}(\mathbf{x}) = h_{n}(L_{1},\dots, L_{n})(\mathbf{x}
 \end{definition}
 
 \noindent
-This definition resembles the definition of consistency. The crucial difference is that the statistic $\hat{\theta}_n(\mathbf{x})$ does not need to converge to the true population parameter, but only to a stable limit $\theta$. This means that an unstable predictor will assume a different limit value for another data set (taken from the same data generating process) with positive probability, even if the size of the data set goes to infinity. 
+This definition resembles the definition of consistency. The crucial difference is that the statistic $\hat{\theta}_n(\mathbf{x})$ does not need to converge to the true population parameter, but only to a stable limit $\theta$. This means that an unstable predictor will assume a different limit value for another data set (taken from the same data generating process) with positive probability, even if the size of the data set goes to infinity.

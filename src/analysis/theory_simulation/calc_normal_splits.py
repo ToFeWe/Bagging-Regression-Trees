@@ -1,11 +1,11 @@
 """
 
-A module to calculate the results for the general stump predictor in subsection 4.2 (Theorem 4.1) of the paper for the dynamic environment
-of x.
+A module to calculate the results for the general stump predictor in Subsection
+4.2 (Theorem 4.1) of the paper for the dynamic environment of x.
 
 Replacing the bootstrap procedure by a subsampling scheme, we can here calculate
-upper bounds for the Variance and the Bias of stump predictors seen in subsection 4.2
-and following the framework developed by Bühlmann and Yu (2002).
+upper bounds for the Variance and the Bias of stump predictors seen in 
+subsection 4.2 and following the framework developed by :cite:`Buhlmann2002`.
 
 """
 
@@ -20,7 +20,8 @@ from bld.project_paths import project_paths_join as ppj
 
 def bias_normal_splits(c, a, gamma):
     """
-    Calculates the squared bias for stump predictors as defined in the paper in Theorem 4.1.
+    Calculates the squared bias for stump predictors as defined in the paper in
+    Theorem 4.1.
 
     Parameters
     ----------
@@ -42,7 +43,8 @@ def bias_normal_splits(c, a, gamma):
 
 def variance_normal_splits(c, a, gamma):
     """
-    Calculates the variance for stump predictors as defined in the paper in Theorem 4.1.
+    Calculates the variance for stump predictors as defined in the paper in
+    Theorem 4.1.
 
     Parameters
     ----------
@@ -64,11 +66,12 @@ def variance_normal_splits(c, a, gamma):
 
 def calculate_normal_splits(settings):
     """
-    Calculate the Bias and the Variance for the case of subagging based on the calculation settings
-    defined in *settings*.
+    Calculate the Bias and the Variance for the case of subagging based on the
+    calculation settings defined in *settings*.
 
     settings: Dictionary as described in :ref:`model_specs`
-        The dictionary defines the calculation set-up that is specific to the stump predictor simulation.
+        The dictionary defines the calculation set-up that is specific to the 
+        stump predictor simulation.
 
     Returns the calculated values as a dictionary.
 

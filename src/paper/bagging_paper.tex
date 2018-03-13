@@ -34,7 +34,7 @@
 \AtBeginDocument{\toggletrue{blx@useprefix}}
 \AtBeginBibliography{\togglefalse{blx@useprefix}}
 
-  \addbibresource{Bibliography/MetricsBibliography.bib}
+ \addbibresource{MetricsBibliography.bib}
  \usepackage[unicode=true]{hyperref}
  \renewcommand{\theenumi}{\roman{enumi}}
  \hypersetup{colorlinks=true, linkcolor=black, anchorcolor=black, citecolor=black, filecolor=black, menucolor=black, runcolor=black, urlcolor=black}
@@ -114,32 +114,31 @@
 \pagenumbering{arabic} %Seitenzahlen ab hier arabisch
 
 %Intro
-\input{Introduction/Introduction}
+\input{introduction/introduction}
 
 %Trees
 
-\input{Trees/Text_Trees.tex}
-
+\input{trees/text_trees}
 
 
 %Bagging
-\input{Bagging/Formeln_Buehlmann}
+\input{bagging/text_bagging}
 
 %Simulation
-\input{Simulation/simulation_formeln}
+\input{simulation/text_simulation}
 
 %Real Data
-\input{Real_Data/Real_Data_Text.tex}
+\input{real_data/text_real_data}
 
 %Ende
-\input{End/end}
+\input{end/end}
 
 \newpage
 
 
 %%%%%%% A P P E N D I X %%%%%%%%%%%%%%%%%%%
 \begin{appendix}
-\input{Appendix/Appendix}
+\input{appendix/appendix}
 
 \end{appendix}
 
@@ -148,10 +147,6 @@
 \setstretch{1}
 \printbibliography
 \setstretch{1.5}
-
-
-%\bibliographystyle{agsm}
-%\bibliography{Bibliography/MetricsBibliography.bib}
 
 
 

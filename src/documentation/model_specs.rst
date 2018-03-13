@@ -12,11 +12,13 @@ without having to rerun the whole code in waf.
 
 Overview for JSON files
 =======================
-All JSON files (except *dgp_models.json*) are used to define a dictionary in python. Below we will give
-a short descriptions to all json files (also referred to as dictionary) and its
+All JSON files are used to define a dictionary in python. Below we will give
+a short descriptions to all JSON files (also referred to as dictionary) and its
 keys.
 The default values are all inline with the descriptions in the final term paper
 and hence omitted here.
+There is no JSON, which describes the Data Generating Processes, as those are
+fixed anyways in the *DataSimulation* class.
 
 boston_settings.json
 ********************
@@ -32,7 +34,7 @@ random_seed_split: int
   Starting point for the random seeds for the test_train_split
 random_seed_fit: int
   Random seed for the fitting procedure
-  
+
 convergence_settings.json
 *************************
 The dictionary defines the simulation set-up that is specific to the convergence of the Bagging Algorithm.
@@ -47,12 +49,6 @@ steps_bootstrap: int
   Steps in the range between *min_bootstrap* and *max_bootstrap*
 converged_bootstrap: int
   A large value of bootstrap iterations to visualize the convergence
-
-dgp_models.json
-***************
-List of available data generating processes. Note that only 'linear' and
-'friedman' were eventually used in the term paper.
-
 
 finite_sample_settings.json
 ***************************
@@ -97,12 +93,8 @@ min_split_tree: int
   Governs the tree depth. Lower values imply more complex Regression Trees
 random_seeds: list
   List of random seeds used. Note: We don't reseed but define different RandomState instances with those.
-BAGGING_RATIO: constant at 1
+bagging_ratio: constant at 1
   Subsampling ratio for bagging. Do not change!
-
-general_settings_small.json
-***************************
-Same as *general_settings.json* but smaller specification. Can be used for testing.
 
 
 normal_splits_settings.json

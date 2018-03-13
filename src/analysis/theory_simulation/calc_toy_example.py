@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 
-A module to calculate the results for the introductory example in subsection 3.2 of the paper for the dynamic environment
-of x.
+A module to calculate the results for the introductory example in Subsection 
+3.2 of the paper for the dynamic environment of x.
 
 Given the choice of the appropriate environment of x, the estimator does not
 stabilizes even asymptotically and we can illustrate the effects of bagging on
@@ -20,10 +20,10 @@ from bld.project_paths import project_paths_join as ppj
 
 
 def convolution_cdf_df(c):
-    """ Calculate the convolution as defined by Bühlmann and Yu (2002) and as
-    used in the introductory example of our paper for the the c.d.f of the standard
-    normal distribution and the standard normal density for the gridpoint *c*
-    for the real number line.
+    """ Calculate the convolution as defined by :cite:`Buhlmann2002` and as
+    used in the introductory example of our paper for the the c.d.f of the 
+    standard normal distribution and the standard normal density for the 
+    gridpoint *c* for the real number line.
 
     Parameters
     ----------
@@ -39,10 +39,10 @@ def convolution_cdf_df(c):
 
 
 def convolution_cdf_squared_df(c):
-    """ Calculate the convolution as defined by Bühlmann and Yu (2002) and as
-    used in the introductory example of our paper for the the squared c.d.f of the standard
-    normal distribution and the standard normal density for the gridpoint *c*
-    for the real number line.
+    """ Calculate the convolution as defined by :cite:`Buhlmann2002` and as
+    used in the introductory example of our paper for the the squared c.d.f of 
+    the standard normal distribution and the standard normal density for the 
+    gridpoint *c* for the real number line.
 
     Parameters
     ----------
@@ -58,7 +58,7 @@ def convolution_cdf_squared_df(c):
 
 def calculate_bias_bagged(c_value):
     """ Calculate the squared bias for the bagged predictor given the grid point
-    *c_value*
+    *c_value*.
 
     Parameters
     ----------
@@ -72,7 +72,7 @@ def calculate_bias_bagged(c_value):
 
 def calculate_var_bagged(c_value):
     """ Calculate the variance for the bagged predictor given the grid point
-    *c_value*
+    *c_value*.
 
     Parameters
     ----------
@@ -87,7 +87,7 @@ def calculate_var_bagged(c_value):
 
 def calculate_var_unbagged(c_value):
     """ Calculate the variance for the bagged predictor given the grid point
-    *c_value*
+    *c_value*.
 
     Parameters
     ----------
@@ -102,11 +102,12 @@ def calculate_var_unbagged(c_value):
 
 def calculate_toy_example(settings):
     """
-    Calculate the Bias and the Variance for the case of bagged and unbagged predictor based on the calulation settings
-    defined in *settings*.
+    Calculate the Bias and the Variance for the case of bagged and unbagged 
+    predictor based on the calulation settings defined in *settings*.
 
     settings: Dictionary as described in :ref:`model_specs`
-        The dictionary defines the calculation set-up that is specific to the introductory simulation.
+        The dictionary defines the calculation set-up that is specific to the 
+        introductory simulation.
 
     Returns the calculated values as a dictionary.
 

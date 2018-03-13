@@ -7,7 +7,7 @@ def build(ctx):
     ctx.recurse('final/main_simulation')
     ctx.recurse('final/theory_simulation')
     ctx.recurse('final/real_data_simulation')
-    # We also recurse *model_code* to run the tests
+    # We also recurse *model_code* to run the tests.
     ctx.recurse('model_code')
     # Safety measure -- else the LaTeX scanner might fail because some
     # '.tex'-source file has not been generated.

@@ -2,7 +2,7 @@
 
 def build(ctx):
 
-  for s in 'bagging_pres', 'bagging_paper':
+  for s in ['bagging_paper']:
       ctx(
           features='tex',
           source=s + '.tex',

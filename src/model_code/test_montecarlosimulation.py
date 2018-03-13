@@ -2,6 +2,8 @@
 
 Tests for the *montecarlosimulation* class.
 
+Wrong parameter inputs are tested directly in the class. 
+
 """
 
 import sys

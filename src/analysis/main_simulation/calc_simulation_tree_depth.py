@@ -72,13 +72,13 @@ def simulate_tree_depth(general_settings, tree_depth_settings, model):
     # keeping the data generating process constant.
     for index, split in enumerate(min_split_array):
         output_bagging = simulation_basis.calc_mse(
-            ratio=general_settings['BAGGING_RATIO'],
+            ratio=general_settings['bagging_ratio'],
             bootstrap=True,
             min_split_tree=split,
             b_iterations=general_settings["b_iterations"])
         # Note: Subagging(bootstrap=False) with ratio = 1 -> Tree
         output_tree = simulation_basis.calc_mse(
-            ratio=general_settings['BAGGING_RATIO'],
+            ratio=general_settings['bagging_ratio'],
             bootstrap=False,
             min_split_tree=split,
             b_iterations=general_settings["b_iterations"])

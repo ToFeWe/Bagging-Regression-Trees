@@ -49,22 +49,24 @@ Once we have applied the Bagging Algorithm with Regression Trees to some trainin
 
 The array $A$ then consists of the averaged predictions, based on the trained Bagging instance $T$, for each observation in the training set $G$ and is therefore of shape $(m,1)$. Hence, we make for each observation in the training set $G$, $B$-many predictions and average over those outcomes to obtain the array of final predictions.
 
-\begin{comment}
-\subsection{Tree Depth and Bagging}\label{sec:Sim_TreeDepth}
-In the simulation employed in Section \ref{sec:Simulation}, we always choose to grow the Trees fully. In this part we want to give some insight why this is optimal, when Bagging is applied to Regression Trees. \newline
-As discussed in Section \ref{sec:BiasVariance}, Regression Trees tend to overfit the data. Overfitting is specifically a problem, when we grow a Tree to its maximal size. The terminal leafs will consist of only a single observation, making it thereby likely that we fit the noise in the data. Thus usually when fitting single Trees to the data it is common to restrict the size of the Tree to reduce overfitting and thereby reduce the variance. \newline
-Interestingly, it turns out that it is \textit{not} the optimal choice in terms of MSPE to restrict the Tree size if we apply Bagging to Regression Trees as we can see in Figure \ref{fig:leafsize}.
+\subsection{Further Simulation Results}
+We report here the results for the indicator model M3 as described by \cite{buhlmann2003bagging}.
+As it was not part of the original project paper, we do not report the functional form here but we
+refer you to \cite{buhlmann2003bagging}.
+
 \begin{figure}[H]
 \centering
-
-\includegraphics[scale=0.6]{../../out/figures/main_simulation/plot_simulation_tree_depth.pdf}
-\caption[The effect of varying the complexity of the Regression Tree for the normal and bagged Tree.]{The effect of varying the complexity of the Regression Tree for the normal and bagged Tree. The minimal size for each leaf is displayed on the $x$-axis. A higher minimal size for each leaf implies a less complex Tree.}
-\label{fig:leafsize}
+\includegraphics[scale=0.7]{../../out/figures/main_simulation/plot_simulation_tree_depth_appendix.pdf}
+\caption[]{The M3 Indicator Model: The effect of varying the complexity of the Regression Tree for the unbagged and bagged Tree. The minimal size for each terminal node is displayed on the $x$-axis. A higher minimal size for each terminal node implies a less complex Tree.}
+\end{figure}
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.7]{../../out/figures/main_simulation/plot_simulation_subagging_appendix.pdf}
+\caption[]{The M3 Indicator Model: The effectiveness of Subagging and Bagging in comparison to the unbagged Regression Tree. The subsample ratio \textit{a} for Subagging is on the $x$-axis.}
 \end{figure}
 
-In Figure \ref{fig:leafsize} we plot the MSPE, the variance and the squared-bias for bagged and unbagged Trees against the Tree depth. We control the size of each Tree by restricting the minimal amount of observations in each terminal node. A larger minimal size for each terminal node implies a smaller and thus less complex Tree.
-We report the results for the unbagged Regression Tree and Bagging applied to Regression Trees as in Section \ref{sub:bagging_table} for both regression functions.
-\newline
-The MSPE for Trees is minimized at a smaller Tree size as for Bagging. Whereas for Bagging we obtain the best result by growing the Tree to the maximal length, the optimum for normal Regression Trees can be achieved by restricting the minimal size for each terminal node to around 20 observations. Lower values result in a higher MSPE for Trees. While we decrease the squared-bias by increasing the size of the Tree, we overfit the data and have a predictor with a high variance. \newline
-Bagging on the other hand works best if there are no restrictions on the Tree size. As discussed in Section \ref{bag} and \ref{sec:bagregtree}, Bagging reduces the variance of the predictor while leaving the squared-bias almost unaffected. As Regression Trees have the lowest bias for maximal grown Trees, it is therefore optimal not to restrict the size of the Trees, when using Bagging.
-\end{comment}
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.7]{../../out/figures/main_simulation/plot_simulation_convergence_appendix.pdf}
+\caption[]{The M3 Indicator Model: The effect of varying the number of bootstrap iterations \textit{B} in the case of Bagging. The effect of varying the number of bootstrap iterations \textit{B} in the case of Bagging. The minimal number of bootstrap iterations is chosen to 2. The light blue line indicates the MSPE for \textit{B}=500}
+\end{figure}

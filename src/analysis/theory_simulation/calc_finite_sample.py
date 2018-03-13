@@ -1,12 +1,13 @@
 """
 
-A module to calculate the results for the introductory example in subsection 3.2 of the paper without the dynamic environment
-of x.
+A module to calculate the results for the introductory example in subsection 3.2
+of the paper without the dynamic environment of x.
 
-Without choosing a dynamic environment for x, the estimator developed by Bühlmann and Yu (2002) and
-illustrated in our paper stabilizes by the (weak) Law of Large Numbers.
-We simulate this here for a range of sample sizes for a given mean and variance,
-assuming that Y follows a Gaussian distribution.
+Without choosing a dynamic environment for x, the estimator developed by 
+:cite:`Buhlmann2002` and illustrated in our paper stabilizes by the (weak) 
+Law of Large Numbers. We simulate this here for a range of sample sizes for a 
+given mean and variance, assuming that Y follows a Gaussian distribution.
+
 """
 import numpy as np
 import json
@@ -17,8 +18,8 @@ from bld.project_paths import project_paths_join as ppj
 
 def indicator(x_value, Y_bar):
     """
-    A indicator function that returns 1 if the threshold *Y_bar* smaller or equal the
-    x value *x_value*.
+    A indicator function that returns 1 if the threshold *Y_bar* smaller or 
+    equal the x value *x_value*.
 
     Parameters
     ----------
@@ -62,14 +63,16 @@ def bagged_indicator(x_value, sample, b_iterations=50):
 
 def simulate_finite_sample(settings):
     """
-    Performs the simulation of the MSE for the bagged and unbagged predictor for a range of sample sizes, which are
-    specified by the *settings* dictionary. The procedure is described in greater detail in the Appendix Part B.2 of the
-    paper.
+    Performs the simulation of the MSE for the bagged and unbagged predictor 
+    for a range of sample sizes, which are specified by the *settings* 
+    dictionary. The procedure is described in greater detail in the Appendix 
+    Part B.2 of the paper.
 
     Parameters
     ----------
     settings: Dictionary as described in :ref:`model_specs`
-        The dictionary that defines the simulation set-up for the finite sample case.
+        The dictionary that defines the simulation set-up for the finite sample
+        case.
 
     """
     # Create dict to save the finale results.

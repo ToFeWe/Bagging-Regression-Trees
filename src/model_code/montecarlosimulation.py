@@ -214,6 +214,35 @@ class MonteCarloSimulation:
         elif data_process == 'linear':
             self.X_test, self.f_test = self.test_simulation.linear_model()
         
+    def _set_train_function(self):
+        """ A function to define a new *DataSimulation* instance and to define
+        the function *draw_train*, which will be used to draw the training
+        samples in each iteration.
+        
+        Note that we do that here and not when initalizing the class as we 
+        want to draw the same sequence of training samples for all subagging 
+        iterations.
+        Hence it would **not** be feasible to define *draw_train* as a class
+        function.
+        
+        """
+        # We define the basis for drawing the training samples.
+        train_simulation = DataSimulation(n_size=self.n_train,
+                                          noise=self.noise,
+                                          without_error=False,
+                                          random_seed=self.random_seed_train)
+
+        # Assign to the variable *draw_train* the according function of the
+        # DataSimulation class/train_instance instance.
+        # This is mainly for ease of execution and notation.
+        if self.data_process == 'friedman':
+            draw_train = train_simulation.friedman_1_model
+        elif self.data_process == 'indicator':
+            draw_train = train_simulation.indicator_model
+        elif self.data_process == 'linear':
+            draw_train = train_simulation.linear_model
+        return draw_train
+    
     def calc_mse(
             self,
             ratio=1.0,
@@ -267,30 +296,16 @@ class MonteCarloSimulation:
         # information on why we do this, see in the documentation X-X.
         random_state_noise = np.random.RandomState(self.random_seed_noise)
 
-        # We define the basis for drawing the training samples.
-        # Note that we do that here as we want to draw the same sequence of
-        # training samples for all subagging iterations.
-        train_instance = DataSimulation(n_size=self.n_train,
-                                        noise=self.noise,
-                                        without_error=False,
-                                        random_seed=self.random_seed_train)
-
-        # Assign to the variable *draw_train* the according function of the
-        # DataSimulation class/train_instance instance.
-        # This is mainly for ease of execution and notation.
-        if self.data_process == 'friedman':
-            draw_train = train_instance.friedman_1_model
-        elif self.data_process == 'indicator':
-            draw_train = train_instance.indicator_model
-        elif self.data_process == 'linear':
-            draw_train = train_instance.linear_model
-
-        # Create array to save prediction results and simulated y_test. Note that
-        # we only save test samples as we also want to compute the noise.
+        # Define the function that sets the training function, which draws the
+        # training samples. Read in the documentation, why we do this here and
+        # not on a class level.
+        draw_train = self._set_train_function()
+        
+        # Create arrays to save prediction results, squared-error and simulated
+        # y_test. Note that we only save test samples as we also want to compute
+        # the noise.
         predictions = np.ones((self.n_test, self.n_repeat)) * np.nan
         simulated_y_test_all = np.ones((self.n_test, self.n_repeat)) * np.nan
-
-        # Create an array to save the squared-error for all simulation runs
         y_se_all = np.ones((self.n_repeat, self.n_test)) * np.nan
 
         # Peform the main simulation. Further explanation on this can be found

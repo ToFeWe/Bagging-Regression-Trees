@@ -60,7 +60,7 @@ def simulate_convergence(general_settings, convergence_settings, model):
     # Simulate over the range of bootstrap iteration values.
     for index, n_bootstrap in enumerate(n_bootstraps_array):
         output_convergence[index,
-                           :] = simulation_basis.calc_mse(ratio=general_settings['BAGGING_RATIO'],
+                           :] = simulation_basis.calc_mse(ratio=general_settings['bagging_ratio'],
                                                           bootstrap=True,
                                                           min_split_tree=general_settings["min_split_tree"],
                                                           b_iterations=n_bootstrap)
@@ -68,7 +68,7 @@ def simulate_convergence(general_settings, convergence_settings, model):
     # Simulate MSE for a high number of bootstrap iterations to visualize its
     # convergence
     output_large_B = simulation_basis.calc_mse(
-        ratio=general_settings['BAGGING_RATIO'],
+        ratio=general_settings['bagging_ratio'],
         bootstrap=True,
         min_split_tree=general_settings["min_split_tree"],
         b_iterations=convergence_settings['converged_bootstrap'])

@@ -51,7 +51,7 @@ def simulate_bagging_subagging(general_settings, subagging_settings, model):
 
     # Perform the simulation for bagging.
     output_bagging = simulation_basis.calc_mse(
-        ratio=general_settings['BAGGING_RATIO'],
+        ratio=general_settings['bagging_ratio'],
         bootstrap=True,
         min_split_tree=general_settings["min_split_tree"],
         b_iterations=general_settings["b_iterations"])

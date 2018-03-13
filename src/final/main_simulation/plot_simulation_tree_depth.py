@@ -30,10 +30,12 @@ def plot_tree_depth(settings_plotting, tree_depth_settings, models, appendix):
     models: list of shape = 2
         The list of regression functions that should be contained in the figure. Must be of length 2.
         In the specification chosen in the paper, it will plot the Friedman 1 Model and the Linear Model.
-        Another option is to replace one of those by the indicator model by changing the *dgp_models.json*
-        described in :ref:`model_specs`.
-        Note that we also need to change the *wscript* file in *src.analysis.main_simulation* then!
-
+    
+    appendix: bool
+        Indicate if we create the figure for the appendix. This simply implies
+        that the figure will only contain one model.
+        Therefore the figure size and the legend positioning will be adjusted
+        accordingly.    
     """
     plt.style.use([settings_plotting['style']])
     if appendix:

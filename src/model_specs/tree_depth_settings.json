@@ -1,1 +1,5 @@
-{"min_split": 2, "max_split": 100, "steps_split": 2}
+{
+  "min_split": 2,
+  "max_split": 100,
+  "steps_split": 2
+}

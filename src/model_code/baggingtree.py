@@ -1,9 +1,9 @@
 """
 
-This module implements the Bagging Algorithm used for the main simulations of 
-this paper. To use it, you first define a class instance that specifies the 
-parameters for the algorithm. Then use the fit() function to fit the algorithm 
-to a training sample. Predictions on a new sample can be made using the predict() 
+This module implements the Bagging Algorithm used for the main simulations of
+this paper. To use it, you first define a class instance that specifies the
+parameters for the algorithm. Then use the fit() function to fit the algorithm
+to a training sample. Predictions on a new sample can be made using the predict()
 function.
 
 """
@@ -23,35 +23,35 @@ class BaggingTree:
     random_seed: int or None, optional (Default: None)
         random_seed is used to specify the RandomState for numpy.random.
         It is shared across all functions of the class.
-        
-        Needs to be specified as a usual random seed 
+
+        Needs to be specified as a usual random seed
         as it is deployed to numpy.random.
 
-        IMPORTANT: This random seed is fixed for a specific instance, as it 
-        specifies a new RandomState for all numpy functions used in this class. 
+        IMPORTANT: This random seed is fixed for a specific instance, as it
+        specifies a new RandomState for all numpy functions used in this class.
         As a result this random_seed is *not* overwritten by numpy random seeds
-        that are defined outside of specific class instance. The reason for 
-        this is that it makes reproducibility easier across different simulations 
+        that are defined outside of specific class instance. The reason for
+        this is that it makes reproducibility easier across different simulations
         and modules. Note however that the downside is, that we have to specify
-        for each class (each instance) a different random seed and it is not 
-        possible to specify one random seed at the beginning of the whole 
+        for each class (each instance) a different random seed and it is not
+        possible to specify one random seed at the beginning of the whole
         simulation, as this will define the RandomState within each class.
-        
+
         For further informtation on this see in :ref:`design_choices`.
 
     ratio: float, optional (Default=1.0)
-        The sample size for the subsampling procedure. Each sample we draw for 
+        The sample size for the subsampling procedure. Each sample we draw for
         the algorithm will be of size math.ceil(n_observations * self.ratio).
 
         Needs to be greater than 0 and smaller than 1.
 
-        In accordance with the theoretical treatment in the paper, one would 
+        In accordance with the theoretical treatment in the paper, one would
         want to choose *ratio<1.0* for *bootstrap=False* (Subagging) and
         *ratio=1.0*  for *bootstrap=True* (Bagging).
 
 
     min_split_tree: int, optional (Default=2)
-        The minimal number of observations that can be within a terminal node 
+        The minimal number of observations that can be within a terminal node
         of the Regression Trees to be considered for a split.
         Use this to control for the complexity of the Regression Tree.
 
@@ -64,7 +64,7 @@ class BaggingTree:
         Needs to be greater than 0.
 
     bootstrap: bool, optional(Default=True)
-        Specify if the you use the standard bootstrap (Bagging) or m out of n 
+        Specify if the you use the standard bootstrap (Bagging) or m out of n
         bootstrap (Subagging).
 
         Default=True implies that we use Bagging.
@@ -125,11 +125,11 @@ class BaggingTree:
         self.min_split_tree = min_split_tree
 
     def _draw_sample(self, X, y):
-        """Draws sample of the given data. Use on the class level *self.ratio* 
-        and *self.bootstrap* to specify if you want to draw with replacement 
+        """Draws sample of the given data. Use on the class level *self.ratio*
+        and *self.bootstrap* to specify if you want to draw with replacement
         (Bootstrap) and how large your sample should be relative to the original
         data.
-        
+
         """
 
         # Number of observations in data set
@@ -146,7 +146,7 @@ class BaggingTree:
             obs_range = self.random_state.choice(
                 n_observations, size=draw_size, replace=False)
 
-        # Create the draw for both, the matrix *X* and the vector *y*, according 
+        # Create the draw for both, the matrix *X* and the vector *y*, according
         # to the observation range *obs_range* that was created beforehand.
         X_draw = X[obs_range, :].copy()
         y_draw = y[obs_range].copy()
@@ -156,7 +156,7 @@ class BaggingTree:
     def fit(self, X, y):
         """
         Fit the Bagging Algorithm *newly* to a sample (usually training sample)
-        that consists of the covariant matrix *X* and the vector the dependent 
+        that consists of the covariant matrix *X* and the vector the dependent
         variable *y*.
 
         Parameters
