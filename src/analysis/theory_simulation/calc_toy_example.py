@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 
 A module to calculate the results for the introductory example in Subsection

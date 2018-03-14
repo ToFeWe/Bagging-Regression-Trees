@@ -2,45 +2,52 @@
 
 
 def build(ctx):
+    # We do not pass the models here by 'append' but directly in the script as we want the highest
+    # degree of flexibility which model should end up in the appendix.
+    # Also, like this it is easier to plot two models together in one figure.
+    ctx(
+        features='run_py_script',
+        source='plot_simulation_convergence.py',
+        deps=[
+            ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_convergence_friedman.pickle'),
+            ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_convergence_linear.pickle'),
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json'),
+        ],
+        target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_convergence.pdf'),
+        name='plot_simulation_convergence'
+    )
 
-        ctx(
-            features='run_py_script',
-            source='plot_simulation_convergence.py',
-            deps=[
-                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_convergence_friedman.pickle'),
-                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_convergence_linear.pickle'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json'),
-            ],
-            target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_convergence.pdf')
-        )
+    ctx(
+        features='run_py_script',
+        source='plot_simulation_subagging.py',
+        deps=[
+            ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_subagging_friedman.pickle'),
+            ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_subagging_linear.pickle'),
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json'),
+        ],
+        target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_subagging.pdf'),
+        name='plot_simulation_subagging'
+    )
 
-        ctx(
-            features='run_py_script',
-            source='plot_simulation_subagging.py',
-            deps=[
-                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_subagging_friedman.pickle'),
-                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_subagging_linear.pickle'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json'),
-            ],
-            target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_subagging.pdf')
-        )
+    ctx(
+        features='run_py_script',
+        source='plot_simulation_tree_depth.py',
+        deps=[
+            ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_friedman.pickle'),
+            ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_linear.pickle'),
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json'),
+        ],
+        target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_tree_depth.pdf'),
+        name='plot_simulation_tree_depth'
+    )
 
-        ctx(
-            features='run_py_script',
-            source='plot_simulation_tree_depth.py',
-            deps=[
-                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_friedman.pickle'),
-                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_linear.pickle'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json'),
-            ],
-            target=ctx.path_to(ctx, 'OUT_FIGURES_MAIN', 'plot_simulation_tree_depth.pdf')
-        )
-        ctx(
-            features='run_py_script',
-            source='table.py',
-            deps=[
-                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_friedman.pickle'),
-                ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_linear.pickle'),
-            ],
-            target=ctx.path_to(ctx, 'OUT_TABLES', 'table_bagging.tex')
-        )
+    ctx(
+        features='run_py_script',
+        source='table_bagging.py',
+        deps=[
+            ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_friedman.pickle'),
+            ctx.path_to(ctx, 'OUT_ANALYSIS_MAIN', 'output_tree_depth_linear.pickle'),
+        ],
+        target=ctx.path_to(ctx, 'OUT_TABLES', 'table_bagging.tex'),
+        name='table_bagging'
+    )

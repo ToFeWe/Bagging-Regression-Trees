@@ -3,12 +3,13 @@
 
 def build(ctx):
 
-        ctx(
-            features='run_py_script',
-            source='plot_boston.py',
-            deps=[
-                ctx.path_to(ctx, 'OUT_ANALYSIS_REAL_DATA', 'output_boston.pickle'),
-                ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
-            ],
-            target=ctx.path_to(ctx, 'OUT_FIGURES_REAL_DATA', 'plot_boston.pdf')
-        )
+    ctx(
+        features='run_py_script',
+        source='plot_boston.py',
+        deps=[
+            ctx.path_to(ctx, 'OUT_ANALYSIS_REAL_DATA', 'output_boston.pickle'),
+            ctx.path_to(ctx, 'IN_MODEL_SPECS', 'settings_plotting.json')
+        ],
+        target=ctx.path_to(ctx, 'OUT_FIGURES_REAL_DATA', 'plot_boston.pdf'),
+        name='plot_boston'
+    )

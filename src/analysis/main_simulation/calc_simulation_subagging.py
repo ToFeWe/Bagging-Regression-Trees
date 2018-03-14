@@ -64,7 +64,7 @@ def simulate_bagging_subagging(general_settings, subagging_settings, model):
         min_split_tree=general_settings["min_split_tree"],
         b_iterations=general_settings["b_iterations"])
 
-    # Peform the simulation for subagging for the given number of ratios.
+    # Perform the simulation for subagging for the given number of ratios.
     output_subagging = simulation_basis.calc_mse_all_ratios(
         n_ratios=subagging_settings["n_ratios"],
         min_ratio=subagging_settings["min_ratio"],
