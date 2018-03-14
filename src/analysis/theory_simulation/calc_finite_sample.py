@@ -30,9 +30,10 @@ def indicator(x_value, y_bar):
 
     """
     if y_bar <= x_value:
-        return 1
-    if y_bar > x_value:
-        return 0
+        out = 1
+    else:
+        out = 0
+    return out
 
 
 def bagged_indicator(x_value, sample, b_iterations=50):
