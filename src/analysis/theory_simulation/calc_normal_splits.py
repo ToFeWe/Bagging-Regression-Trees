@@ -35,7 +35,10 @@ def bias_normal_splits(c_value, a_value, gamma):
 
     Returns the squared bias.
     """
-    bias = (norm.cdf(c_value * a_value ** gamma) - norm.cdf(c_value)) ** 2
+    bias = (
+        (norm.cdf(c_value * a_value ** gamma) -
+         norm.cdf(c_value)) ** 2
+    )
     return bias
 
 
@@ -81,26 +84,32 @@ def calculate_normal_splits(settings):
     output = {}
 
     # Create a range of c_value values that we will iterate over for each subsampling
-    # fraction a and save it to output dictionary for plotting.
-    c_range = np.linspace(
-        settings['c_min'],
-        settings['c_max'],
-        num=settings['c_gridpoints'])
+    # fraction *a_value* and save it to output dictionary for plotting.
+    c_range = (
+        np.linspace(
+            settings['c_min'],
+            settings['c_max'],
+            num=settings['c_gridpoints']
+        )
+    )
     output['c_range'] = c_range
 
-    # Create the array with the a_range. The formation is chosen this way, for
-    # plotting reasons.
-    # Note that the first a is always one as a reference (unbagged). Hence no
-    # fraction.
-    a_range = np.array([
-        settings['a_array']['first_a'],
-        settings['a_array']['second_a'][0] /
-        settings['a_array']['second_a'][1],
-        settings['a_array']['third_a'][0] /
-        settings['a_array']['third_a'][1],
-        settings['a_array']['fourth_a'][0] /
-        settings['a_array']['fourth_a'][1]
-    ])
+    # Create the array with the a_value_range. The formation is chosen this way,
+    # for plotting reasons.
+    # Note that the first a is always one as a reference (unbagged). Hence it is
+    # not a fraction.This way we can easily adjust the *normal_splits_settings.json*
+    # to plot other fractions.
+    a_range = (
+        np.array([
+            settings['a_array']['first_a'],
+            settings['a_array']['second_a'][0] /
+            settings['a_array']['second_a'][1],
+            settings['a_array']['third_a'][0] /
+            settings['a_array']['third_a'][1],
+            settings['a_array']['fourth_a'][0] /
+            settings['a_array']['fourth_a'][1]
+        ])
+    )
 
     # Loop over the range of c_value values.
     for i_a, a_value in enumerate(a_range):
@@ -118,7 +127,7 @@ def calculate_normal_splits(settings):
 
         mse_array = np.add(bias_array, var_array)
 
-        # Save the results to the dictonary. Note that we use the iteration number
+        # Save the results to the dictionary. Note that we use the iteration number
         # as the key, since we follow a similar logic in the plotting part.
         output[i_a] = {}
         output[i_a]['bias'] = bias_array

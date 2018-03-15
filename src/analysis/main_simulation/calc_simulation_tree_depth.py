@@ -9,8 +9,8 @@ in the *simulate_tree_depth()* function and return the results as a dictionary.
 import sys
 import json
 import pickle
-from src.model_code.montecarlosimulation import MonteCarloSimulation
 import numpy as np
+from src.model_code.montecarlosimulation import MonteCarloSimulation
 
 from bld.project_paths import project_paths_join as ppj
 
@@ -51,44 +51,58 @@ def simulate_tree_depth(general_settings, tree_depth_settings, model):
     # Create an array that describes minimal leaf sizes.
     # As we want to start from high to low, we turn the array around with
     # [::-1].
-    # We add the step soze again to the maximal value as we want it to be
+    # We add the step size again to the maximal value as we want it to be
     # included.
-    min_split_array = np.arange(
-        tree_depth_settings['min_split'],
-        tree_depth_settings['max_split'] +
-        tree_depth_settings["steps_split"],
-        tree_depth_settings["steps_split"])[::-1]
+    min_split_array = (
+        np.arange(
+            tree_depth_settings['min_split'],
+            tree_depth_settings['max_split'] +
+            tree_depth_settings["steps_split"],
+            tree_depth_settings["steps_split"]
+        )[::-1]
+    )
 
     # Create arrays to save the MSE, Bias, Variance + Noise for each split
     # specification.
-    output_array_bagging = np.ones(
-        (min_split_array.size, size_mse_decomp)) * np.nan
-    output_array_tree = np.ones(
-        (min_split_array.size, size_mse_decomp)) * np.nan
+    output_array_bagging = (
+        np.ones((min_split_array.size, size_mse_decomp)) * np.nan
+    )
+    output_array_tree = (
+        np.ones((min_split_array.size, size_mse_decomp)) * np.nan
+    )
 
     # Create a MonteCarloSimulation instance that defines the attributes For
     # the data generating process and will be constant for the tree and
     # bagging simulation.
-    simulation_basis = MonteCarloSimulation(
-        n_repeat=general_settings['n_repeat'],
-        noise=general_settings['noise'],
-        data_process=model,
-        n_test_train=general_settings['n_test_train'],
-        random_seeds=general_settings['random_seeds'])
+    simulation_basis = (
+        MonteCarloSimulation(
+            n_repeat=general_settings['n_repeat'],
+            noise=general_settings['noise'],
+            data_process=model,
+            n_test_train=general_settings['n_test_train'],
+            random_seeds=general_settings['random_seeds']
+        )
+    )
     # We simulate the MSE for Bagging and Trees for the different splits, while
     # keeping the data generating process constant.
     for index, split in enumerate(min_split_array):
-        output_bagging = simulation_basis.calc_mse(
-            ratio=general_settings['bagging_ratio'],
-            bootstrap=True,
-            min_split_tree=split,
-            b_iterations=general_settings["b_iterations"])
+        output_bagging = (
+            simulation_basis.calc_mse(
+                ratio=general_settings['bagging_ratio'],
+                bootstrap=True,
+                min_split_tree=split,
+                b_iterations=general_settings["b_iterations"]
+            )
+        )
         # Note: Subagging(bootstrap=False) with ratio = 1 -> Tree
-        output_tree = simulation_basis.calc_mse(
-            ratio=general_settings['bagging_ratio'],
-            bootstrap=False,
-            min_split_tree=split,
-            b_iterations=general_settings["b_iterations"])
+        output_tree = (
+            simulation_basis.calc_mse(
+                ratio=general_settings['bagging_ratio'],
+                bootstrap=False,
+                min_split_tree=split,
+                b_iterations=general_settings["b_iterations"]
+            )
+        )
 
         output_array_bagging[index, :] = output_bagging
         output_array_tree[index, :] = output_tree

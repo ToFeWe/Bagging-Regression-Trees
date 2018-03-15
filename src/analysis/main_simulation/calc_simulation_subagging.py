@@ -50,12 +50,15 @@ def simulate_bagging_subagging(general_settings, subagging_settings, model):
     # Create a MonteCarloSimulation instance that defines the attributes For
     # the data generating process and will be constant for the subagging and
     # bagging simulation.
-    simulation_basis = MonteCarloSimulation(
-        n_repeat=general_settings['n_repeat'],
-        noise=general_settings['noise'],
-        data_process=model,
-        n_test_train=general_settings['n_test_train'],
-        random_seeds=general_settings['random_seeds'])
+    simulation_basis = (
+        MonteCarloSimulation(
+            n_repeat=general_settings['n_repeat'],
+            noise=general_settings['noise'],
+            data_process=model,
+            n_test_train=general_settings['n_test_train'],
+            random_seeds=general_settings['random_seeds']
+        )
+    )
 
     # Perform the simulation for bagging.
     output_bagging = simulation_basis.calc_mse(
@@ -65,12 +68,15 @@ def simulate_bagging_subagging(general_settings, subagging_settings, model):
         b_iterations=general_settings["b_iterations"])
 
     # Perform the simulation for subagging for the given number of ratios.
-    output_subagging = simulation_basis.calc_mse_all_ratios(
-        n_ratios=subagging_settings["n_ratios"],
-        min_ratio=subagging_settings["min_ratio"],
-        max_ratio=subagging_settings["max_ratio"],
-        min_split_tree=general_settings["min_split_tree"],
-        b_iterations=general_settings["b_iterations"])
+    output_subagging = (
+        simulation_basis.calc_mse_all_ratios(
+            n_ratios=subagging_settings["n_ratios"],
+            min_ratio=subagging_settings["min_ratio"],
+            max_ratio=subagging_settings["max_ratio"],
+            min_split_tree=general_settings["min_split_tree"],
+            b_iterations=general_settings["b_iterations"]
+        )
+    )
 
     return output_bagging, output_subagging
 

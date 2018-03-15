@@ -10,8 +10,8 @@ in the simulate_convergence() function and return the results as a dictionary.
 import sys
 import json
 import pickle
-from src.model_code.montecarlosimulation import MonteCarloSimulation
 import numpy as np
+from src.model_code.montecarlosimulation import MonteCarloSimulation
 
 from bld.project_paths import project_paths_join as ppj
 
@@ -46,23 +46,29 @@ def simulate_convergence(general_settings, convergence_settings, model):
     # MSE + Variance + Bias + Error = 4
     size_mse_decomp = 4
 
-    # Create an array with all bootstrap itertions we consider.
-    n_bootstraps_array = np.arange(
-        convergence_settings['min_bootstrap'],
-        convergence_settings['max_bootstrap'],
-        convergence_settings['steps_bootstrap'])
-
+    # Create an array with all bootstrap iterations we consider.
+    n_bootstraps_array = (
+        np.arange(
+            convergence_settings['min_bootstrap'],
+            convergence_settings['max_bootstrap'],
+            convergence_settings['steps_bootstrap']
+        )
+    )
     # Create an array to save the results.
-    output_convergence = np.ones(
-        (n_bootstraps_array.shape[0],
-         size_mse_decomp)) * np.nan
-
-    simulation_basis = MonteCarloSimulation(
-        n_repeat=general_settings['n_repeat'],
-        noise=general_settings['noise'],
-        data_process=model,
-        n_test_train=general_settings['n_test_train'],
-        random_seeds=general_settings['random_seeds'])
+    output_convergence = (
+        np.ones((n_bootstraps_array.shape[0], size_mse_decomp)) * np.nan
+    )
+    # Create the simulation instance, which will be used to perform all
+    # simulations.
+    simulation_basis = (
+        MonteCarloSimulation(
+            n_repeat=general_settings['n_repeat'],
+            noise=general_settings['noise'],
+            data_process=model,
+            n_test_train=general_settings['n_test_train'],
+            random_seeds=general_settings['random_seeds']
+        )
+    )
     # Simulate over the range of bootstrap iteration values.
     for index, n_bootstrap in enumerate(n_bootstraps_array):
         output_convergence[index, :] = (
@@ -75,12 +81,15 @@ def simulate_convergence(general_settings, convergence_settings, model):
         )
 
     # Simulate MSE for a high number of bootstrap iterations to visualize its
-    # convergence
-    output_large_b = simulation_basis.calc_mse(
-        ratio=general_settings['bagging_ratio'],
-        bootstrap=True,
-        min_split_tree=general_settings["min_split_tree"],
-        b_iterations=convergence_settings['converged_bootstrap'])
+    # convergence.
+    output_large_b = (
+        simulation_basis.calc_mse(
+            ratio=general_settings['bagging_ratio'],
+            bootstrap=True,
+            min_split_tree=general_settings["min_split_tree"],
+            b_iterations=convergence_settings['converged_bootstrap']
+        )
+    )
     return output_convergence, output_large_b
 
 

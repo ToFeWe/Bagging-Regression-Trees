@@ -18,8 +18,8 @@ from bld.project_paths import project_paths_join as ppj
 
 def indicator(x_value, y_bar):
     """
-    A indicator function that returns 1 if the threshold *y_bar* smaller or
-    equal the x value *x_value*.
+    A indicator function that returns 1 if the threshold *y_bar* is smaller
+    or equal the x value *x_value*.
 
     Parameters
     ----------
@@ -80,15 +80,17 @@ def simulate_finite_sample(settings):
         case.
 
     """
-    # Create dict to save the finale results.
+    # Create a dictionary to save the finale results.
     output = {}
 
     # Create array with x values we want to consider.
-    x_range = np.linspace(settings['x_min'],
-                          settings['x_max'],
-                          settings['x_gridpoints'])
+    x_range = np.linspace(
+        settings['x_min'],
+        settings['x_max'],
+        settings['x_gridpoints']
+    )
 
-    # Save x_range to Dictionary as we want to plot the results later.
+    # Save x_range to dictionary as we want to plot the results later.
     output['x_range'] = x_range
 
     # Iterate over the list of sample sizes.
@@ -105,8 +107,10 @@ def simulate_finite_sample(settings):
             y_se_unbagged = np.ones(settings['n_repeat']) * np.nan
 
             # Set random state s.t. for each grid point we draw the same
-            # sequence.
+            # sequence. A larger explanation why we define RandomStates
+            # can be found in the documentation.
             random_state = np.random.RandomState(settings['random_seed'])
+
             # Calculate the true prediction for the given x.
             true_prediction = indicator(x_value, settings['mu'])
 
@@ -115,15 +119,25 @@ def simulate_finite_sample(settings):
 
                 # Draw a new sample and make a prediction for bagging and
                 # without bagging.
-                y_sample = random_state.normal(
-                    settings['mu'], settings['sigma'], size=sample_size)
+                y_sample = (
+                    random_state.normal(
+                        settings['mu'],
+                        settings['sigma'],
+                        size=sample_size
+                    )
+                )
 
                 # Make a prediction with the unbagged predictor.
                 prediction_unbagged = indicator(x_value, y_sample.mean())
 
                 # Make a prediction with the bagged predictor.
-                prediction_bagged = bagged_indicator(
-                    x_value, y_sample, b_iterations=settings['b_iterations'])
+                prediction_bagged = (
+                    bagged_indicator(
+                        x_value,
+                        y_sample,
+                        b_iterations=settings['b_iterations']
+                    )
+                )
 
                 # Calculate the Squared Error for the given repetition.
                 y_se_bagged[i_repeat] = (

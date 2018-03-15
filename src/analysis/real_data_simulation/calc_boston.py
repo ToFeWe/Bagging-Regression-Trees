@@ -12,7 +12,7 @@ i. For each simulation iteration follow this procedure
 ii. Compute the MSPE as the mean of average prediction errors of each iteration
 
 For this we use the BaggingTree Class described in :ref:`model_code` in the
-*simulate_bagging()* and *simulate_subagging()* functions and return the
+*simulate_bagging()* and *simulate_subagging()* functions and write the
 results as a dictionary.
 
 """
@@ -61,14 +61,20 @@ def split_fit_predict_bagging(
     Returns the MSPE for one iteration.
     """
     # Split the sample into train and test using the RandomState instance.
-    x_matrix_train, x_matrix_test, y_vector_train, y_vector_test = train_test_split(
-        x_matrix, y_vector, test_size=ratio_test, random_state=random_state)
+    x_matrix_train, x_matrix_test, y_vector_train, y_vector_test = (
+        train_test_split(
+            x_matrix,
+            y_vector,
+            test_size=ratio_test,
+            random_state=random_state
+        )
+    )
 
-    # Fit the Model and make a prediction on the test sample
+    # Fit the Model and make a prediction on the test sample.
     fitted_model = bagging_object.fit(x_matrix_train, y_vector_train)
     predictions = fitted_model.predict(x_matrix_test)
 
-    # Calculate the MSPE
+    # Calculate the MSPE.
     y_mse = np.mean((y_vector_test - predictions) ** 2)
     return y_mse
 
@@ -100,29 +106,37 @@ def simulate_bagging(x_matrix, y_vector, general_settings, boston_settings):
 
     """
     # Define a RandomState for the train_test_split.
-    random_state_split = np.random.RandomState(
-        boston_settings['random_seed_split'])
+    random_state_split = (
+        np.random.RandomState(boston_settings['random_seed_split'])
+    )
+
+    # Create an array that will save the simulation results.
+    mse_not_expected = np.ones(general_settings['n_repeat']) * np.nan
 
     # Train the bagged Regression Tree.
     # The random seed can be fixed here.
-    bagging_instance = BaggingTree(
-        random_seed=boston_settings['random_seed_fit'],
-        ratio=general_settings['bagging_ratio'],
-        bootstrap=True,
-        b_iterations=general_settings['b_iterations'],
-        min_split_tree=general_settings['min_split_tree']
+    bagging_instance = (
+        BaggingTree(
+            random_seed=boston_settings['random_seed_fit'],
+            ratio=general_settings['bagging_ratio'],
+            bootstrap=True,
+            b_iterations=general_settings['b_iterations'],
+            min_split_tree=general_settings['min_split_tree']
+        )
     )
-    mse_not_expected = np.ones(general_settings['n_repeat']) * np.nan
 
     for i_n_repeat in range(general_settings['n_repeat']):
-        mse_not_expected[i_n_repeat] = split_fit_predict_bagging(
-            x_matrix,
-            y_vector,
-            ratio_test=boston_settings['ratio_test'],
-            random_state=random_state_split,
-            bagging_object=bagging_instance
+        mse_not_expected[i_n_repeat] = (
+            split_fit_predict_bagging(
+                x_matrix,
+                y_vector,
+                ratio_test=boston_settings['ratio_test'],
+                random_state=random_state_split,
+                bagging_object=bagging_instance
+            )
         )
 
+    # Average over all simulation results to get the MSPE.
     mse_sim = np.mean(mse_not_expected)
     return mse_sim
 
@@ -162,40 +176,54 @@ def simulate_subagging(
     Returns a numpy array with the simulated MSPE for each subsampling fraction.
 
     """
-
+    # Create an array that will save the MSPE for all ratios.
     mse_subagging = np.ones(subagging_settings['n_ratios']) * np.nan
-    ratio_range = np.linspace(
-        subagging_settings['min_ratio'],
-        subagging_settings['max_ratio'],
-        subagging_settings['n_ratios'])
 
+    # Create the range of ratios we want to consider.
+    ratio_range = (
+        np.linspace(
+            subagging_settings['min_ratio'],
+            subagging_settings['max_ratio'],
+            subagging_settings['n_ratios']
+        )
+    )
+
+    # Loop over the different ratios we consider and simulate the MSPE for each ratio.
     for i_a, a_value in enumerate(ratio_range):
         # Define a RandomState for the train_test_split
         # Note:Inside the loop as we want to have a smooth plot -> same
         # samples.
-        random_state_split = np.random.RandomState(
-            boston_settings['random_seed_split'])
+        random_state_split = (
+            np.random.RandomState(
+                boston_settings['random_seed_split']
+            )
+        )
 
         # Train the bagged Regression Tree.
         # The random seed can be fixed here.
-        bagging_instance = BaggingTree(
-            random_seed=boston_settings['random_seed_fit'],
-            ratio=a_value,
-            bootstrap=False,
-            b_iterations=general_settings['b_iterations'],
-            min_split_tree=general_settings['min_split_tree']
+        bagging_instance = (
+            BaggingTree(
+                random_seed=boston_settings['random_seed_fit'],
+                ratio=a_value,
+                bootstrap=False,
+                b_iterations=general_settings['b_iterations'],
+                min_split_tree=general_settings['min_split_tree']
+            )
         )
+        # Create an array that will save the simulation results for one ratio.
         mse_not_expected = np.ones(general_settings['n_repeat']) * np.nan
 
         for i_n_repeat in range(general_settings['n_repeat']):
-            mse_not_expected[i_n_repeat] = split_fit_predict_bagging(
-                x_matrix,
-                y_vector,
-                ratio_test=boston_settings['ratio_test'],
-                random_state=random_state_split,
-                bagging_object=bagging_instance
+            mse_not_expected[i_n_repeat] = (
+                split_fit_predict_bagging(
+                    x_matrix,
+                    y_vector,
+                    ratio_test=boston_settings['ratio_test'],
+                    random_state=random_state_split,
+                    bagging_object=bagging_instance
+                )
             )
-
+        # Average over all simulation results for a specific ratio to get the MSPE.
         mse_subagging[i_a] = np.mean(mse_not_expected)
     return mse_subagging
 
@@ -214,18 +242,22 @@ if __name__ == '__main__':
     BOSTON_X_MATRIX = BOSTON_FULL['data']
     BOSTON_Y_VECTOR = BOSTON_FULL['target']
 
-    MSE_BAGGING = simulate_bagging(
-        BOSTON_X_MATRIX,
-        BOSTON_Y_VECTOR,
-        GENERAL_SETTINGS_IMPORTED,
-        BOSTON_SETTINGS_IMPORTED
+    MSE_BAGGING = (
+        simulate_bagging(
+            BOSTON_X_MATRIX,
+            BOSTON_Y_VECTOR,
+            GENERAL_SETTINGS_IMPORTED,
+            BOSTON_SETTINGS_IMPORTED
+        )
     )
-    MSE_SUBAGGING = simulate_subagging(
-        BOSTON_X_MATRIX,
-        BOSTON_Y_VECTOR,
-        GENERAL_SETTINGS_IMPORTED,
-        SUBAGGING_SETTINGS_IMPORTED,
-        BOSTON_SETTINGS_IMPORTED
+    MSE_SUBAGGING = (
+        simulate_subagging(
+            BOSTON_X_MATRIX,
+            BOSTON_Y_VECTOR,
+            GENERAL_SETTINGS_IMPORTED,
+            SUBAGGING_SETTINGS_IMPORTED,
+            BOSTON_SETTINGS_IMPORTED
+        )
     )
 
     SIMULATION_BOSTON = {}
