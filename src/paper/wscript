@@ -2,15 +2,14 @@
 
 def build(ctx):
 
-  for s in ['bagging_paper']:
-      ctx(
-          features='tex',
-          source=s + '.tex',
-          prompt=1,
-          name=s
-      )
-      # Install to the project root.
-      ctx.install_files(
-          ctx.env.PROJECT_PATHS['PROJECT_ROOT'].abspath(),
-          s + '.pdf'
-      )
+    ctx(
+        features='tex',
+        source='bagging_paper.tex',
+        prompt=1,
+        name='bagging_paper'
+    )
+    # Install to the project root.
+    ctx.install_files(
+        ctx.env.PROJECT_PATHS['PROJECT_ROOT'].abspath(),
+        'bagging_paper.pdf'
+    )

@@ -7,10 +7,10 @@ Main Calculations and Simulations
 Documentation of the code in *src.analysis*. This is the core of the project.
 
 
-
 Theoretical Calculations
 =========================
 Documentation of the code in *src.analysis.theory_simulation*.
+All modules listed below are used for the theoretical simulations and calculations related to bagging.
 
 Simulating the convergence for the finite sample case
 *****************************************************
@@ -35,10 +35,10 @@ Main Simulations
 ================
 Documentation of the code in *src.analysis.main_simulation*.
 All modules listed below use the ``MonteCarloSimulation`` Class in *src.analysis.montecarlosimulation*.
-We define the simulation setup and the data generating process as a class instance.
-Using the functions of the class, we then analysis changes in the bagging parameters for an else constant
+I define the simulation setup and the data generating process as a class instance.
+Using the functions of the class, I then analysis changes in the bagging parameters for an else constant
 simulation set up.
-For more details regarding the general simulation set-up see :ref:`model_code`
+For more details regarding the general simulation set-up see :ref:`model_code`.
 
 The Case of Subagging
 *********************
@@ -66,18 +66,11 @@ Real Data Simulations using the Boston Housing Data
 Documentation of the code in *src.analysis.real_data_simulation*.
 
 
-Following the simulation set-up by Breiman (1996), we show that the method also works, when applied to
+Following the simulation set-up by :cite:`Breiman1996`, we show that the method also works, when applied to
 real data.
 As Bagging applied to Regression Trees is mostly used for prediction purposes, we pick a
 classical prediction problem data set, namely the Boston Housing Data Set.
 It was obtain from the scikit-learn library ``sklearn.datasets``.
-The simulation is parallelized, which increases the speed drastically. The functions are tested and
-work well behaved, even though it might not be the most elegant and prettiest solution.
-
-Note that we use the ``joblib`` library to run the simulation as a pipeline job. This package
-should have been installed, when setting up the conde eniroemnt. If you run into any error
-install it from https://pythonhosted.org/joblib/
-or contact s6towern@uni-bonn.de.
 
 
 .. automodule:: src.analysis.real_data_simulation.calc_boston

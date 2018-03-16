@@ -6,19 +6,20 @@ Model specifications
 
 The directory *src.model_specs* contains `JSON <http://www.json.org/>`_ files with model specifications.
 They are used across different parts of the model to specify the simulations/calculations or make the
-plotting uniform across different modules. We decided to split those specification in a lot of
+plotting uniform across different modules. I decided to split those specification in a lot of
 different files to make it easier to change only certain parts of the specifications
 without having to rerun the whole code in waf.
 
 Overview for JSON files
 =======================
-All JSON files are used to define a dictionary in python. Below we will give
+All JSON files are used to define a dictionary in python. Below I will give
 a short descriptions to all JSON files (also referred to as dictionary) and its
 keys.
 The default values are all inline with the descriptions in the final term paper
 and hence omitted here.
 There is no JSON, which describes the Data Generating Processes, as those are
-fixed anyways in the *DataSimulation* class.
+fixed anyways in the *DataSimulation* class. Also, the order of them is fixed due to
+the structure of the paper.
 
 boston_settings.json
 ********************
@@ -31,7 +32,7 @@ ratio_test: float
 ratio_train: float
   Counterpart to *ratio_test*
 random_seed_split: int
-  Starting point for the random seeds for the test_train_split
+  Defines the RandomState for the test_train_split
 random_seed_fit: int
   Random seed for the fitting procedure
 
@@ -92,7 +93,7 @@ b_iterations: int
 min_split_tree: int
   Governs the tree depth. Lower values imply more complex Regression Trees
 random_seeds: list
-  List of random seeds used. Note: We don't reseed but define different RandomState instances with those.
+  List of random seeds used. Note: I don't reseed but define different RandomState instances with those.
 bagging_ratio: constant at 1
   Subsampling ratio for bagging. Do not change!
 
@@ -110,12 +111,12 @@ c_min: int
 c_max: int
   Maximal gridpoint
 a_array: dictionary
-  Consists of keys that define the subsampling ratios we want to consider.
+  Consists of keys that define the subsampling ratios I want to consider.
   The value of the first key has to be equal to 1.
   The other key values are defined as lists, where list[0] = numerators and
   list[1] = denominator of the subsampling fraction.
 gamma: float
-  Rate of convergence
+  Rate of convergence of the estimator
 
 
 

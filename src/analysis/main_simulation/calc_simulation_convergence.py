@@ -2,8 +2,8 @@
 This module simulates the convergence of bagging towards a stable value as seen
 in Subsection 5.4 of the final paper.
 
-For this we use the MonteCarloSimulation Class described in :ref:`model_code`
-in the simulate_convergence() function and return the results as a dictionary.
+For this we use the ``MonteCarloSimulation`` class described in :ref:`model_code`
+in the *simulate_convergence()* function and return the results as a dictionary.
 
 """
 

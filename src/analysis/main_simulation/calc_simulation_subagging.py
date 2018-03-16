@@ -2,7 +2,7 @@
 This module simulates the dependence of the subagging results on the
 subsampling faction and sets it in relation to bagging.
 
-For this we use the MonteCarloSimulation Class described in :ref:`model_code`
+For this we use the ``MonteCarloSimulation`` Class described in :ref:`model_code`
 in the *simulate_bagging_subagging()* function and return the results as a
 dictionary.
 

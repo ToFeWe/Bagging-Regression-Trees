@@ -11,7 +11,7 @@ i. For each simulation iteration follow this procedure
         the value
 ii. Compute the MSPE as the mean of average prediction errors of each iteration
 
-For this we use the BaggingTree Class described in :ref:`model_code` in the
+For this we use the ``BaggingTree`` Class described in :ref:`model_code` in the
 *simulate_bagging()* and *simulate_subagging()* functions and write the
 results as a dictionary.
 

@@ -7,7 +7,6 @@ Welcome to the Bagging Regression Trees project's documentation!
     :maxdepth: 3
 
     introduction
-    overview
     design_choices
     model_code
     analysis

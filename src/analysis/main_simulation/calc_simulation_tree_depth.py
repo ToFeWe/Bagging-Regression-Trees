@@ -2,7 +2,7 @@
 This module simulates the variations in the model complexity governed by the
 Tree depth for the Bagging Algorithm.
 
-For this we use the MonteCarloSimulation Class described in :ref:`model_code`
+For this we use the ``MonteCarloSimulation`` Class described in :ref:`model_code`
 in the *simulate_tree_depth()* function and return the results as a dictionary.
 
 """

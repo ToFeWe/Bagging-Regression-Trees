@@ -2,10 +2,12 @@
 
 This module implements different data generating processes within
 the *DataSimulation* class. In order to make the results for different functional
-forms of f(x_matrix) comparable, we define the attributes of the datasimulation
+forms of f(x_matrix) comparable, we define the attributes of the data simulation
 within a class. All function to which we apply the Bagging Algorithm then have
-the same noise, size and random_seed This is important, as we want to compare
-its performance on different regression functions.
+the same noise, size and random_seed.
+This is helpful as I want to compare the effectiveness of the Bagging Algorithm among
+different functional forms while keeping attributes like the sample size or the noise
+constant across different regression functions
 
 """
 
