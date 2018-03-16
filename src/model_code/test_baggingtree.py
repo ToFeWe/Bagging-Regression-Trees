@@ -53,7 +53,7 @@ def test_baggingtree_if_different_if_same_instance(setup):
     """
 
     x_matrix_train, y_vector_train, y_vector_test = setup
-    bagged_tree = BaggingTree(random_seed=1, b_iterations=5)
+    bagged_tree = BaggingTree(random_seed=1, b_iterations=10)
     first_prediction = (
         bagged_tree.fit(x_matrix_train, y_vector_train).predict(y_vector_test)
     )
@@ -96,5 +96,5 @@ def test_baggingtree_with_zeros_and_ones():
 
 
 if __name__ == '__main__':
-    status = pytest.main([sys.argv[1]])
-    sys.exit(status)
+    STATUS = pytest.main([sys.argv[1]])
+    sys.exit(STATUS)

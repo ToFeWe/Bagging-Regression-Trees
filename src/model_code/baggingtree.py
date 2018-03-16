@@ -91,7 +91,7 @@ class BaggingTree:
     def _set_ratio(self, ratio):
         """ A function to check if *ratio* is specified correctly. """
         assert np.issubdtype(
-            type(ratio), np.float), ' The *ratio* needs to be of type float.'
+            type(ratio), np.floating), ' The *ratio* needs to be of type float.'
         assert 1 >= ratio > 0, \
             'It is required that 1 >= *ratio* > 0. You provided ratio={}'.format(ratio)
         self.ratio = ratio

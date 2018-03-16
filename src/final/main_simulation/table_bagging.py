@@ -41,9 +41,9 @@ def make_table(models):
         for index, model in enumerate(models):
             if index is not 0:
                 tex_file.write('\\midrule\n')
-            if model is 'friedman':
+            if model == 'friedman':
                 tex_file.write('\\multirow{2}{*}{Friedman \# 1}\n')
-            elif model is 'linear':
+            elif model == 'linear':
                 tex_file.write('\\multirow{2}{*}{Linear}\n')
 
             with open(ppj("OUT_ANALYSIS_MAIN", "output_subagging_{}.pickle"

@@ -18,7 +18,7 @@ from bld.project_paths import project_paths_join as ppj
 
 
 def convolution_cdf_df(c_value):
-    """ 
+    """
     Calculate the convolution as defined by :cite:`Buhlmann2002` and as
     used in the introductory example of our paper for the the c.d.f of the
     standard normal distribution and the standard normal density for the
@@ -39,7 +39,7 @@ def convolution_cdf_df(c_value):
 
 
 def convolution_cdf_squared_df(c_value):
-    """ 
+    """
     Calculate the convolution as defined by :cite:`Buhlmann2002` and as
     used in the introductory example of our paper for the the squared c.d.f of
     the standard normal distribution and the standard normal density for the

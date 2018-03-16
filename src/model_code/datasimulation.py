@@ -84,7 +84,7 @@ class DataSimulation:
 
     def _set_noise(self, noise):
         """ A function to check if *noise* is specified correctly. """
-        assert (np.issubdtype(type(noise), np.float) and noise > 0), \
+        assert (np.issubdtype(type(noise), np.floating) and noise > 0), \
             ('*noise* needs to be of type integer or float and greater or equal'
              ' to zero. You provided noise={}, which is of type {}.'
              ''.format(noise, type(noise)))
@@ -172,11 +172,12 @@ class DataSimulation:
         # We test for the equality then elementwise.
         equal_1 = np.equal(full_array_1, var_1)
         if var_2 is None and arg_2 is None:
-            return 1 * equal_1
+            out_array = 1 * equal_1
         else:
             full_array_2 = np.full(self.n_size, arg_2, dtype='int32')
             equal_2 = np.equal(full_array_2, var_2)
-            return 1 * np.logical_and(equal_1, equal_2)
+            out_array = 1 * np.logical_and(equal_1, equal_2)
+        return out_array
 
     def indicator_model(self):
         """Returns the covariant matrix *x_matrix* (shape = [n_size, 5]) and the

@@ -37,5 +37,5 @@ def test_montecarlosimulation_mspe_decomposition_same_as_mspe():
 
 
 if __name__ == '__main__':
-    status = pytest.main([sys.argv[1]])
-    sys.exit(status)
+    STATUS = pytest.main([sys.argv[1]])
+    sys.exit(STATUS)

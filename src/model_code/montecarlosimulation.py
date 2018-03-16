@@ -124,7 +124,7 @@ class MonteCarloSimulation:
 
     def _set_noise(self, noise):
         """ A function to check if *noise* is specified correctly."""
-        assert np.issubdtype(type(noise), np.float) and noise > 0, \
+        assert np.issubdtype(type(noise), np.floating) and noise > 0, \
             ('*noise* needs to be of type integer or float and greater or equal'
              ' to zero. You provided noise={}, which is of type {}.'
              ''.format(noise, type(noise)))
@@ -455,12 +455,12 @@ class MonteCarloSimulation:
              'You provided n_ratios={}, which is of type'
              ' {}'.format(n_ratios, type(n_ratios)))
 
-        assert np.issubdtype(type(min_ratio), np.float) and min_ratio >= 0, \
+        assert np.issubdtype(type(min_ratio), np.floating) and min_ratio >= 0, \
             ('*min_ratio* need to be an float greater than zero. '
              'You provided min_ratio={}, which is of type'
              ' {}'.format(min_ratio, type(min_ratio)))
 
-        assert np.issubdtype(type(max_ratio), np.float) and max_ratio <= 1, \
+        assert np.issubdtype(type(max_ratio), np.floating) and max_ratio <= 1, \
             ('*max_ratio* need to be an float greater than zero. '
              'You provided max_ratio={}, which is of type'
              ' {}'.format(max_ratio, type(max_ratio)))

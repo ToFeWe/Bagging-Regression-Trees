@@ -42,5 +42,5 @@ def test_datasimulation_friedman_shape():
 
 
 if __name__ == '__main__':
-    status = pytest.main([sys.argv[1]])
-    sys.exit(status)
+    STATUS = pytest.main([sys.argv[1]])
+    sys.exit(STATUS)
