@@ -107,4 +107,5 @@ if __name__ == '__main__':
     plot_boston(
         SETTINGS_PLOTTING_IMPORTED,
         SUBAGGING_SETTINGS_IMPORTED,
-        OUTPUT_BOSTON_IMPORTED)
+        OUTPUT_BOSTON_IMPORTED
+    )

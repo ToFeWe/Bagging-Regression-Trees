@@ -45,7 +45,8 @@ def build(ctx):
         features='run_py_script',
         source='test_toy_example.py',
         deps='calc_toy_example.py',
-        append=abspath_toy_example
+        append=abspath_toy_example,
+        name='test_toy_example'
     )
 
     abspath_normal_splits = (
@@ -56,7 +57,8 @@ def build(ctx):
         features='run_py_script',
         source='test_normal_splits.py',
         deps='calc_normal_splits.py',
-        append=abspath_normal_splits
+        append=abspath_normal_splits,
+        name='test_normal_splits'
     )
 
     abspath_finite_sample = (
@@ -67,5 +69,6 @@ def build(ctx):
         features='run_py_script',
         source='test_finite_sample.py',
         deps='calc_finite_sample.py',
-        append=abspath_finite_sample
+        append=abspath_finite_sample,
+        name='test_finite_sample'
     )
