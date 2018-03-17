@@ -1,5 +1,5 @@
 {
-  "n_repeat": 10,
+  "n_repeat": 100,
   "n_test_train": [500, 500],
   "noise": 1.0,
   "b_iterations": 50,

@@ -5,7 +5,8 @@ import os
 
 def build(ctx):
     ctx(
-        features='run_py_script', source='calc_finite_sample.py',
+        features='run_py_script',
+        source='calc_finite_sample.py',
         deps=[
             ctx.path_to(ctx, 'IN_MODEL_SPECS', 'finite_sample_settings.json')
         ],
