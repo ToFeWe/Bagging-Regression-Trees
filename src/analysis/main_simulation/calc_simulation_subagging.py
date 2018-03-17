@@ -1,10 +1,13 @@
 """
+
 This module simulates the dependence of the subagging results on the
 subsampling faction and sets it in relation to bagging.
 
 For this we use the ``MonteCarloSimulation`` Class described in :ref:`model_code`
 in the *simulate_bagging_subagging()* function and return the results as a
 dictionary.
+Also the intuition of the simulation setup from :ref:`model_code` and
+:ref:`design_choice` carries over to this module.
 
 """
 
@@ -37,14 +40,14 @@ def simulate_bagging_subagging(general_settings, subagging_settings, model):
         passed as the first system argument.
 
     Returns a tuple of the simulation results:
-        tuple[0]: numpy array of shape = 4
-                  The array consists of the MSPE decompositions for the Bagging
-                  Algorithm.
-        tuple[1]: numpy array of shape = [*n_ratios*, 4], where *n_ratios* is
-                  the number of subsampling ratios to be considered. This is
-                  defined by keys in *subagging_settings*. The array consists
-                  of the MSPE decompositions for each of those subsampling
-                  fraction.
+        - tuple[0]: numpy array of shape = 4
+                    The array consists of the MSPE decompositions for the Bagging
+                    Algorithm.
+        - tuple[1]: numpy array of shape = [*n_ratios*, 4], where *n_ratios* is
+                    the number of subsampling ratios to be considered. This is
+                    defined by keys in *subagging_settings*. The array consists
+                    of the MSPE decompositions for each of those subsampling
+                    fraction.
 
     """
     # Create a MonteCarloSimulation instance that defines the attributes For

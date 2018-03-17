@@ -1,9 +1,12 @@
 """
+
 This module simulates the variations in the model complexity governed by the
 Tree depth for the Bagging Algorithm.
 
 For this we use the ``MonteCarloSimulation`` Class described in :ref:`model_code`
 in the *simulate_tree_depth()* function and return the results as a dictionary.
+Also the intuition of the simulation setup from :ref:`model_code` and
+:ref:`design_choice` carries over to this module.
 
 """
 import sys
@@ -35,16 +38,16 @@ def simulate_tree_depth(general_settings, tree_depth_settings, model):
         passed as the first system argument.
 
     Returns a tuple of the simulation results:
-        tuple[0]: numpy array of shape = [min_split_array.size, 4], where
-                  *min_split_array* is the array of minimal split values we want
-                  to consider. This is defined by keys in *tree_depth_settings*.
-                  The array consists of the MSPE decompositions for each of those
-                  minimal split values for the Bagging Algorithm.
-        tuple[0]: numpy array of shape = [min_split_array.size, 4], where
-                  *min_split_array* is the array of minimal split values we want
-                  to consider. This is defined by keys in *tree_depth_settings*.
-                  The array consists of the MSPE decompositions for each of those
-                  minimal split values for the **unbagged** Tree.
+        - tuple[0]: numpy array of shape = [min_split_array.size, 4], where
+                    *min_split_array* is the array of minimal split values we want
+                    to consider. This is defined by keys in *tree_depth_settings*.
+                    The array consists of the MSPE decompositions for each of those
+                    minimal split values for the Bagging Algorithm.
+        - tuple[0]: numpy array of shape = [min_split_array.size, 4], where
+                    *min_split_array* is the array of minimal split values we want
+                    to consider. This is defined by keys in *tree_depth_settings*.
+                    The array consists of the MSPE decompositions for each of those
+                    minimal split values for the **unbagged** Tree.
     """
     # MSE + Variance + Bias + Error = 4
     size_mse_decomp = 4

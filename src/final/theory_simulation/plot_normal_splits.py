@@ -1,7 +1,10 @@
 """
-A module which creates figure 4 in the final paper. The calculations for this
+The module which created Figure 4 of the final paper can be found under
+*src.final.theory_simulation.plot_normal_splits*. The calculations for this
 have been performed in the module *calc_normal_splits*, which can be found under
 *src.analysis.theory_simulation* and has been described in :ref:`analysis`.
+The *.pickle* files, which were created by the module described above and which are
+used here, where saved under *bld.out.analysis.theory_simulation*.
 
 """
 import pickle

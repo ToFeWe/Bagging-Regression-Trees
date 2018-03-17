@@ -1,8 +1,11 @@
 """
-A module which creates figure 8 in the final paper. The calculations for this
-have been performed in the module *calc_simulation_convergence*, which can be
+The module which created Figure 8 of the final paper can be found under
+*src.final.real_data_simulation.plot_boston*. The calculations for this
+have been performed in the module *calc_boston*, which can be
 found under *src.analysis.real_data_simulation* and has been described
 in :ref:`analysis`.
+The *.pickle* files, which were created by the module described above and which are
+used here, where saved under *bld.out.analysis.real_data_simulation*.
 
 """
 import pickle

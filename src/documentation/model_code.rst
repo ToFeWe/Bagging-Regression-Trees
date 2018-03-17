@@ -31,7 +31,7 @@ Note however that given a different parameter set (more bootstrap iterations/lar
 algorithm is liked to be desired.
 
 
-
+The ``BaggingTree`` class can be found under *src.model_code.baggingtree*.
 
 .. automodule:: src.model_code.baggingtree
     :members:
@@ -39,6 +39,7 @@ algorithm is liked to be desired.
 
 The ``DataSimulation`` class
 ============================
+The ``DataSimulation`` can be found under *src.model_code.datasimulation*.
 
 .. automodule:: src.model_code.datasimulation
     :members:
@@ -46,7 +47,7 @@ The ``DataSimulation`` class
 The ``MonteCarloSimulation`` class
 ==================================
 The ``MonteCarloSimulation`` class implements the Monte Carlo simulation for a given set of parameters as it was
-used in the **Simulation** part of the paper.
+used in the *Simulation part* of the paper.
 We picked this simulation procedure as we wanted to emphasis the decomposition of the
 mean squared prediction error at a new input point into Bias and the Variance
 but also the irreducible Noise term.
@@ -55,7 +56,7 @@ Bagging Algorithm to observe changes in the MSPE, Bias and the Variance.
 The parameters that are specific to the data generating process are defined in the class instance.
 Parameters for the Bagging Algorithm are defined in the functions.
 
-
+The ``MonteCarloSimulation`` can be found under *src.model_code.montecarlosimulation*.
 
 .. automodule:: src.model_code.montecarlosimulation
     :members:

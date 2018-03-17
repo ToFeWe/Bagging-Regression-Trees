@@ -12,14 +12,14 @@ The authors of the term paper are Robin Kraft, Tobias Felix Werner and David Zei
 
 All code, including the implementation to waf, was written by Tobias Felix Werner.
 
-The waf template was designed by cite:`Gaudecker2014`. Documentation for Waf and more background on this is at http://hmgaudecker.github.io/econ-project-templates/ and https://github.com/hmgaudecker/econ-project-templates
+The waf template was designed by :cite:`Gaudecker2014`. Documentation for Waf and more background on this is at http://hmgaudecker.github.io/econ-project-templates/ and https://github.com/hmgaudecker/econ-project-templates
 
 
 Research Question
 =================
 In statistical estimation, most prediction problems encounter a bias-variance tradeoff.
-A class of predictors for which this is pronounced are so-called Regression Trees (cite:`Breiman1984`).
-The  Bagging algorithm proposed by cite:`Breiman1996` bypasses this tradeoff by reducing
+A class of predictors for which this is pronounced are so-called Regression Trees (:cite:`Breiman1984`).
+The  Bagging algorithm proposed by :cite:`Breiman1996` bypasses this tradeoff by reducing
 the variance of the unstable predictor, while leaving its bias mostly unaffected. In particular,
 Bagging uses repeated bootstrap sampling to construct multiple versions of the same prediction
 model like Regression Trees and averages over the resulting predictions.
@@ -50,7 +50,7 @@ The real data we use in the :ref:`analysis` part was directly obtained from the 
 How to run parts of the code? How to replicate the output myself?
 ==========================================================
 
-The term paper project has been implemented using Python and a replication template by cite:`Gaudecker2014`, which builds on the build automation tool waf.
+The project has been implemented using Python and a replication template by :cite:`Gaudecker2014`, which builds on the build automation tool waf.
 
 To run the code yourself you have to follow the following steps:
   * Make sure to have Miniconda or Anaconda installed. A modern LaTeX distribution (e.g. TeXLive, MacTex, or MikTex) needs to be found on your path.
@@ -64,6 +64,8 @@ To run the code yourself you have to follow the following steps:
 
 Note that its crucial to setup the conda environment as the packages chosen are tailored specifically to this project and
 might differ to your conda root environment.
+Depended on your LaTeX distribution you will also need to install further LaTeX packages (like ``algorithm``), which are naturally not
+included in the conda environment. You will get notified about this during the first build process.
 
 The replication template was obtained from https://github.com/hmgaudecker/econ-project-templates.
 For further information on this see also http://hmgaudecker.github.io/econ-project-templates/.

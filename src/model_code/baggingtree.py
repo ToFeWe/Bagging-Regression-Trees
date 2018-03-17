@@ -2,8 +2,8 @@
 
 This module implements the Bagging Algorithm used for the main simulations of
 this paper. To use it, you first define a class instance that specifies the
-parameters for the algorithm. Then use the fit() function to fit the algorithm
-to a training sample. Predictions on a new sample can be made using the predict()
+parameters for the algorithm. Then use the *fit()* function to fit the algorithm
+to a training sample. Predictions on a new sample can be made using the *predict()*
 function.
 
 """
@@ -190,7 +190,8 @@ class BaggingTree:
             tree = DecisionTreeRegressor(
                 max_depth=None,
                 min_samples_split=self.min_split_tree,
-                random_state=self.random_seed)
+                random_state=self.random_seed
+            )
 
             # Fit Regression Tree to the Bootstrap Sample.
             fitted_tree = tree.fit(x_matrix_draw, y_draw)

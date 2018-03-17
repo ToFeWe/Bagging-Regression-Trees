@@ -250,7 +250,7 @@ class DataSimulation:
             self._indicator_function(x_2, 0, x_3, 1)
         )
 
-        # Create the covariante matrix by stacking the corresponding variables
+        # Create the covariante matrix by stacking the corresponding variables.
         x_matrix = np.stack((x_1, x_2, x_3, x_4, x_5), axis=1)
 
         # Add an error term to *f_x* if this is desired.

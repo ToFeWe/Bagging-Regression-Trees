@@ -1,8 +1,12 @@
 """
-A module which creates Table 1 in the final paper. The calculations for this
-have been performed in the module *calc_simulation_subagging*, which can be
+The module which created Table 1 of the final paper can be found under
+*src.final.main_simulation.table_bagging.py*. Note that the output folder
+is here *bld.out.tables*. The calculations for this have been performed in the
+module *calc_simulation_subagging*, which can be
 found under *src.analysis.main_simulation* and has been described
 in :ref:`analysis`.
+The *.pickle* files, which were created by the module described above and which are
+used here, where saved under *bld.out.analysis.main_simulation*.
 
 """
 

@@ -1,8 +1,11 @@
 """
-A module which creates figure 5 in the final paper and a figure with the same
+The module which created Figure 5 of the final paper can be found under
+*src.final.main_simulation.plot_simulation_convergence*. and a figure with the same
 style for the indicator function for the appendix. The calculations for this
 have been performed in the module *calc_simulation_convergence*, which can be found
 under *src.analysis.main_simulation* and has been described in :ref:`analysis`.
+The *.pickle* files, which were created by the module described above and which are
+used here, where saved under *bld.out.analysis.main_simulation*.
 
 """
 import pickle

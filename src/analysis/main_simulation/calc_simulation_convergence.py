@@ -1,9 +1,12 @@
 """
+
 This module simulates the convergence of bagging towards a stable value as seen
 in Subsection 5.4 of the final paper.
 
 For this we use the ``MonteCarloSimulation`` class described in :ref:`model_code`
 in the *simulate_convergence()* function and return the results as a dictionary.
+Also the intuition of the simulation setup from :ref:`model_code` and
+:ref:`design_choice` carries over to this module.
 
 """
 
@@ -35,13 +38,13 @@ def simulate_convergence(general_settings, convergence_settings, model):
         passed as the first system argument.
 
     Returns a tuple of the simulation results:
-        tuple[0]: Numpy array of shape = [len(n_bootstraps_array), 4], where
-                  *n_bootstraps_array* is the array of Bootstrap iterations to
-                  be considered. This is defined by keys in *convergence_settings*.
-                  The array consists of the MSPE decompositions for each of those
-                  bootstrap iterations.
-        tuple[1]: Numpy array of shape = 4 with the MSPE decomposition for a
-                  larger bootstrap iterations.
+        - tuple[0]: Numpy array of shape = [len(n_bootstraps_array), 4], where
+                    *n_bootstraps_array* is the array of Bootstrap iterations to
+                    be considered. This is defined by keys in *convergence_settings*.
+                    The array consists of the MSPE decompositions for each of those
+                    bootstrap iterations.
+        - tuple[1]: Numpy array of shape = 4 with the MSPE decomposition for a
+                    larger bootstrap iterations.
     """
     # MSE + Variance + Bias + Error = 4
     size_mse_decomp = 4

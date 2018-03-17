@@ -5,18 +5,21 @@ squared-bias, variance and noise, for the Bagging Algorithm as described in the
 paper:
 
 In all simulations we use the following procedure:
-i.  Generate a test sample, without error term, according to the data
+
+1.  Generate a test sample, without error term, according to the data
     generating processes of interest. This will be constant for the whole
     simulation study. All predictions will be made on this sample.
-ii. For each simulation iteration we follow this procedure:
-    (a) Draw new error terms for the test sample.
-    (b) Draw a new training sample with regressior and error terms.
-    (c) Fit the predictor (Tree, Bagging, Subagging) to the generated training
-        data.
-    (d) Using this new predictor make a prediction into the fixed test sample
-        and save the predicted values.
-iii. We compute the MSPE, squared bias and variance for the given predictor at
-     the input point x_matrix = x0 with x0 being the test sample generated in (i).
+
+2.  For each simulation iteration we follow this procedure
+        a. Draw new error terms for the test sample.
+        b. Draw a new training sample with regressor and error terms.
+        c. Fit the predictor (Tree, Bagging, Subagging) to the generated training
+           data.
+        d. Using this new predictor make a prediction into the fixed test sample
+           and save the predicted values.
+
+3. We compute the MSPE, squared bias and variance for the given predictor at
+   the input point x_matrix = x0 with x0 being the test sample generated in (i).
 
 
 
@@ -42,8 +45,7 @@ class MonteCarloSimulation:
 
     Parameters
     ----------
-    random_seeds: tuple or list of size 4 consisting of int or None, optional
-    (Default: (None, None, None, None))
+    random_seeds: tuple or list of size 4 consisting of int or None, optional (Default: (None, None, None, None))
         Specify the random seeds that will be used for the simulation study.
         We have to use different random seeds, as we define different
         RandomState instances for each part of the simulation.
@@ -188,7 +190,7 @@ class MonteCarloSimulation:
     def _set_data_process(self, data_process):
         """ A function to check if *data_process* is specified correctly.
         Furthermore it creates the test sample consisting of *x_matrix_test* and
-        *f_vector_test*(dependend variable without error) according to the given
+        *f_vector_test*(dependent variable without error) according to the given
         data generating process.
 
         """
@@ -261,10 +263,10 @@ class MonteCarloSimulation:
         function with respect to variations in the Bagging parameters.
 
         Returns a numpy array of size 4 with the MSPE decomposition:
-            array[0]: Simulated MSPE
-            array[1]: Simulated squared bias
-            array[2]: Simulated variance
-            array[3]: Simulated noise
+            - array[0]: Simulated MSPE
+            - array[1]: Simulated squared bias
+            - array[2]: Simulated variance
+            - array[3]: Simulated noise
 
         Parameters
         ----------
@@ -323,8 +325,9 @@ class MonteCarloSimulation:
         # in the paper.
         for i in range(self.n_repeat):
             # Draw a new error term for the given *f_vector_test*.
-            y_vector_test = self.f_vector_test + \
-                random_state_noise.normal(0, self.noise, self.n_test)
+            y_vector_test = (
+                self.f_vector_test + random_state_noise.normal(0, self.noise, self.n_test)
+            )
             # Draw a new training set.
             x_matrix_train, y_vector_train = draw_train()
 
@@ -377,11 +380,11 @@ class MonteCarloSimulation:
         Returns a numpy array of shape = [n_ratios, 4] with the MSPE
         decomposition for the *n_ratios* different subsampling
 
-        out:
-            array[:,0]: Simulated MSPE for all subsampling ratios
-            array[:,1]: Simulated squared bias for all subsampling ratios
-            array[:,2]: Simulated variance for all subsampling ratios
-            array[:,3]: Simulated noise for all subsampling ratios
+        Returns a numpy array with:
+            - array[:,0]: Simulated MSPE for all subsampling ratios
+            - array[:,1]: Simulated squared bias for all subsampling ratios
+            - array[:,2]: Simulated variance for all subsampling ratios
+            - array[:,3]: Simulated noise for all subsampling ratios
 
         Parameters
         ----------
