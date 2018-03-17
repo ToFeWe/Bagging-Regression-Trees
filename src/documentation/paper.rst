@@ -1,11 +1,12 @@
 .. _paper:
 
-******************************
-Research paper / presentations
-******************************
+***********************************
+Research paper and the presentation
+***********************************
 
 The following final outputs have been created in the project:
     * :file:`bagging_paper.tex` contains the term paper.
+    * :file:`bagging_pres.tex` contains the presentation as held for the project module.
     * :file:`external_figures` contains files that are not created by the build process.
 
 

@@ -1,6 +1,6 @@
 {
-  "n_repeat": 1,
-  "n_test_train": [5, 5],
+  "n_repeat": 10,
+  "n_test_train": [500, 500],
   "noise": 1.0,
   "b_iterations": 50,
   "min_split_tree": 2,

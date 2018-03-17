@@ -1,7 +1,7 @@
 .. _final:
 
 ************************************
-Visualization and results formatting
+Visualization and Results Formatting
 ************************************
 
 Documentation of the code in *src.final*.
